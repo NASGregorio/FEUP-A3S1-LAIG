@@ -99,6 +99,8 @@ class XMLscene extends CGFscene {
 
         this.initLights();
 
+        //Criar objectos aqui //TODO
+
         this.sceneInited = true;
     }
 
@@ -120,7 +122,9 @@ class XMLscene extends CGFscene {
         this.applyViewMatrix();
 
         this.pushMatrix();
-        this.axis.display();
+        //this.axis.display();
+        if(this.graph.referenceLength != 0) //HACK
+            this.axis.display();
 
         for (var i = 0; i < this.lights.length; i++) {
             this.lights[i].setVisible(true);

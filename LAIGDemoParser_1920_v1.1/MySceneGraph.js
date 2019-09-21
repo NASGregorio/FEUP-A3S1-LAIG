@@ -11,6 +11,19 @@ var TRANSFORMATIONS_INDEX = 6;
 var PRIMITIVES_INDEX = 7;
 var COMPONENTS_INDEX = 8;
 
+var DEBUG_ALL = 0;
+var DEBUG_FLAGS = [ 
+    DEBUG_ALL | 0, //SCENE
+    DEBUG_ALL | 0, //VIEWS
+    DEBUG_ALL | 0, //AMBIENT
+    DEBUG_ALL | 0, //LIGHTS
+    DEBUG_ALL | 0, //TEXTURES
+    DEBUG_ALL | 0, //MATERIALS
+    DEBUG_ALL | 0, //TRANSFORMATIONS
+    DEBUG_ALL | 0, //PRIMITIVES
+    DEBUG_ALL | 1  //COMPONENTS
+];
+
 /**
  * MySceneGraph class, representing the scene graph.
  */
@@ -82,6 +95,7 @@ class MySceneGraph {
         for (var i = 0; i < nodes.length; i++) {
             nodeNames.push(nodes[i].nodeName);
         }
+        if(DEBUG_ALL) console.log(nodes); //DEBUG
 
         var error;
 
@@ -95,10 +109,17 @@ class MySceneGraph {
             if (index != SCENE_INDEX)
                 this.onXMLMinorError("tag <scene> out of order " + index);
 
+            if(DEBUG_FLAGS[SCENE_INDEX]) console.log(nodes[index]); //DEBUG
+
             //Parse scene block
             if ((error = this.parseScene(nodes[index])) != null)
                 return error;
         }
+
+        // var testasd;
+        // if((testasd = this.processEntity("scene", nodeNames, nodes, SCENE_INDEX, this.parseScene, DEBUG_SCENE)) != null)
+        //     return testasd;
+
 
         // <views>
         if ((index = nodeNames.indexOf("views")) == -1)
@@ -106,6 +127,8 @@ class MySceneGraph {
         else {
             if (index != VIEWS_INDEX)
                 this.onXMLMinorError("tag <views> out of order");
+
+            if(DEBUG_FLAGS[VIEWS_INDEX]) console.log(nodes[index]); //DEBUG
 
             //Parse views block
             if ((error = this.parseView(nodes[index])) != null)
@@ -190,6 +213,8 @@ class MySceneGraph {
             if (index != COMPONENTS_INDEX)
                 this.onXMLMinorError("tag <components> out of order");
 
+            if(DEBUG_FLAGS[COMPONENTS_INDEX]) console.log(nodes[index]); //DEBUG
+
             //Parse components block
             if ((error = this.parseComponents(nodes[index])) != null)
                 return error;
@@ -208,14 +233,15 @@ class MySceneGraph {
         if (root == null)
             return "no root defined for scene";
 
-        this.idRoot = root;
+            this.idRoot = root;
 
         // Get axis length        
         var axis_length = this.reader.getFloat(sceneNode, 'axis_length');
         if (axis_length == null)
-            this.onXMLMinorError("no axis_length defined for scene; assuming 'length = 1'");
+        this.onXMLMinorError("no axis_length defined for scene; assuming 'length = 1'");
 
-        this.referenceLength = axis_length || 1;
+        //this.referenceLength = axis_length || 1;
+        this.referenceLength = axis_length != null ? axis_length : 1; //HACK
 
         this.log("Parsed scene");
 
@@ -227,7 +253,16 @@ class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
-        this.onXMLMinorError("To do: Parse views and create cameras.");
+
+        var children = viewsNode.children;
+
+        var nodeNames = [];
+
+        for (var i = 0; i < children.length; i++) {
+            nodeNames.push(children[i].nodeName);
+        }
+
+        //this.onXMLMinorError("To do: Parse views and create cameras.");
 
         return null;
     }
@@ -573,24 +608,24 @@ class MySceneGraph {
    * @param {components block element} componentsNode
    */
     parseComponents(componentsNode) {
-        var children = componentsNode.children;
-
         this.components = [];
 
-        var grandChildren = [];
-        var grandgrandChildren = [];
+        var componentNodes = componentsNode.children;
+        var componentDataNodes = [];
+        var componentData = [];
         var nodeNames = [];
 
         // Any number of components.
-        for (var i = 0; i < children.length; i++) {
+        for (var i = 0; i < componentNodes.length; i++) {
 
-            if (children[i].nodeName != "component") {
-                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+            // Check for malformed components
+            if (componentNodes[i].nodeName != "component") {
+                this.onXMLMinorError("unknown tag <" + componentNodes[i].nodeName + ">");
                 continue;
             }
 
             // Get id of the current component.
-            var componentID = this.reader.getString(children[i], 'id');
+            var componentID = this.reader.getString(componentNodes[i], 'id');
             if (componentID == null)
                 return "no ID defined for componentID";
 
@@ -598,11 +633,16 @@ class MySceneGraph {
             if (this.components[componentID] != null)
                 return "ID must be unique for each component (conflict: ID = " + componentID + ")";
 
-            grandChildren = children[i].children;
+            
+            // Get component data (transformations, materials, textures and children nodes)
+            componentDataNodes = componentNodes[i].children;
+
+            console.log(grandChildren);
+
 
             nodeNames = [];
-            for (var j = 0; j < grandChildren.length; j++) {
-                nodeNames.push(grandChildren[j].nodeName);
+            for (var j = 0; j < componentDataNodes.length; j++) {
+                nodeNames.push(componentDataNodes[j].nodeName);
             }
 
             var transformationIndex = nodeNames.indexOf("transformation");
@@ -741,5 +781,30 @@ class MySceneGraph {
 
         //To test the parsing/creation of the primitives, call the display function directly
         this.primitives['demoRectangle'].display();
+    }
+
+
+    /**
+     * Process node (check validity and order)
+     * @param {*} nodeName 
+     * @param {*} nodeNames 
+     * @param {*} nodes 
+     * @param {*} expectedIndex 
+     * @callback parseFunc
+     */
+    processEntity(nodeName, nodeNames, nodes, expectedIndex, parseFunc) {
+        var index = -1;
+
+        if ((index = nodeNames.indexOf(nodeName)) == -1)
+            return "tag <"+nodeName+"> missing";
+        else {
+            if (index != expectedIndex)
+                this.onXMLMinorError("tag <"+nodeName+"> out of order " + index);
+
+            if(DEBUG_FLAGS[expectedIndex]) console.log(nodes[index]); //DEBUG
+
+            //Parse scene block
+            return parseFunc(nodes[index]);
+        }
     }
 }
