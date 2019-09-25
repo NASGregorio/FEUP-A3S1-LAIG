@@ -636,15 +636,20 @@ class MySceneGraph {
         this.components = [];
       
         var componentNodes = componentsNode.children;
-        var componentDataNodes = [];
-        var componentData = [];
-        var nodeNames = [];
         
         // Any number of components.
         console.log(componentNodes.length);
         for (var i = 0; i < componentNodes.length; i++) {
             
-            var component = {};
+            var componentDataNodes = [];
+            var componentData = [];
+            var nodeNames = [];
+            var component = {
+                transformation: [],
+                texture: "",
+                materials: [],
+                children: []
+            };
             console.log(i);
             console.log(component);
             console.log("FORCEFUL EXIT, can't access second node");
@@ -723,30 +728,30 @@ class MySceneGraph {
             // TODO: Ver se referencias existem em todos os campos
             // Materials
 
-            component.materials = [];
+            //component.materials = [];
             console.log(component.materials);
             componentData = componentDataNodes[materialsIndex].children;
-            for (var i = 0; i < componentData.length; i++) {
+            for (var k = 0; k < componentData.length; k++) {
                 console.log("B");
-                var materialID = this.reader.getString(componentData[i], 'id');
+                var materialID = this.reader.getString(componentData[k], 'id');
                 component.materials.push(materialID);
             }
             console.log("C");
  
             // // Texture
-            // component.texture = this.reader.getString(componentDataNodes[textureIndex], 'id');
+            component.texture = this.reader.getString(componentDataNodes[textureIndex], 'id');
             
-            // // Children
-            // component.children = [];
-            // componentData = componentDataNodes[childrenIndex].children;
-            // for (var i = 0; i < componentData.length; i++) {
-            //     var childID = this.reader.getString(componentData[i], 'id');
-            //     component.children.push(childID);
-            // }
+            // Children
+            component.children = [];
+            componentData = componentDataNodes[childrenIndex].children;
+            for (var k = 0; k < componentData.length; k++) {
+                var childID = this.reader.getString(componentData[k], 'id');
+                component.children.push(childID);
+            }
 
-            // // Assign newly created component to components array
-            // this.components[componentID] = component;
-            // console.log(component);
+            // Assign newly created component to components array
+            this.components[componentID] = component;
+            console.log(component);
         }
     }
     
@@ -915,17 +920,18 @@ class MySceneGraph {
             var nodeName = this.treeStack.pop();
             //console.log(nodeName);
             var node = this.components[nodeName];
-            //console.log(node);
+            //console.log(""+node.texture);
             if(node && !node.visited) {
-                //console.log(node);
+                console.log(node);
                 node.visited = true;
                 node.children.forEach(element => {
                     if(!element.visited)
                         this.treeStack.push(element);
                 });
             }
-
         }
+
+        
 
         //var root = this.components[this.idRoot];
         //var lastTransf = root.transfMatrix;

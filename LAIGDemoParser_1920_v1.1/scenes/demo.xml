@@ -84,9 +84,9 @@
                 <translate x="0" y="0" z="1" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="demoMaterial4" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="demoTexture2"/>
             <children>
                 <primitiveref id="demoRectangle" />
                 <primitiveref id="demoRectan" />
