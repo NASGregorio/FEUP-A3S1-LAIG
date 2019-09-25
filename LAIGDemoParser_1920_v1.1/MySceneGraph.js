@@ -41,7 +41,7 @@ class MySceneGraph {
         this.nodes = [];
 
         this.idRoot = null;                    // The id of the root element.
-        this.treeStack = [];
+        //this.treeStack = [];
 
         this.axisCoords = [];
         this.axisCoords['x'] = [1, 0, 0];
@@ -633,7 +633,7 @@ class MySceneGraph {
    * @param {components block element} componentsNode
    */
     parseComponents(componentsNode) {
-        this.components = [];
+        this.components = new Map();
       
         var componentNodes = componentsNode.children;
         
@@ -750,8 +750,11 @@ class MySceneGraph {
             }
 
             // Assign newly created component to components array
-            this.components[componentID] = component;
-            console.log(component);
+            this.components.set(componentID, component);
+            // this.components[componentID] = component;
+            // this.components.length++;
+
+            //console.log(component);
         }
     }
     
@@ -906,20 +909,31 @@ class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
 
         //console.log(this.components);
-        for (var i = 0; i < this.components.length; i++) {
-            this.components[i].visited = false;
-            //console.log(this.components[i]);
-            //console.log(this.components[i].visited);
-        }
+        console.log("------------------START FRAME------------------");
+        // console.log(this.components);
+        // console.log(this.components.length);
+        // for (var i = 0; i < this.components.length; i++) {
+        //     console.log(i + ": " + this.components[i]);
+        //     this.components[i].visited = false;
+        //     //console.log(this.components[i].visited);
+        // }
+        
+        this.components.forEach((value, key) => {
+            console.log(key);
+            value.visited = false;
+        });
 
+        this.treeStack = [];
+        console.log(this.treeStack);
         this.treeStack.push(this.idRoot);
-        //console.log(this.treeStack.length);
+        console.log(this.idRoot);
 
-
+        
+        
         while (this.treeStack.length > 0) {
             var nodeName = this.treeStack.pop();
             //console.log(nodeName);
-            var node = this.components[nodeName];
+            var node = this.components.get(nodeName);
             //console.log(""+node.texture);
             if(node && !node.visited) {
                 console.log(node);
@@ -930,24 +944,25 @@ class MySceneGraph {
                 });
             }
         }
-
         
-
+        
+        
         //var root = this.components[this.idRoot];
         //var lastTransf = root.transfMatrix;
-
+        
         // this.traverseGraph(this.components[this.idRoot], 
         //                 [1,0,0,0,
         //                 0,1,0,0,
         //                 0,0,1,0,
         //                 0,0,0,1]);
-
-
+        
+        
         // console.log(this.components[this.idRoot]);
         // console.log(this.components[this.idRoot].children);
-
+        
         //To test the parsing/creation of the primitives, call the display function directly
         this.primitives['demoRectangle'].display();
+        console.log("------------------END   FRAME------------------");
     }
 
 
@@ -958,6 +973,7 @@ class MySceneGraph {
      * @param {*} nodes 
      * @param {*} expectedIndex 
      * @callback parseFunc
+            console.log(this.components.length);
      */
     processEntity(nodeName, nodeNames, nodes, expectedIndex, parseFunc) {
         var index = -1;
