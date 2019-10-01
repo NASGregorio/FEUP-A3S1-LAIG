@@ -619,6 +619,21 @@ class MySceneGraph {
 
                 this.primitives[primitiveId] = rect;
             }
+            else if (primitiveType == 'sphere') {
+                // stacks
+                var stacks = this.reader.getFloat(grandChildren[0], 'stacks'); //TODO: nome convencionado para stacks e slices?
+                if (!(stacks != null && !isNaN(stacks) && stacks > 0))
+                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+
+                // slices
+                var slices = this.reader.getFloat(grandChildren[0], 'slices');
+                if (!(slices != null && !isNaN(slices) && slices > 0))
+                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
+
+                var sphere = new MySphere(this.scene, stacks, slices);
+
+                this.primitives[primitiveId] = sphere;
+            }
             else {
                 console.warn("To do: Parse other primitives.");
             }
@@ -961,7 +976,9 @@ class MySceneGraph {
         // console.log(this.components[this.idRoot].children);
         
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives['demoRectangle'].display();
+        //this.primitives['demoRectangle'].display();
+        //this.primitives['demoSphere'].enableNormalViz();
+        this.primitives['demoSphere'].display();
         console.log("------------------END   FRAME------------------");
     }
 
