@@ -619,10 +619,20 @@ class MySceneGraph {
 
                 this.primitives[primitiveId] = rect;
             }
-            else if (primitiveType == 'sphere') {
-                // stacks
-                var stacks = this.reader.getFloat(grandChildren[0], 'stacks'); //TODO: nome convencionado para stacks e slices?
-                if (!(stacks != null && !isNaN(stacks) && stacks > 0))
+            else if (primitiveType == 'cylinder') {
+                // base radius
+                var base = this.reader.getFloat(grandChildren[0], 'base');
+                if (!(base != null && !isNaN(base) && base > 0))
+                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+
+                // top radius
+                var top = this.reader.getFloat(grandChildren[0], 'top');
+                if (!(top != null && !isNaN(top) && top > 0))
+                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+
+                // height
+                var height = this.reader.getFloat(grandChildren[0], 'height');
+                if (!(height != null && !isNaN(height) && height > 0))
                     return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
 
                 // slices
@@ -630,7 +640,32 @@ class MySceneGraph {
                 if (!(slices != null && !isNaN(slices) && slices > 0))
                     return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
 
-                var sphere = new MySphere(this.scene, stacks, slices);
+                // stacks
+                var stacks = this.reader.getFloat(grandChildren[0], 'stacks');
+                if (!(stacks != null && !isNaN(stacks) && stacks > 0))
+                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+
+                var cylinder = new MyCylinder(this.scene, base, top, height, slices, stacks);
+
+                this.primitives[primitiveId] = cylinder;
+            }
+            else if (primitiveType == 'sphere') {
+                // radius
+                var radius = this.reader.getFloat(grandChildren[0], 'radius');
+                if (!(radius != null && !isNaN(radius) && radius > 0))
+                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
+
+                // slices
+                var slices = this.reader.getFloat(grandChildren[0], 'slices');
+                if (!(slices != null && !isNaN(slices) && slices > 0))
+                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
+
+                // stacks
+                var stacks = this.reader.getFloat(grandChildren[0], 'stacks');
+                if (!(stacks != null && !isNaN(stacks) && stacks > 0))
+                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+
+                var sphere = new MySphere(this.scene, radius, stacks, slices);
 
                 this.primitives[primitiveId] = sphere;
             }
@@ -924,7 +959,7 @@ class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
 
         //console.log(this.components);
-        console.log("------------------START FRAME------------------");
+        //console.log("------------------START FRAME------------------");
         // console.log(this.components);
         // console.log(this.components.length);
         // for (var i = 0; i < this.components.length; i++) {
@@ -933,34 +968,30 @@ class MySceneGraph {
         //     //console.log(this.components[i].visited);
         // }
         
-        this.components.forEach((value, key) => {
-            console.log(key);
-            value.visited = false;
-        });
+        // this.components.forEach((value, key) => {
+        //     console.log(key);
+        //     value.visited = false;
+        // });
 
-        this.treeStack = [];
-        console.log(this.treeStack);
-        this.treeStack.push(this.idRoot);
-        console.log(this.idRoot);
+        // this.treeStack = [];
+        // console.log(this.treeStack);
+        // this.treeStack.push(this.idRoot);
+        // console.log(this.idRoot);
 
-        
-        
-        while (this.treeStack.length > 0) {
-            var nodeName = this.treeStack.pop();
-            //console.log(nodeName);
-            var node = this.components.get(nodeName);
-            //console.log(""+node.texture);
-            if(node && !node.visited) {
-                console.log(node);
-                node.visited = true;
-                node.children.forEach(element => {
-                    if(!element.visited)
-                        this.treeStack.push(element);
-                });
-            }
-        }
-        
-        
+        // while (this.treeStack.length > 0) {
+        //     var nodeName = this.treeStack.pop();
+        //     //console.log(nodeName);
+        //     var node = this.components.get(nodeName);
+        //     //console.log(""+node.texture);
+        //     if(node && !node.visited) {
+        //         console.log(node);
+        //         node.visited = true;
+        //         node.children.forEach(element => {
+        //             if(!element.visited)
+        //                 this.treeStack.push(element);
+        //         });
+        //     }
+        // }
         
         //var root = this.components[this.idRoot];
         //var lastTransf = root.transfMatrix;
@@ -971,7 +1002,6 @@ class MySceneGraph {
         //                 0,0,1,0,
         //                 0,0,0,1]);
         
-        
         // console.log(this.components[this.idRoot]);
         // console.log(this.components[this.idRoot].children);
         
@@ -979,7 +1009,8 @@ class MySceneGraph {
         //this.primitives['demoRectangle'].display();
         //this.primitives['demoSphere'].enableNormalViz();
         this.primitives['demoSphere'].display();
-        console.log("------------------END   FRAME------------------");
+        //this.primitives['demoCylinder'].display();
+        //console.log("------------------END   FRAME------------------");
     }
 
 

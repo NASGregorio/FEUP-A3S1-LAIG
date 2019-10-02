@@ -5,11 +5,14 @@
  */
 class MyCylinder extends CGFobject
 {
-    constructor(scene, slices, tileScaleVec)
+    constructor(scene, base, top, height, slices, stacks)
     {
         super(scene);
+        this.base = base;
+        this.top = top;
+        this.height = height;
         this.slices = slices;
-        this.tileScaleVec = (tileScaleVec != undefined) ? tileScaleVec : [1,1];
+        this.stacks = stacks;
         this.initBuffers();
     }
 
@@ -17,12 +20,12 @@ class MyCylinder extends CGFobject
     {
         this.vertices = [];
         this.indices = [];
-        this.normals = [];
-        this.texCoords = [];
 
         // Definir passo do angulo em função do nº de faces
         var theta = 0;
         var thetaStep = 2 * Math.PI / this.slices;
+        var radius = this.base;
+        var heightStep = this.stacks
 
         var cosTheta = Math.cos(theta);
         var sinTheta = Math.sin(theta);
@@ -32,9 +35,9 @@ class MyCylinder extends CGFobject
         this.vertices.push(cosTheta, 0, sinTheta);
         this.vertices.push(cosTheta, 1, sinTheta);
 
-        // Adicionar normais correspondentes
-        this.normals.push(cosTheta, 0, sinTheta);
-        this.normals.push(cosTheta, 0, sinTheta);
+        // // Adicionar normais correspondentes
+        // this.normals.push(cosTheta, 0, sinTheta);
+        // this.normals.push(cosTheta, 0, sinTheta);
 
         // Gerar vertices, triangulos e normais segundo o nº de faces pedido
         for (var i = 0; i < this.slices-1; i++)
@@ -53,9 +56,9 @@ class MyCylinder extends CGFobject
             cosTheta = cosThetaNext;
             sinTheta = sinThetaNext;
 
-            // Corresponde ao vetor aresta-origem
-            this.normals.push(cosTheta, 0, sinTheta);
-            this.normals.push(cosTheta, 0, sinTheta);
+            // // Corresponde ao vetor aresta-origem
+            // this.normals.push(cosTheta, 0, sinTheta);
+            // this.normals.push(cosTheta, 0, sinTheta);
         }
 
         // Adicionar vertices finais (que coincidem com os iniciais)
@@ -66,24 +69,24 @@ class MyCylinder extends CGFobject
         this.indices.push((this.slices-1)*2, (this.slices-1)*2+1, (this.slices-1)*2+3);
         this.indices.push((this.slices-1)*2, (this.slices-1)*2+3, (this.slices-1)*2+2);
 
-        // Adicionar normais dos vertices finais
-        this.normals.push(1, 0, 0);
-        this.normals.push(1, 0, 0);
+        // // Adicionar normais dos vertices finais
+        // this.normals.push(1, 0, 0);
+        // this.normals.push(1, 0, 0);
 
         // Mapear coordenadas de textura em torno das faces (tileScaleVec controlo tiling)
-        this.calcUVCoords(this.tileScaleVec);
+        //this.calcUVCoords();
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
 
-    calcUVCoords(tileScaleVec)
+    calcUVCoords()
     {
         var uvSlice = 1 / this.slices;
         for(var i = this.slices; i >= 0 ; i--)
         {
-            this.texCoords.push(tileScaleVec[0] * uvSlice*i, tileScaleVec[1]);
-            this.texCoords.push(tileScaleVec[0] * uvSlice*i, 0);
+            this.texCoords.push(uvSlice*i, 1);
+            this.texCoords.push(uvSlice*i, 0);
         }
         this.updateTexCoordsGLBuffers();
     }

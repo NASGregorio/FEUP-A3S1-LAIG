@@ -14,10 +14,10 @@
         </ortho>
     </views>
 
-    <ambient>
+    <globals>
         <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
         <background r="0.0" g="0.0" b="0.0" a="1.0" />
-    </ambient>
+    </globals>
 
     <lights>
         <omni id="demoLight" enabled="1">
@@ -59,7 +59,10 @@
             <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
         </primitive>
         <primitive id="demoSphere">
-            <sphere stacks="32" slices="32" />
+            <sphere radius="1" stacks="32" slices="32" />
+        </primitive>
+        <primitive id="demoCylinder">
+            <cylinder base="1" top="1" height="3" slices="12" stacks="6" />
         </primitive>
     </primitives>
 

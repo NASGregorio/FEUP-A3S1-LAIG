@@ -6,10 +6,11 @@
  * @param y - Scale of rectangle in Y
  */
 class MySphere extends CGFobject {
-	constructor(scene, nStacks, nSlices) {
-		super(scene);
-		this.nStacks = 2 * nStacks;
+	constructor(scene, radius, nStacks, nSlices) {
+        super(scene);
+        this.radius = radius;
 		this.nSlices = nSlices;
+		this.nStacks = 2 * nStacks;
 
 		this.initBuffers();
 	}
@@ -27,9 +28,9 @@ class MySphere extends CGFobject {
         for (var i = 0; i <= this.nStacks; i++) {
             for (var j = 0; j < this.nSlices; j++) {
                 
-                var v = [   Math.sin(theta) * Math.sin(phi),
-                            Math.sin(theta) * Math.cos(phi),
-                            Math.cos(theta)];
+                var v = [   this.radius * Math.sin(theta) * Math.sin(phi),
+                            this.radius * Math.sin(theta) * Math.cos(phi),
+                            this.radius * Math.cos(theta)];
 
                 var mag = Math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
 
