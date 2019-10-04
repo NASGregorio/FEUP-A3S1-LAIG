@@ -20,61 +20,50 @@ class MyCylinder extends CGFobject
     {
         this.vertices = [];
         this.indices = [];
+        this.normals = [];
 
-        // Definir passo do angulo em função do nº de faces
-        var theta = 0;
-        var thetaStep = 2 * Math.PI / this.slices;
-        var radius = this.base;
-        var heightStep = this.stacks
+        var dTheta = 2 * Math.PI / this.slices;
+        var currRadius = this.base;
+        var currHeight = 0;
+        var dHeight = this.height / this.stacks;
 
-        var cosTheta = Math.cos(theta);
-        var sinTheta = Math.sin(theta);
-        var cosThetaNext, sinThetaNext;
-
-        // Adicionar vértices iniciais
-        this.vertices.push(cosTheta, 0, sinTheta);
-        this.vertices.push(cosTheta, 1, sinTheta);
-
-        // // Adicionar normais correspondentes
-        // this.normals.push(cosTheta, 0, sinTheta);
-        // this.normals.push(cosTheta, 0, sinTheta);
-
-        // Gerar vertices, triangulos e normais segundo o nº de faces pedido
-        for (var i = 0; i < this.slices-1; i++)
+        for (var t = 0; t < this.stacks; t++)
         {
-            // Calculo do proximo angulo
-            cosThetaNext = Math.cos(theta + thetaStep);
-            sinThetaNext = Math.sin(theta + thetaStep);
+            var theta = 0;
+            currRadius = this.base - t * (this.base - this.top) / this.stacks;
+            currHeight = t * dHeight;
 
-            this.vertices.push(cosThetaNext, 0, sinThetaNext);
-            this.vertices.push(cosThetaNext, 1, sinThetaNext);
+            for (var l = 0; l < this.slices; l++)
+            {
+                this.vertices.push( currRadius * Math.sin(theta),
+                                    currRadius * Math.cos(theta),
+                                    currHeight);
 
-            this.indices.push((2 * i), (2 * i + 1), (2 * i + 3));
-            this.indices.push((2 * i), (2 * i + 3), (2 * i + 2));
+                var slope = -this.height/(this.base-this.top);
+                var perpSlope = -1/slope;
 
-            theta += thetaStep;
-            cosTheta = cosThetaNext;
-            sinTheta = sinThetaNext;
+                //console.log(perpSlope);
 
-            // // Corresponde ao vetor aresta-origem
-            // this.normals.push(cosTheta, 0, sinTheta);
-            // this.normals.push(cosTheta, 0, sinTheta);
+                this.normals.push(currRadius * Math.sin(theta), currRadius * Math.cos(theta), perpSlope);
+
+                theta += dTheta;
+            }
         }
 
-        // Adicionar vertices finais (que coincidem com os iniciais)
-        this.vertices.push(1, 0, 0);
-        this.vertices.push(1, 1, 0);
 
-        // Criar triângulos finais
-        this.indices.push((this.slices-1)*2, (this.slices-1)*2+1, (this.slices-1)*2+3);
-        this.indices.push((this.slices-1)*2, (this.slices-1)*2+3, (this.slices-1)*2+2);
-
-        // // Adicionar normais dos vertices finais
-        // this.normals.push(1, 0, 0);
-        // this.normals.push(1, 0, 0);
-
-        // Mapear coordenadas de textura em torno das faces (tileScaleVec controlo tiling)
-        //this.calcUVCoords();
+        var v = 0;
+        for (var k = 1; k <= this.slices * (this.stacks-1); k++) {
+            if(k % this.slices == 0) {
+                console.log(v);
+                this.indices.push(v, v + 1, v + 1 - this.slices);
+                this.indices.push(v, v + this.slices, v + 1);
+            }
+            else {
+                this.indices.push(v, v + 1 + this.slices, v + 1);
+                this.indices.push(v, v + this.slices, v + 1 + this.slices);
+            }
+            v++;
+        }
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();

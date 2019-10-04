@@ -139,15 +139,15 @@ class MySceneGraph {
                 return error;
         }
 
-        // <ambient>
-        if ((index = nodeNames.indexOf("ambient")) == -1)
-            return "tag <ambient> missing";
+        // <globals>
+        if ((index = nodeNames.indexOf("globals")) == -1)
+            return "tag <globals> missing";
         else {
             if (index != AMBIENT_INDEX)
-                this.onXMLMinorError("tag <ambient> out of order");
+                this.onXMLMinorError("tag <globals> out of order");
 
-            //Parse ambient block
-            if ((error = this.parseAmbient(nodes[index])) != null)
+            //Parse globals block
+            if ((error = this.parseGlobals(nodes[index])) != null)
                 return error;
         }
 
@@ -274,14 +274,14 @@ class MySceneGraph {
     }
 
     /**
-     * Parses the <ambient> node.
-     * @param {ambient block element} ambientsNode
+     * Parses the <globals> node.
+     * @param {globals block element} globalsNode
      */
-    parseAmbient(ambientsNode) {
+    parseGlobals(globalsNode) {
 
-        var children = ambientsNode.children;
+        var children = globalsNode.children;
 
-        this.ambient = [];
+        this.globals = [];
         this.background = [];
 
         var nodeNames = [];
@@ -304,7 +304,7 @@ class MySceneGraph {
         else
             this.background = color;
 
-        this.log("Parsed ambient");
+        this.log("Parsed globals");
 
         return null;
     }
@@ -1007,9 +1007,9 @@ class MySceneGraph {
         
         //To test the parsing/creation of the primitives, call the display function directly
         //this.primitives['demoRectangle'].display();
-        //this.primitives['demoSphere'].enableNormalViz();
-        this.primitives['demoSphere'].display();
-        //this.primitives['demoCylinder'].display();
+        this.primitives['demoCylinder'].enableNormalViz();
+        //this.primitives['demoSphere'].display();
+        this.primitives['demoCylinder'].display();
         //console.log("------------------END   FRAME------------------");
     }
 
