@@ -623,27 +623,27 @@ class MySceneGraph {
                 // base radius
                 var base = this.reader.getFloat(grandChildren[0], 'base');
                 if (!(base != null && !isNaN(base) && base > 0))
-                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse base of the primitive coordinates for ID = " + primitiveId;
 
                 // top radius
                 var top = this.reader.getFloat(grandChildren[0], 'top');
                 if (!(top != null && !isNaN(top) && top > 0))
-                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse top of the primitive coordinates for ID = " + primitiveId;
 
                 // height
                 var height = this.reader.getFloat(grandChildren[0], 'height');
                 if (!(height != null && !isNaN(height) && height > 0))
-                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse height of the primitive coordinates for ID = " + primitiveId;
 
                 // slices
                 var slices = this.reader.getFloat(grandChildren[0], 'slices');
                 if (!(slices != null && !isNaN(slices) && slices > 0))
-                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
 
                 // stacks
                 var stacks = this.reader.getFloat(grandChildren[0], 'stacks');
                 if (!(stacks != null && !isNaN(stacks) && stacks > 0))
-                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
 
                 var cylinder = new MyCylinder(this.scene, base, top, height, slices, stacks);
 
@@ -653,17 +653,17 @@ class MySceneGraph {
                 // radius
                 var radius = this.reader.getFloat(grandChildren[0], 'radius');
                 if (!(radius != null && !isNaN(radius) && radius > 0))
-                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse radius of the primitive coordinates for ID = " + primitiveId;
 
                 // slices
                 var slices = this.reader.getFloat(grandChildren[0], 'slices');
                 if (!(slices != null && !isNaN(slices) && slices > 0))
-                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
 
                 // stacks
                 var stacks = this.reader.getFloat(grandChildren[0], 'stacks');
                 if (!(stacks != null && !isNaN(stacks) && stacks > 0))
-                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
 
                 var sphere = new MySphere(this.scene, radius, stacks, slices);
 
@@ -705,9 +705,9 @@ class MySceneGraph {
     }
 
     /**
-   * Parses the <components> block.
-   * @param {components block element} componentsNode
-   */
+     * Parses the <components> block.
+     * @param {components block element} componentsNode
+     */
     parseComponents(componentsNode) {
         this.components = new Map();
       
@@ -728,7 +728,6 @@ class MySceneGraph {
             };
             console.log(i);
             console.log(component);
-            console.log("FORCEFUL EXIT, can't access second node");
 
 
             // Check for malformed components
@@ -804,15 +803,15 @@ class MySceneGraph {
             // TODO: Ver se referencias existem em todos os campos
             // Materials
 
-            //component.materials = [];
-            console.log(component.materials);
+            component.materials = [];
+            //console.log(component.materials);
             componentData = componentDataNodes[materialsIndex].children;
             for (var k = 0; k < componentData.length; k++) {
-                console.log("B");
+                //console.log("B");
                 var materialID = this.reader.getString(componentData[k], 'id');
                 component.materials.push(materialID);
             }
-            console.log("C");
+            //console.log("C");
  
             // // Texture
             component.texture = this.reader.getString(componentDataNodes[textureIndex], 'id');
@@ -978,6 +977,52 @@ class MySceneGraph {
         }
     }
 
+    displayTireF() {
+        this.scene.pushMatrix();
+        //f1_car_axle_cylinder
+        //this.scene.translate(9,0,0);
+        this.scene.pushMatrix();
+        this.scene.scale(1,0.7,1);
+        this.primitives['f1_car_axle_cylinder'].display();
+        this.scene.popMatrix();
+        //f1_car_tilted_axle
+        this.scene.pushMatrix();
+        this.scene.rotate(-Math.PI/9,1,0,0);
+        this.scene.scale(1, 0.7, 1.5);
+        this.primitives['f1_car_axle_cylinder'].display();
+        this.scene.popMatrix();
+        //f1_car_front_tire
+        this.scene.pushMatrix();
+        this.primitives['f1_car_tire_f_torus'].display();
+        this.scene.rotate(Math.PI,0,1,0);
+        this.primitives['f1_car_wheel_rim_rect'].display();
+        this.scene.popMatrix();
+        this.scene.popMatrix();
+    }
+
+    displayTireB() {
+        this.scene.pushMatrix();
+        //f1_car_axle_cylinder
+        //this.scene.translate(9,0,0);
+        this.scene.pushMatrix();
+        this.scene.scale(1,0.7,1);
+        this.primitives['f1_car_axle_cylinder'].display();
+        this.scene.popMatrix();
+        //f1_car_tilted_axle
+        this.scene.pushMatrix();
+        this.scene.rotate(-Math.PI/9,1,0,0);
+        this.scene.scale(1, 0.7, 1.5);
+        this.primitives['f1_car_axle_cylinder'].display();
+        this.scene.popMatrix();
+        //f1_car_front_tire
+        this.scene.pushMatrix();
+        this.primitives['f1_car_tire_b_torus'].display();
+        this.scene.rotate(Math.PI,0,1,0);
+        this.primitives['f1_car_wheel_rim_rect'].display();
+        this.scene.popMatrix();
+        this.scene.popMatrix();
+    }
+
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
@@ -1033,9 +1078,178 @@ class MySceneGraph {
         
         //To test the parsing/creation of the primitives, call the display function directly
         //this.primitives['demoRectangle'].display();
-        this.primitives['demoCylinder'].enableNormalViz();
-        //this.primitives['demoSphere'].display();
-        this.primitives['demoCylinder'].display();
+        //this.primitives['demoTorus'].enableNormalViz();
+
+        // body
+        this.scene.pushMatrix();
+            this.scene.scale(1,0.6,1);
+            this.primitives['f1_car_body_cylinder'].display();
+            this.scene.pushMatrix();
+            this.scene.translate(0,0,10.75);
+            this.scene.scale(1,1,0.5);
+                this.primitives['f1_car_splitter'].display();
+            this.scene.popMatrix();
+        this.scene.popMatrix();
+
+        // right
+        this.scene.pushMatrix();
+            this.scene.rotate(Math.PI/2,0,1,0);
+
+            this.scene.pushMatrix();
+            this.scene.translate(-8,0,-2);
+            this.displayTireF();
+            this.scene.popMatrix();
+            
+            this.scene.pushMatrix();
+            this.scene.translate(-2,0,-2.65);
+            this.displayTireB();
+            this.scene.popMatrix();
+        this.scene.popMatrix();
+
+        // left
+        this.scene.pushMatrix();
+        this.scene.rotate(-Math.PI/2,0,1,0);
+
+        this.scene.pushMatrix();
+        this.scene.translate(8,0,-2);
+        this.displayTireF();
+        this.scene.popMatrix();
+        
+        this.scene.pushMatrix();
+        this.scene.translate(2,0,-2.65);
+        this.displayTireB();
+        this.scene.popMatrix();
+        
+        this.scene.popMatrix();
+
+
+        // // left
+        // this.scene.pushMatrix();
+        //     this.scene.translate(2,0,0);
+        //     this.scene.rotate(-Math.PI/2,0,1,0);
+        //     // front
+        //     this.scene.pushMatrix();
+        //         //f1_car_axle_cylinder
+        //         this.scene.translate(9,0,0);
+        //         this.scene.pushMatrix();
+        //         this.scene.scale(1,0.8,1);
+        //         this.primitives['f1_car_axle_cylinder'].display();
+        //         this.scene.popMatrix();
+        //         //f1_car_tilted_axle
+        //         this.scene.pushMatrix();
+        //         this.scene.rotate(-Math.PI/8,1,0,0);
+        //         this.scene.scale(1, 0.8, 1.5);
+        //         this.primitives['f1_car_axle_cylinder'].display();
+        //         this.scene.popMatrix();
+        //         //f1_car_front_tire
+        //         this.scene.pushMatrix();
+        //         this.primitives['f1_car_tire_f_torus'].display();
+        //         this.scene.rotate(Math.PI,0,1,0);
+        //         this.primitives['f1_car_wheel_rim_rect'].display();
+        //         this.scene.popMatrix();
+        //     this.scene.popMatrix();
+        //     //back
+        //     this.scene.pushMatrix();
+        //         //f1_car_axle_cylinder
+        //         this.scene.translate(2,0,-0.65);
+        //         this.scene.pushMatrix();
+        //         this.scene.scale(1,0.8,1);
+        //         this.primitives['f1_car_axle_cylinder'].display();
+        //         this.scene.popMatrix();
+        //         //f1_car_tilted_axle
+        //         this.scene.pushMatrix();
+        //         this.scene.rotate(-Math.PI/8,1,0,0);
+        //         this.scene.scale(1, 0.8, 1.5);
+        //         this.primitives['f1_car_axle_cylinder'].display();
+        //         this.scene.popMatrix();
+        //         //f1_car_front_tire
+        //         this.scene.pushMatrix();
+        //         this.primitives['f1_car_tire_b_torus'].display();
+        //         this.scene.rotate(Math.PI,0,1,0);
+        //         this.primitives['f1_car_wheel_rim_rect'].display();
+        //         this.scene.popMatrix();
+        //     this.scene.popMatrix();
+        // this.scene.popMatrix();
+
+
+        // // left
+        // this.scene.pushMatrix();
+        //     //this.scene.translate(-2,0,0);
+        //     //this.scene.rotate(-Math.PI/2,0,1,0);
+        //     // front
+        //     this.scene.pushMatrix();
+        //         //f1_car_axle_cylinder
+        //         this.scene.translate(9,0,0);
+        //         this.scene.pushMatrix();
+        //         this.scene.scale(1,0.8,1);
+        //         this.primitives['f1_car_axle_cylinder'].display();
+        //         this.scene.popMatrix();
+        //         //f1_car_tilted_axle
+        //         this.scene.pushMatrix();
+        //         this.scene.rotate(-Math.PI/8,1,0,0);
+        //         this.scene.scale(1, 0.8, 1.5);
+        //         this.primitives['f1_car_axle_cylinder'].display();
+        //         this.scene.popMatrix();
+        //         //f1_car_front_tire
+        //         this.scene.pushMatrix();
+        //         this.primitives['f1_car_tire_f_torus'].display();
+        //         this.scene.rotate(Math.PI,0,1,0);
+        //         this.primitives['f1_car_wheel_rim_rect'].display();
+        //         this.scene.popMatrix();
+        //     this.scene.popMatrix();
+        //     //back
+        //     this.scene.pushMatrix();
+        //         //f1_car_axle_cylinder
+        //         this.scene.translate(2,0,-0.65);
+        //         this.scene.pushMatrix();
+        //         this.scene.scale(1,0.8,1);
+        //         this.primitives['f1_car_axle_cylinder'].display();
+        //         this.scene.popMatrix();
+        //         //f1_car_tilted_axle
+        //         this.scene.pushMatrix();
+        //         this.scene.rotate(-Math.PI/8,1,0,0);
+        //         this.scene.scale(1, 0.8, 1.5);
+        //         this.primitives['f1_car_axle_cylinder'].display();
+        //         this.scene.popMatrix();
+        //         //f1_car_front_tire
+        //         this.scene.pushMatrix();
+        //         this.primitives['f1_car_tire_b_torus'].display();
+        //         this.scene.rotate(Math.PI,0,1,0);
+        //         this.primitives['f1_car_wheel_rim_rect'].display();
+        //         this.scene.popMatrix();
+        //     this.scene.popMatrix();
+        // this.scene.popMatrix();
+
+        
+        // // back
+        // this.scene.translate(0,0,2);
+        // this.scene.popMatrix();
+
+        // // right
+        // this.scene.pushMatrix();
+        // this.scene.translate(1,0.6,1);
+        // this.scene.rotate(Math.PI/2,0,1,0);
+        // this.scene.popMatrix();
+
+
+
+
+
+
+
+
+        // this.scene.pushMatrix();
+        // this.scene.scale(1,0.5,0.5);
+        // this.scene.rotate(Math.PI/2,0,1,0);
+        // this.primitives['f1_car_axel'].display();
+        // this.scene.popMatrix();
+
+        // this.scene.pushMatrix();
+        // this.scene.scale(0.5,0.5,0.5);
+        // this.primitives['f1_car_axel'].display();
+        // this.scene.popMatrix();
+        //this.primitives['f1_car_axel'].display();
+        
         //console.log("------------------END   FRAME------------------");
     }
 
