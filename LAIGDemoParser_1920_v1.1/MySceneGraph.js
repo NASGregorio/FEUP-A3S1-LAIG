@@ -1,4 +1,5 @@
-var DEGREE_TO_RAD = Math.PI / 180;
+//var DEGREE_TO_RAD = Math.PI / 180;
+//var RAD_TO_DEGREE = 180 / Math.PI;
 
 // Order of the groups in the XML document.
 var SCENE_INDEX = 0;
@@ -714,7 +715,7 @@ class MySceneGraph {
         var componentNodes = componentsNode.children;
         
         // Any number of components.
-        console.log(componentNodes.length);
+//        console.log(componentNodes.length);
         for (var i = 0; i < componentNodes.length; i++) {
             
             var componentDataNodes = [];
@@ -726,9 +727,9 @@ class MySceneGraph {
                 materials: [],
                 children: []
             };
-            console.log(i);
-            console.log(component);
-            console.log("FORCEFUL EXIT, can't access second node");
+            // console.log(i);
+            // console.log(component);
+            // console.log("FORCEFUL EXIT, can't access second node");
 
 
             // Check for malformed components
@@ -742,7 +743,7 @@ class MySceneGraph {
             if (componentID == null)
                 return "no ID defined for componentID";
 
-            console.log(componentID);
+            //console.log(componentID);
             
 
             // Checks for repeated IDs.
@@ -805,14 +806,14 @@ class MySceneGraph {
             // Materials
 
             //component.materials = [];
-            console.log(component.materials);
+            //console.log(component.materials);
             componentData = componentDataNodes[materialsIndex].children;
             for (var k = 0; k < componentData.length; k++) {
-                console.log("B");
+                //console.log("B");
                 var materialID = this.reader.getString(componentData[k], 'id');
                 component.materials.push(materialID);
             }
-            console.log("C");
+            //console.log("C");
  
             // // Texture
             component.texture = this.reader.getString(componentDataNodes[textureIndex], 'id');
@@ -978,63 +979,8 @@ class MySceneGraph {
         }
     }
 
-    /**
-     * Displays the scene, processing each node, starting in the root node.
-     */
-    displayScene() {
-        //To do: Create display loop for transversing the scene graph
 
-        //console.log(this.components);
-        //console.log("------------------START FRAME------------------");
-        // console.log(this.components);
-        // console.log(this.components.length);
-        // for (var i = 0; i < this.components.length; i++) {
-        //     console.log(i + ": " + this.components[i]);
-        //     this.components[i].visited = false;
-        //     //console.log(this.components[i].visited);
-        // }
-        
-        // this.components.forEach((value, key) => {
-        //     console.log(key);
-        //     value.visited = false;
-        // });
-
-        // this.treeStack = [];
-        // console.log(this.treeStack);
-        // this.treeStack.push(this.idRoot);
-        // console.log(this.idRoot);
-
-        // while (this.treeStack.length > 0) {
-        //     var nodeName = this.treeStack.pop();
-        //     //console.log(nodeName);
-        //     var node = this.components.get(nodeName);
-        //     //console.log(""+node.texture);
-        //     if(node && !node.visited) {
-        //         console.log(node);
-        //         node.visited = true;
-        //         node.children.forEach(element => {
-        //             if(!element.visited)
-        //                 this.treeStack.push(element);
-        //         });
-        //     }
-        // }
-        
-        //var root = this.components[this.idRoot];
-        //var lastTransf = root.transfMatrix;
-        
-        // this.traverseGraph(this.components[this.idRoot], 
-        //                 [1,0,0,0,
-        //                 0,1,0,0,
-        //                 0,0,1,0,
-        //                 0,0,0,1]);
-        
-        // console.log(this.components[this.idRoot]);
-        // console.log(this.components[this.idRoot].children);
-        
-        //To test the parsing/creation of the primitives, call the display function directly
-        //this.primitives['demoRectangle'].display();
-        
-        
+    DEBUG_displayDemo() {
         this.scene.pushMatrix();
             this.scene.translate(0,0,0);
             this.primitives['demoSphere'].display();
@@ -1059,14 +1005,96 @@ class MySceneGraph {
             this.primitives['demoRectangle'].display();
         this.scene.popMatrix();
         
-        
         // this.scene.pushMatrix();
         //     this.scene.translate(4,2,0);
         //     //this.primitives['demoTriangle'].enableNormalViz();
         //     this.primitives['demoTriangle'].display();
         // this.scene.popMatrix();
+    }
 
-        //console.log("------------------END   FRAME------------------");
+    DEBUG_displayF1(){
+        this.scene.pushMatrix();
+            this.scene.translate(0,0,0);
+            this.primitives['f1_car_splitter'].display();
+        this.scene.popMatrix();
+    
+        this.scene.pushMatrix();
+            this.scene.translate(2,-2,0);
+            this.scene.scale(0.5,0.5,0.25);
+            //this.primitives['demoCylinder'].enableNormalViz();
+            this.primitives['f1_car_body_cylinder'].display();
+        this.scene.popMatrix();
+    
+        this.scene.pushMatrix();
+            this.scene.translate(2,2,0);
+            //this.primitives['demoTorus'].enableNormalViz();
+            this.primitives['f1_car_tire_f_torus'].display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+            this.scene.translate(4,-2,0);
+            //this.primitives['demoRectangle'].enableNormalViz();
+            this.primitives['f1_car_wheel_rim_rect'].display();
+        this.scene.popMatrix();
+    }
+
+    /**
+     * Displays the scene, processing each node, starting in the root node.
+     */
+    displayScene() {
+        //To do: Create display loop for transversing the scene graph
+
+        //console.log(this.components);
+        console.log("------------------START FRAME------------------");
+        // console.log(this.components);
+        // console.log(this.components.length);
+        // for (var i = 0; i < this.components.length; i++) {
+        //     //console.log(i + ": " + this.components[i]);
+        //     this.components[i].visited = false;
+        //     //console.log(this.components[i].visited);
+        // }
+        
+        this.components.forEach((value, key) => {
+            value.visited = false;
+        });
+
+        this.treeStack = [];
+        // console.log(this.treeStack);
+        this.treeStack.push(this.idRoot);
+        // console.log(this.idRoot);
+
+        while (this.treeStack.length > 0) {
+            var nodeName = this.treeStack.pop();
+            //console.log(nodeName);
+            var node = this.components.get(nodeName);
+            //console.log(""+node.texture);
+            if(node && !node.visited) {
+                console.log(node);
+                node.visited = true;
+                node.children.forEach(element => {
+                    if(!element.visited)
+                        this.treeStack.push(element);
+                });
+            }
+        }
+        
+        //var root = this.components[this.idRoot];
+        //var lastTransf = root.transfMatrix;
+        
+        // this.traverseGraph(this.components[this.idRoot], 
+        //                 [1,0,0,0,
+        //                 0,1,0,0,
+        //                 0,0,1,0,
+        //                 0,0,0,1]);
+        
+        // console.log(this.components[this.idRoot]);
+        // console.log(this.components[this.idRoot].children);
+        
+        console.log("------------------END   FRAME------------------");
+        
+        //To test the parsing/creation of the primitives, call the display function directly
+        //this.DEBUG_displayDemo();
+        //this.DEBUG_displayF1();
     }
 
 
