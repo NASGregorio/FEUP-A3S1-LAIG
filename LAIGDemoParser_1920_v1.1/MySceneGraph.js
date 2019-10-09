@@ -1,4 +1,4 @@
-//var DEGREE_TO_RAD = Math.PI / 180;
+var DEGREE_TO_RAD = Math.PI / 180;
 //var RAD_TO_DEGREE = 180 / Math.PI;
 
 // Order of the groups in the XML document.
@@ -907,7 +907,7 @@ class MySceneGraph {
         var angle = this.reader.getFloat(node, 'angle');
         if (!(angle != null && !isNaN(angle)))
             return "unable to parse angle of the " + messageError;
-        rotation.angle = angle;
+        rotation.angle = angle * DEGREE_TO_RAD;
 
         return rotation;
     }
@@ -981,16 +981,21 @@ class MySceneGraph {
         
         if(!node)
         {
-            this.scene.multMatrix(lastTransf);
             this.primitives[currentNodeName].display();
+            // this.scene.pushMatrix();
+            // this.scene.multMatrix(lastTransf);
+            // this.scene.popMatrix();
             return;
         }
-        console.log(node.transformation);
-        mat4.multiply(lastTransf, lastTransf, node.transformation);
+        
+        // mat4.multiply(lastTransf, lastTransf, node.transformation);
+        // console.log(currentNodeName);
+        // console.log(mat4.str(lastTransf));
         
         node.children.forEach(child => {
             //console.log(child);
             this.scene.pushMatrix();
+            this.scene.multMatrix(node.transformation);
             this.traverseGraph(child, lastTransf, depth);
             this.scene.popMatrix();
         });

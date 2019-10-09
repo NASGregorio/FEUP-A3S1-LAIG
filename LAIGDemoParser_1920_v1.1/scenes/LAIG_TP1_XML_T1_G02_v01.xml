@@ -103,7 +103,8 @@
         
         <component id="f1_car_body">
             <transformation>
-                <transformationref id="f1_car_body_flatten" />
+                <!-- <transformationref id="f1_car_body_flatten" /> -->
+                <scale x="1" y="0.6" z="1" />
             </transformation>
             <materials>
                 <material id="inherit" />
