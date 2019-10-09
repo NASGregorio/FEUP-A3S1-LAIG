@@ -80,6 +80,7 @@ class MyTorus extends CGFobject
 
         for (var k = 1; k <= lastIndex; k++) {
             if(k % this.slices == 0) {
+                //console.log(v);
                 this.indices.push(v, v + 1, v + 1 - this.slices);
                 this.indices.push(v, v + this.slices, v + 1);
             }
@@ -96,6 +97,7 @@ class MyTorus extends CGFobject
         this.indices.push(this.slices-1, 0, lastIndex+(this.slices-1));
         this.indices.push(0, lastIndex, lastIndex+(this.slices-1));
 
+        console.log(this.vertices.length/3);
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();

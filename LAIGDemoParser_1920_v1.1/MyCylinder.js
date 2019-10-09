@@ -54,6 +54,7 @@ class MyCylinder extends CGFobject
         var v = 0;
         for (var k = 1; k <= this.slices * (this.stacks-1); k++) {
             if(k % this.slices == 0) {
+                console.log(v);
                 this.indices.push(v, v + 1, v + 1 - this.slices);
                 this.indices.push(v, v + this.slices, v + 1);
             }
