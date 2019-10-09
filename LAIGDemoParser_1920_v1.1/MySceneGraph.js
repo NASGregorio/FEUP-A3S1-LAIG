@@ -1033,9 +1033,39 @@ class MySceneGraph {
         
         //To test the parsing/creation of the primitives, call the display function directly
         //this.primitives['demoRectangle'].display();
-        this.primitives['demoCylinder'].enableNormalViz();
-        //this.primitives['demoSphere'].display();
-        this.primitives['demoCylinder'].display();
+        
+        
+        this.scene.pushMatrix();
+            this.scene.translate(0,0,0);
+            this.primitives['demoSphere'].display();
+        this.scene.popMatrix();
+        
+        this.scene.pushMatrix();
+            this.scene.translate(2,-2,0);
+            //this.primitives['demoCylinder'].enableNormalViz();
+            this.primitives['demoCylinder'].display();
+        this.scene.popMatrix();
+        
+        this.scene.pushMatrix();
+            this.scene.translate(2,2,0);
+            this.scene.scale(1/2,1/2,1/2);
+            //this.primitives['demoTorus'].enableNormalViz();
+            this.primitives['demoTorus'].display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+            this.scene.translate(4,-2,0);
+            //this.primitives['demoRectangle'].enableNormalViz();
+            this.primitives['demoRectangle'].display();
+        this.scene.popMatrix();
+        
+        
+        // this.scene.pushMatrix();
+        //     this.scene.translate(4,2,0);
+        //     //this.primitives['demoTriangle'].enableNormalViz();
+        //     this.primitives['demoTriangle'].display();
+        // this.scene.popMatrix();
+
         //console.log("------------------END   FRAME------------------");
     }
 
