@@ -970,13 +970,30 @@ class MySceneGraph {
         console.log("   " + message);
     }
 
-    traverseGraph(currentNode, lastTransf) {
-        currentNode.visited = true;
-        this.scene.push();
-        for (var i = 0; i < currentNode.children.length; i++) {
-            if(!currentNode.children[i].visited)
-                traverseGraph(currentNode.children[i], mat4.multMatrix(lastTransf, lastTransf, currentNode.transfMatrix))
+    traverseGraph(currentNodeName, lastTransf, depth) {
+        // var depthStr = "";
+        // for(var i = 0; i < depth; i++) { depthStr = depthStr.concat(' '); }
+        // console.log(depthStr + currentNodeName);
+        // depth++;
+
+        var node = this.components.get(currentNodeName);
+
+        
+        if(!node)
+        {
+            this.scene.multMatrix(lastTransf);
+            this.primitives[currentNodeName].display();
+            return;
         }
+        console.log(node.transformation);
+        mat4.multiply(lastTransf, lastTransf, node.transformation);
+        
+        node.children.forEach(child => {
+            //console.log(child);
+            this.scene.pushMatrix();
+            this.traverseGraph(child, lastTransf, depth);
+            this.scene.popMatrix();
+        });
     }
 
 
@@ -1042,55 +1059,43 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        //To do: Create display loop for transversing the scene graph
+
+        //console.log("------------------START FRAME------------------");
 
         //console.log(this.components);
-        console.log("------------------START FRAME------------------");
-        // console.log(this.components);
-        // console.log(this.components.length);
-        // for (var i = 0; i < this.components.length; i++) {
-        //     //console.log(i + ": " + this.components[i]);
-        //     this.components[i].visited = false;
-        //     //console.log(this.components[i].visited);
-        // }
+        //console.log(this.components.size);
         
-        this.components.forEach((value, key) => {
-            value.visited = false;
-        });
+        // // // // // this.components.forEach((value, key) => {
+        // // // // //     value.visited = false;
+        // // // // // });
 
-        this.treeStack = [];
-        // console.log(this.treeStack);
-        this.treeStack.push(this.idRoot);
-        // console.log(this.idRoot);
+        // // // // // this.treeStack = [];
+        // // // // // this.treeStack.push(this.idRoot);
 
-        while (this.treeStack.length > 0) {
-            var nodeName = this.treeStack.pop();
-            //console.log(nodeName);
-            var node = this.components.get(nodeName);
-            //console.log(""+node.texture);
-            if(node && !node.visited) {
-                console.log(node);
-                node.visited = true;
-                node.children.forEach(element => {
-                    if(!element.visited)
-                        this.treeStack.push(element);
-                });
-            }
-        }
+        // // // // // while (this.treeStack.length > 0) {
+        // // // // //     var nodeName = this.treeStack.pop();
+        // // // // //     var node = this.components.get(nodeName);
+        // // // // //     if(node && !node.visited) {
+        // // // // //         console.log(nodeName);
+        // // // // //         node.visited = true;
+        // // // // //         node.children.forEach(element => {
+        // // // // //             if(!element.visited)
+        // // // // //                 this.treeStack.push(element);
+        // // // // //         });
+        // // // // //     }
+        // // // // // }
         
-        //var root = this.components[this.idRoot];
-        //var lastTransf = root.transfMatrix;
+        var root = this.components.get(this.idRoot);
+        var lastTransf = root.transfMatrix;
         
-        // this.traverseGraph(this.components[this.idRoot], 
-        //                 [1,0,0,0,
-        //                 0,1,0,0,
-        //                 0,0,1,0,
-        //                 0,0,0,1]);
+        this.traverseGraph(this.idRoot, 
+                        [1,0,0,0,
+                        0,1,0,0,
+                        0,0,1,0,
+                        0,0,0,1],
+                        0);
         
-        // console.log(this.components[this.idRoot]);
-        // console.log(this.components[this.idRoot].children);
-        
-        console.log("------------------END   FRAME------------------");
+        //console.log("------------------END   FRAME------------------");
         
         //To test the parsing/creation of the primitives, call the display function directly
         //this.DEBUG_displayDemo();
