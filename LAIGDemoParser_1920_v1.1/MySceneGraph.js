@@ -4,7 +4,7 @@ var RAD_TO_DEGREE = 180 / Math.PI;
 // Order of the groups in the XML document.
 var SCENE_INDEX = 0;
 var VIEWS_INDEX = 1;
-var AMBIENT_INDEX = 2;
+var GLOBALS_INDEX = 2;
 var LIGHTS_INDEX = 3;
 var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
@@ -12,11 +12,11 @@ var TRANSFORMATIONS_INDEX = 6;
 var PRIMITIVES_INDEX = 7;
 var COMPONENTS_INDEX = 8;
 
-var DEBUG_ALL = 0;
+var DEBUG_ALL = 1;
 var DEBUG_FLAGS = [ 
     DEBUG_ALL | 0, //SCENE
     DEBUG_ALL | 0, //VIEWS
-    DEBUG_ALL | 0, //AMBIENT
+    DEBUG_ALL | 0, //GLOBALS
     DEBUG_ALL | 0, //LIGHTS
     DEBUG_ALL | 0, //TEXTURES
     DEBUG_ALL | 0, //MATERIALS
@@ -48,6 +48,8 @@ class MySceneGraph {
         this.axisCoords['x'] = [1, 0, 0];
         this.axisCoords['y'] = [0, 1, 0];
         this.axisCoords['z'] = [0, 0, 1];
+
+        this.parser = new MyParser();
 
         // File reading 
         this.reader = new CGFXMLreader();
@@ -86,144 +88,60 @@ class MySceneGraph {
      * @param {XML root element} rootElement
      */
     parseXMLFile(rootElement) {
+
+        // Check root tag
         if (rootElement.nodeName != "lxs")
             return "root tag <lxs> missing";
 
+        // Get all nodes
         var nodes = rootElement.children;
 
-        // Reads the names of the nodes to an auxiliary buffer.
+        // Get all node names
         var nodeNames = [];
-
-        for (var i = 0; i < nodes.length; i++) {
+        for (var i = 0; i < nodes.length; i++)
             nodeNames.push(nodes[i].nodeName);
-        }
-        if(DEBUG_ALL) console.log(nodes); //DEBUG
-
+   
+        // Process each node, checking for errors.
         var error;
 
-        // Processes each node, verifying errors.
-
         // <scene>
-        var index;
-        if ((index = nodeNames.indexOf("scene")) == -1)
-            return "tag <scene> missing";
-        else {
-            if (index != SCENE_INDEX)
-                this.onXMLMinorError("tag <scene> out of order " + index);
-
-            if(DEBUG_FLAGS[SCENE_INDEX]) console.log(nodes[index]); //DEBUG
-
-            //Parse scene block
-            if ((error = this.parseScene(nodes[index])) != null)
-                return error;
-        }
-
-        // var error;
-        // if((error = this.processEntity("scene", nodeNames, nodes, SCENE_INDEX, this.parseScene)) != null)
-        //     return error;
-
+        if((error = this.processEntity("scene", nodeNames, nodes, SCENE_INDEX, this.parseScene.bind(this))) != null)
+            return error;
 
         // <views>
-        if ((index = nodeNames.indexOf("views")) == -1)
-            return "tag <views> missing";
-        else {
-            if (index != VIEWS_INDEX)
-                this.onXMLMinorError("tag <views> out of order");
-
-            if(DEBUG_FLAGS[VIEWS_INDEX]) console.log(nodes[index]); //DEBUG
-
-            //Parse views block
-            if ((error = this.parseView(nodes[index])) != null)
-                return error;
-        }
+        if((error = this.processEntity("views", nodeNames, nodes, VIEWS_INDEX, this.parseView.bind(this))) != null)
+            return error;
 
         // <globals>
-        if ((index = nodeNames.indexOf("globals")) == -1)
-            return "tag <globals> missing";
-        else {
-            if (index != AMBIENT_INDEX)
-                this.onXMLMinorError("tag <globals> out of order");
-
-            //Parse globals block
-            if ((error = this.parseGlobals(nodes[index])) != null)
-                return error;
-        }
+        if((error = this.processEntity("globals", nodeNames, nodes, GLOBALS_INDEX, this.parseGlobals.bind(this))) != null)
+            return error;
 
         // <lights>
-        if ((index = nodeNames.indexOf("lights")) == -1)
-            return "tag <lights> missing";
-        else {
-            if (index != LIGHTS_INDEX)
-                this.onXMLMinorError("tag <lights> out of order");
+        if((error = this.processEntity("lights", nodeNames, nodes, LIGHTS_INDEX, this.parseLights.bind(this))) != null)
+            return error;
 
-            //Parse lights block
-            if ((error = this.parseLights(nodes[index])) != null)
-                return error;
-        }
         // <textures>
-        if ((index = nodeNames.indexOf("textures")) == -1)
-            return "tag <textures> missing";
-        else {
-            if (index != TEXTURES_INDEX)
-                this.onXMLMinorError("tag <textures> out of order");
-
-            //Parse textures block
-            if ((error = this.parseTextures(nodes[index])) != null)
-                return error;
-        }
+        if((error = this.processEntity("textures", nodeNames, nodes, TEXTURES_INDEX, this.parseTextures.bind(this))) != null)
+            return error;
 
         // <materials>
-        if ((index = nodeNames.indexOf("materials")) == -1)
-            return "tag <materials> missing";
-        else {
-            if (index != MATERIALS_INDEX)
-                this.onXMLMinorError("tag <materials> out of order");
-
-            //Parse materials block
-            if ((error = this.parseMaterials(nodes[index])) != null)
-                return error;
-        }
+        if((error = this.processEntity("materials", nodeNames, nodes, MATERIALS_INDEX, this.parseMaterials.bind(this))) != null)
+            return error;
 
         // <transformations>
-        if ((index = nodeNames.indexOf("transformations")) == -1)
-            return "tag <transformations> missing";
-        else {
-            if (index != TRANSFORMATIONS_INDEX)
-                this.onXMLMinorError("tag <transformations> out of order");
-
-            if(DEBUG_FLAGS[TRANSFORMATIONS_INDEX]) console.log(nodes[index]); //DEBUG
-
-            //Parse transformations block
-            if ((error = this.parseTransformations(nodes[index])) != null)
-                return error;
-        }
+        if((error = this.processEntity("transformations", nodeNames, nodes, TRANSFORMATIONS_INDEX, this.parseTransformations.bind(this))) != null)
+            return error;
 
         // <primitives>
-        if ((index = nodeNames.indexOf("primitives")) == -1)
-            return "tag <primitives> missing";
-        else {
-            if (index != PRIMITIVES_INDEX)
-                this.onXMLMinorError("tag <primitives> out of order");
-
-            //Parse primitives block
-            if ((error = this.parsePrimitives(nodes[index])) != null)
-                return error;
-        }
+        if((error = this.processEntity("primitives", nodeNames, nodes, PRIMITIVES_INDEX, this.parsePrimitives.bind(this))) != null)
+            return error;
 
         // <components>
-        if ((index = nodeNames.indexOf("components")) == -1)
-            return "tag <components> missing";
-        else {
-            if (index != COMPONENTS_INDEX)
-                this.onXMLMinorError("tag <components> out of order");
+        if((error = this.processEntity("components", nodeNames, nodes, COMPONENTS_INDEX, this.parseComponents.bind(this))) != null)
+            return error;
 
-            if(DEBUG_FLAGS[COMPONENTS_INDEX]) console.log(nodes[index]); //DEBUG
-
-            //Parse components block
-            if ((error = this.parseComponents(nodes[index])) != null)
-                return error;
-        }
-        this.log("all parsed");
+        this.log("READY");
+        return null;
     }
 
     /**
@@ -233,7 +151,6 @@ class MySceneGraph {
     parseScene(sceneNode) {
 
         // Get root of the scene.
-
         var root = this.reader.getString(sceneNode, 'root')
         if (root == null)
             return "no root defined for scene";
@@ -247,8 +164,6 @@ class MySceneGraph {
 
         //this.referenceLength = axis_length || 1;
         this.referenceLength = axis_length != null ? axis_length : 1; //HACK
-
-        this.log("Parsed scene");
 
         return null;
     }
@@ -302,8 +217,6 @@ class MySceneGraph {
             return color;
         else
             this.background = color;
-
-        this.log("Parsed globals");
 
         return null;
     }
@@ -422,7 +335,6 @@ class MySceneGraph {
         else if (numLights > 8)
             this.onXMLMinorError("too many lights defined; WebGL imposes a limit of 8 lights");
 
-        this.log("Parsed lights");
         return null;
     }
 
@@ -470,8 +382,39 @@ class MySceneGraph {
             this.onXMLMinorError("To do: Parse materials.");
         }
 
-        //this.log("Parsed materials");
         return null;
+    }
+
+
+    createTransformationFromXML(transformation, sourceName) {
+        var transfMatrix = mat4.create();
+
+        for (var j = 0; j < transformation.length; j++) {
+            switch (transformation[j].nodeName) {
+                case 'translate':
+                    var coordinates = this.parseCoordinates3D(transformation[j], "translate transformation from " + sourceName);
+                    if (!Array.isArray(coordinates))
+                        return coordinates;
+
+                    transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
+                    break;
+                case 'scale':                        
+                    var coordinates = this.parseCoordinates3D(transformation[j], "scale transformation from " + sourceName);
+                    if (!Array.isArray(coordinates))
+                        return coordinates;
+
+                    transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
+                    break;
+                case 'rotate':
+                    var rotation = this.parseRotation(transformation[j], "rotate transformation from " + sourceName);
+                    if (!Array.isArray(rotation.axis))
+                        return rotation;
+
+                    transfMatrix = mat4.rotate(transfMatrix, transfMatrix, rotation.angle, rotation.axis);
+                    break;
+            }
+        }
+        return transfMatrix;
     }
 
     /**
@@ -505,49 +448,17 @@ class MySceneGraph {
             transformationDataNodes = transformationNodes[i].children;
 
             // Specifications for the current transformation.
-            var transfMatrix = mat4.create();
+            var transfMatrix = this.createTransformationFromXML(transformationDataNodes, transformationID);
+            if (!(transfMatrix instanceof Float32Array))
+                return transfMatrix;
 
-            for (var j = 0; j < transformationDataNodes.length; j++) {
-                switch (transformationDataNodes[j].nodeName) {
-                    case 'translate':
-                        var coordinates = this.parseCoordinates3D(transformationDataNodes[j], "translate transformation for ID " + transformationID);
-                        if (!Array.isArray(coordinates))
-                            return coordinates;
+            // var helpers = new MyProcessHelpers();
 
-                        transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
-                        break;
-                    case 'scale':                        
-                        var coordinates = this.parseCoordinates3D(transformationDataNodes[j], "scale transformation for ID " + transformationID);
-                        if (!Array.isArray(coordinates))
-                            return coordinates;
+            // var a = this.parser.createTransformationFromXML(transformationDataNodes, "b");
+            // console.log(a);
 
-                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
-                        break;
-                    case 'rotate':
-                        var rotation = this.parseRotation(transformationDataNodes[j], "rotate transformation for ID " + transformationID);
-                        if (!Array.isArray(rotation.axis))
-                            return rotation;
-
-                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, rotation.angle, rotation.axis);
-                        break;
-                }
-            }
             this.transformations[transformationID] = transfMatrix;
-
-            //console.log(mat4.str(transfMatrix));
-            // var t = mat4.transpose(transfMatrix, transfMatrix);
-            // console.log("[" + t[0] + ", " + t[1] + ", " + t[2] + ", " + t[3] + "]\n["
-            //                 + t[4] + ", " + t[5] + ", " + t[6] + ", " + t[7] + "]\n["
-            //                 + t[8] + ", " + t[9] + ", " + t[10] + ", " + t[11] + "]\n["
-            //                 + t[12] + ", " + t[13] + ", " + t[14] + ", " + t[15] + "]");
-
-            //pushmatrix
-            //multMatrix(t)
-            //display
-            //popmatrix
         }
-
-        this.log("Parsed transformations");
         return null;
     }
 
@@ -698,8 +609,6 @@ class MySceneGraph {
                 console.warn("To do: Parse other primitives.");
             }
         }
-
-        this.log("Parsed primitives");
         return null;
     }
 
@@ -756,33 +665,10 @@ class MySceneGraph {
             
             // Transformations
             componentData = componentDataNodes[transformationIndex].children;
-            var transfMatrix = mat4.create();
-            
-            for (var j = 0; j < componentData.length; j++) {
-                switch (componentData[j].nodeName) {
-                    case 'translate':
-                        var coordinates = this.parseCoordinates3D(componentData[j], "translate transformation from component " + componentID);
-                        if (!Array.isArray(coordinates))
-                        return coordinates;
+            var transfMatrix = this.createTransformationFromXML(componentData, componentID);
+            if (!(transfMatrix instanceof Float32Array))
+                return transfMatrix;
 
-                        transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
-                        break;
-                    case 'scale':                        
-                        var coordinates = this.parseCoordinates3D(componentData[j], "scale transformation from component " + componentID);
-                        if (!Array.isArray(coordinates))
-                            return coordinates;
-
-                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
-                        break;
-                    case 'rotate':
-                        var rotation = this.parseRotation(componentData[j], "rotate transformation from component " + componentID);
-                        if (!Array.isArray(rotation.axis))
-                            return rotation;
-
-                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, rotation.angle, rotation.axis);
-                        break;
-                }
-            }
             component.transformation = transfMatrix;
                     
             // TODO: Ver se referencias existem em todos os campos
@@ -808,6 +694,7 @@ class MySceneGraph {
             // Assign newly created component to components array
             this.components[componentID] = component;
         }
+        return null;
     }
     
 
@@ -853,7 +740,6 @@ class MySceneGraph {
         if (!Array.isArray(position))
             return position;
 
-
         // w
         var w = this.reader.getFloat(node, 'w');
         if (!(w != null && !isNaN(w)))
@@ -870,18 +756,20 @@ class MySceneGraph {
      * @param {message to be displayed in case of error} messageError
      */
     parseRotation(node, messageError) {
-        var rotation = {};
+        var rotation = [];
 
         // axis
         var axis = this.reader.getString(node, 'axis');
         if (!(axis != null && axis.length == 1 && axis.match(/[x-z]/) ))
             return "unable to parse axis of the " + messageError;
+
         rotation.axis = [axis=="x", axis=="y", axis=="z"];
 
         // angle
         var angle = this.reader.getFloat(node, 'angle');
         if (!(angle != null && !isNaN(angle)))
             return "unable to parse angle of the " + messageError;
+
         rotation.angle = angle * DEGREE_TO_RAD;
 
         return rotation;
@@ -1060,7 +948,10 @@ class MySceneGraph {
             if(DEBUG_FLAGS[expectedIndex]) console.log(nodes[index]); //DEBUG
 
             //Parse scene block
-            return parseFunc(nodes[index], this);
+            var res = parseFunc(nodes[index]);
+            if(res == null)
+                this.log("Parsed "+nodeName);
+            return res;
         }
     }
 }
