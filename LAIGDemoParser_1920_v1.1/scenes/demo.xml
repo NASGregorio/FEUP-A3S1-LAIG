@@ -35,17 +35,30 @@
     <materials>
         <material id="demoMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
             <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
-            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="demoMaterial2" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.0" g="0.6" b="0.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="demoMaterial3" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.0" g="0.0" b="0.6" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
     </materials>
 
     <transformations>
         <transformation id="demoTransform">
-            <scale x="2" y="1" z="1" />
-            <rotate axis="y" angle="-45" />
-            <!-- <rotate axis="z" angle="-90" /> -->
+            <rotate axis="z" angle="-45" />
+            <scale x="2" y="1" z="2" />
         </transformation>
         
         <transformation id="demoTransform2">
@@ -65,7 +78,7 @@
         </primitive>
 
         <primitive id="demoCylinder">
-            <cylinder base="2" top="1" height="6" slices="24" stacks="24" />
+            <cylinder base="1" top="2" height="2" slices="6" stacks="6" />
         </primitive>
 
         <primitive id="demoTorus">
@@ -93,30 +106,33 @@
         
         <component id="demoRoot2">
             <transformation>
-                <scale x="1" y="-1" z="1"/>
-                <!-- <translate x="0" y="1" z="0" />
-                <rotate axis="y" angle="-90" /> -->
+                <translate x="0" y="0" z="1" />
+                <scale x="1" y="2" z="1" />
             </transformation>
             <materials>
-                <material id="demoMaterial5" />
+                <material id="demoMaterial3" />
+                <material id="inherit" />
+                <material id="demoMaterial" />
             </materials>
             <texture id="demoTexture2"/>
             <children>
-                <primitiveref id="demoCylinder" />
+                <primitiveref id="demoRectangle" />
             </children>
         </component>
 
         <component id="demoRoot3">
             <transformation>
-                <!-- <translate x="0" y="1" z="0" />
-                <rotate axis="y" angle="-90" /> -->
+                <translate x="0" y="1" z="0" />
+                <rotate axis="y" angle="-90" />
             </transformation>
             <materials>
-                <material id="demoMaterial5" />
+                <material id="demoMaterial2" />
+                <material id="demoMaterial" />
+                <material id="inherit" />
             </materials>
             <texture id="demoTexture2"/>
             <children>
-                <primitiveref id="demoCylinder" />
+                <primitiveref id="demoTorus" />
             </children>
         </component>
     </components>

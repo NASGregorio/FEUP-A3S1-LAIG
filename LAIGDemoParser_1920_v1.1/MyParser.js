@@ -452,7 +452,7 @@ class MyParser {
 
             // Specifications for the current transformation.
             var mat = this.processMaterial(materialID, materialShine, materialDataNodes);
-            if (!(mat instanceof MaterialObj))
+            if (!(mat instanceof CGFappearance))
                 return mat;
             else
                 this.sceneGraph.materials[materialID] = mat;
@@ -776,24 +776,6 @@ class MyParser {
                 component.children.push(childID);
             }
 
-            /*
-                <component id="demoRoot">
-                    <transformation>
-                        <transformationref id="demoTransform" />
-                    </transformation>
-                    <materials>
-                        <material id="demoMaterial" />
-                        <material id="demoMaterial2" />
-                        <material id="demoMaterial3" />
-                    </materials>
-                    <texture id="demoTexture"/>
-                    <children>
-                        <componentref id="demoRoot2" />
-                        <componentref id="demoRoot3" />
-                    </children>
-                </component>
-            */
-
             // Assign newly created component to components array
             this.sceneGraph.components[componentID] = component;
         }
@@ -956,9 +938,7 @@ class MyParser {
      * @param {block ID to be displayed in case of error} sourceName
      */
     processMaterial(sourceName, shininess, material) {
-        //var transfMatrix = mat4.create();
 
-        
         if(material.length != 4)
             return "material only has 4 attributes. " + sourceName + " has " + material.length;
             
@@ -1015,10 +995,17 @@ class MyParser {
             }
         }
 
-        if(got_emission && got_ambient && got_diffuse && got_specular)
-            return new MaterialObj(sourceName, shininess, emission, ambient, diffuse, specular);
-        else
+        if(got_emission && got_ambient && got_diffuse && got_specular) {
+            var mat = new CGFappearance(this.sceneGraph.scene);
+            mat.setShininess(shininess);
+            mat.setEmission(emission[0], emission[1], emission[2], emission[3]);
+            mat.setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
+            mat.setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
+            mat.setSpecular(specular[0], specular[1], specular[2], specular[3]);
+            return mat;
+        } else {
             return "Missing attributes: " + sourceName;
+        }
     }
 
 }

@@ -14,12 +14,23 @@ class MySceneGraph {
         
         // Try to parse the XML file
         this.parser = new MyParser(this, filename);
+
+        this.count = 0;
+        this.matIndex = 0;
     }
 
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
+
+
+        this.count++;
+        
+        if(this.count >= 60) {
+            this.count = 0;
+            this.matIndex++;
+        }
 
         //console.log("------------------START FRAME------------------");        
         this.traverseGraph(this.idRoot, this.idRoot, 0);
@@ -29,34 +40,31 @@ class MySceneGraph {
         //console.log("------------------END   FRAME------------------");
     }
 
-    traverseGraph(parentNodeName, currentNodeName, depth) {
+    traverseGraph(currentNodeName, parentMaterialName, depth) {
         // var depthStr = "";
         // for(var i = 0; i < depth; i++) { depthStr = depthStr.concat(' '); }
         // console.log(depthStr + currentNodeName);
         // depth++;
 
-        var matIndex = 0;
-
+        
         var node = this.components[currentNodeName];
 
         if(!node)
         {
-            // var thisMatIndex = matIndex % node.materials.length;
-
-            // var matName = (node.materials[thisMatIndex] != "inherit") ? 
-            //                 node.materials[thisMatIndex].apply() :
-            //                 this.components[parentNodeName].materials[thisMatIndex];
-
-            // this.materials[matName].apply();
-
+            this.materials[parentMaterialName].apply();
             this.primitives[currentNodeName].display();
             return;
         }
+ 
+        var thisMatIndex = this.matIndex % node.materials.length;
+        var matName = (node.materials[thisMatIndex] != "inherit") ? 
+                            node.materials[thisMatIndex] :
+                            parentMaterialName;
         
-        node.children.forEach(child => {
+        node.children.forEach(childName => {
             this.scene.pushMatrix();
             this.scene.multMatrix(this.transformations[node.transformationref]);
-            this.traverseGraph(currentNodeName, child, depth);
+            this.traverseGraph(childName, matName, depth);
             this.scene.popMatrix();
         });
     }
