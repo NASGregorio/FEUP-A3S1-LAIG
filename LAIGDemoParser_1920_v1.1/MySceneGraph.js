@@ -22,23 +22,33 @@ class MySceneGraph {
     displayScene() {
 
         //console.log("------------------START FRAME------------------");        
-        this.traverseGraph(this.idRoot, 0);
+        this.traverseGraph(this.idRoot, this.idRoot, 0);
         
         //this.DEBUG_displayDemo();
         //this.DEBUG_displayF1();
         //console.log("------------------END   FRAME------------------");
     }
 
-    traverseGraph(currentNodeName, depth) {
+    traverseGraph(parentNodeName, currentNodeName, depth) {
         // var depthStr = "";
         // for(var i = 0; i < depth; i++) { depthStr = depthStr.concat(' '); }
         // console.log(depthStr + currentNodeName);
         // depth++;
 
+        var matIndex = 0;
+
         var node = this.components[currentNodeName];
 
         if(!node)
         {
+            // var thisMatIndex = matIndex % node.materials.length;
+
+            // var matName = (node.materials[thisMatIndex] != "inherit") ? 
+            //                 node.materials[thisMatIndex].apply() :
+            //                 this.components[parentNodeName].materials[thisMatIndex];
+
+            // this.materials[matName].apply();
+
             this.primitives[currentNodeName].display();
             return;
         }
@@ -46,7 +56,7 @@ class MySceneGraph {
         node.children.forEach(child => {
             this.scene.pushMatrix();
             this.scene.multMatrix(this.transformations[node.transformationref]);
-            this.traverseGraph(child, depth);
+            this.traverseGraph(currentNodeName, child, depth);
             this.scene.popMatrix();
         });
     }

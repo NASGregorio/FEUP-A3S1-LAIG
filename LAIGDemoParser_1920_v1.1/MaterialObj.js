@@ -1,4 +1,3 @@
-
 /**
  * MaterialObj class, responsible for parsing XML scene data.
  */

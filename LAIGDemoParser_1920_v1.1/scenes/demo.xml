@@ -43,8 +43,9 @@
 
     <transformations>
         <transformation id="demoTransform">
-            <rotate axis="z" angle="-45" />
-            <scale x="2" y="1" z="2" />
+            <scale x="2" y="1" z="1" />
+            <rotate axis="y" angle="-45" />
+            <!-- <rotate axis="z" angle="-90" /> -->
         </transformation>
         
         <transformation id="demoTransform2">
@@ -64,7 +65,7 @@
         </primitive>
 
         <primitive id="demoCylinder">
-            <cylinder base="1" top="2" height="2" slices="6" stacks="6" />
+            <cylinder base="2" top="1" height="6" slices="24" stacks="24" />
         </primitive>
 
         <primitive id="demoTorus">
@@ -92,29 +93,30 @@
         
         <component id="demoRoot2">
             <transformation>
-                <translate x="0" y="0" z="1" />
-                <scale x="1" y="2" z="1" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial4" />
-            </materials>
-            <texture id="demoTexture2"/>
-            <children>
-                <primitiveref id="demoRectangle" />
-            </children>
-        </component>
-
-        <component id="demoRoot3">
-            <transformation>
-                <translate x="0" y="1" z="0" />
-                <rotate axis="y" angle="-90" />
+                <scale x="1" y="-1" z="1"/>
+                <!-- <translate x="0" y="1" z="0" />
+                <rotate axis="y" angle="-90" /> -->
             </transformation>
             <materials>
                 <material id="demoMaterial5" />
             </materials>
             <texture id="demoTexture2"/>
             <children>
-                <primitiveref id="demoTorus" />
+                <primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+        <component id="demoRoot3">
+            <transformation>
+                <!-- <translate x="0" y="1" z="0" />
+                <rotate axis="y" angle="-90" /> -->
+            </transformation>
+            <materials>
+                <material id="demoMaterial5" />
+            </materials>
+            <texture id="demoTexture2"/>
+            <children>
+                <primitiveref id="demoCylinder" />
             </children>
         </component>
     </components>
