@@ -19,14 +19,20 @@ var DEBUG_FLAGS = [
     DEBUG_ALL | 0, //GLOBALS
     DEBUG_ALL | 0, //LIGHTS
     DEBUG_ALL | 0, //TEXTURES
-    DEBUG_ALL | 0, //MATERIALS
+    DEBUG_ALL | 1, //MATERIALS
     DEBUG_ALL | 1, //TRANSFORMATIONS
     DEBUG_ALL | 1, //PRIMITIVES
     DEBUG_ALL | 1  //COMPONENTS
 ];
 
+/**
+ * MyParser class, responsible for parsing XML scene data.
+ */
 class MyParser {
 
+    /**
+     * @constructor
+     */
 	constructor(sceneGraph, filename) {
 
         this.sceneGraph = sceneGraph;
@@ -143,7 +149,7 @@ class MyParser {
         console.log("   " + message);
     }
 
-    /*
+    /**
      * Callback to be executed on any read error, showing an error on the console.
      * @param {string} message
      */
@@ -414,32 +420,42 @@ class MyParser {
      * @param {materials block element} materialsNode
      */
     parseMaterials(materialsNode) {
-        var children = materialsNode.children;
-
         this.sceneGraph.materials = [];
 
-        var grandChildren = [];
-        var nodeNames = [];
+        var materialNodes = materialsNode.children;
+        var materialDataNodes = [];
 
         // Any number of materials.
-        for (var i = 0; i < children.length; i++) {
+        for (var i = 0; i < materialNodes.length; i++) {
 
-            if (children[i].nodeName != "material") {
-                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+            if (materialNodes[i].nodeName != "material") {
+                this.onXMLMinorError("unknown tag <" + materialNodes[i].nodeName + ">");
                 continue;
             }
 
             // Get id of the current material.
-            var materialID = this.reader.getString(children[i], 'id');
+            var materialID = this.reader.getString(materialNodes[i], 'id');
             if (materialID == null)
                 return "no ID defined for material";
 
             // Checks for repeated IDs.
             if (this.sceneGraph.materials[materialID] != null)
-                return "ID must be unique for each light (conflict: ID = " + materialID + ")";
+                return "ID must be unique for each material (conflict: ID = " + materialID + ")";
 
-            //Continue here
-            this.onXMLMinorError("To do: Parse materials.");
+            // Get shininess of the current material.
+            var materialShine = this.reader.getString(materialNodes[i], 'shininess');
+            if (materialShine == null)
+                return "no shininess defined for material";
+
+            // Get transformation data (translation, rotation and scaling nodes)            
+            materialDataNodes = materialNodes[i].children;
+
+            // Specifications for the current transformation.
+            var mat = this.processMaterial(materialID, materialShine, materialDataNodes);
+            if (!(mat instanceof MaterialObj))
+                return mat;
+            else
+                this.sceneGraph.materials[materialID] = mat;
         }
 
         return null;
@@ -494,10 +510,9 @@ class MyParser {
      * @param {primitives block element} primitivesNode
      */
     parsePrimitives(primitivesNode) {
-        var children = primitivesNode.children;
-
         this.sceneGraph.primitives = [];
 
+        var children = primitivesNode.children;
         var grandChildren = [];
 
         // Any number of primitives.
@@ -662,7 +677,6 @@ class MyParser {
                 children: []
             };
 
-
             // Check for malformed components
             if (componentNodes[i].nodeName != "component") {
                 this.onXMLMinorError("unknown tag <" + componentNodes[i].nodeName + ">");
@@ -693,6 +707,8 @@ class MyParser {
             var childrenIndex = nodeNames.indexOf("children");
             
             // Transformations
+            if(componentDataNodes[transformationIndex] == null)
+                return "Component " + componentID + " is missing transformation tag";
             componentData = componentDataNodes[transformationIndex].children;
             var ref;
             
@@ -706,9 +722,9 @@ class MyParser {
             else if (componentData.length == 1 && componentData[0].nodeName == "transformationref") {
                 ref = this.reader.getString(componentData[0], 'id');
                 if(ref == null)
-                    return "";
+                    return "Component " + componentID + " has transformationref without id.";
                 if(this.sceneGraph.transformations[ref] == null)
-                    return "";
+                    return "Component " + componentID + " wants transformation with id " + ref + " that doesn't exist.";
             } 
             // has explicit
             else {
@@ -725,23 +741,58 @@ class MyParser {
                     
             // TODO: Ver se referencias existem em todos os campos
             // Materials
-
+            if(componentDataNodes[materialsIndex] == null)
+                return "Component " + componentID + " is missing materials tag";
             componentData = componentDataNodes[materialsIndex].children;
+
             for (var k = 0; k < componentData.length; k++) {
                 var materialID = this.reader.getString(componentData[k], 'id');
                 component.materials.push(materialID);
             }
 
-            // // Texture
+            // Texture
+            if(componentDataNodes[textureIndex] == null)
+                return "Component " + componentID + " is missing texture tag";
             component.texture = this.reader.getString(componentDataNodes[textureIndex], 'id');
             
             // Children
-            component.children = [];
+            if(componentDataNodes[childrenIndex] == null)
+                return "Component " + componentID + " is missing children tag";
+
             componentData = componentDataNodes[childrenIndex].children;
+
+            if(componentData.length == 0)
+                return "Component " + componentID + " must have at least one child.";
+
             for (var k = 0; k < componentData.length; k++) {
+
                 var childID = this.reader.getString(componentData[k], 'id');
+                if(childID == null)
+                    return "Component " + componentID + " has componentref without id.";
+
+                // if(this.sceneGraph.components[childID] == null)
+                //     return "Component " + componentID + " wants child with id " + childID + " that doesn't exist.";
+
                 component.children.push(childID);
             }
+
+            /*
+                <component id="demoRoot">
+                    <transformation>
+                        <transformationref id="demoTransform" />
+                    </transformation>
+                    <materials>
+                        <material id="demoMaterial" />
+                        <material id="demoMaterial2" />
+                        <material id="demoMaterial3" />
+                    </materials>
+                    <texture id="demoTexture"/>
+                    <children>
+                        <componentref id="demoRoot2" />
+                        <componentref id="demoRoot3" />
+                    </children>
+                </component>
+            */
 
             // Assign newly created component to components array
             this.sceneGraph.components[componentID] = component;
@@ -897,6 +948,77 @@ class MyParser {
             }
         }
         return transfMatrix;
+    }
+
+    /**
+     * Process content from a <material> XML block into a material object
+     * @param {material block element} material
+     * @param {block ID to be displayed in case of error} sourceName
+     */
+    processMaterial(sourceName, shininess, material) {
+        //var transfMatrix = mat4.create();
+
+        
+        if(material.length != 4)
+            return "material only has 4 attributes. " + sourceName + " has " + material.length;
+            
+        var got_emission = false;
+        var got_ambient = false;
+        var got_diffuse = false;
+        var got_specular = false;
+        
+        var emission = [];
+        var ambient = [];
+        var diffuse = [];
+        var specular = [];
+            
+        for (var j = 0; j < material.length; j++) {
+            switch (material[j].nodeName) {
+                case 'emission':
+                    if(got_emission)
+                        return "duplicate emission attribute found in " + sourceName;
+                    got_emission = true;
+                    
+                    emission = this.parseColor(material[j], "material with ID " + sourceName);
+                    if (!Array.isArray(emission))
+                        return emission;
+                    break;
+                case 'ambient':
+                    if(got_ambient)
+                        return "duplicate ambient attribute found in " + sourceName;
+                    got_ambient = true;
+
+                    ambient = this.parseColor(material[j], "material with ID " + sourceName);
+                    if (!Array.isArray(ambient))
+                        return ambient;
+                    break;
+                case 'diffuse':                        
+                    if(got_diffuse)
+                        return "duplicate diffuse attribute found in " + sourceName;
+                    got_diffuse = true;
+                        
+                    diffuse = this.parseColor(material[j], "material with ID " + sourceName);
+                    if (!Array.isArray(diffuse))
+                        return diffuse;
+                    break;
+                case 'specular':
+                    if(got_specular)
+                        return "duplicate specular attribute found in " + sourceName;
+                    got_specular = true;
+                        
+                    specular = this.parseColor(material[j], "material with ID " + sourceName);
+                    if (!Array.isArray(specular))
+                        return specular;
+                    break;
+                default:
+                    return "invalid material attribute tag \"" + material[j].nodeName +"\" in " + sourceName;
+            }
+        }
+
+        if(got_emission && got_ambient && got_diffuse && got_specular)
+            return new MaterialObj(sourceName, shininess, emission, ambient, diffuse, specular);
+        else
+            return "Missing attributes: " + sourceName;
     }
 
 }
