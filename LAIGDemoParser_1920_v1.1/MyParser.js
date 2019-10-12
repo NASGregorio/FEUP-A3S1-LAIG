@@ -12,7 +12,7 @@ var TRANSFORMATIONS_INDEX = 6;
 var PRIMITIVES_INDEX = 7;
 var COMPONENTS_INDEX = 8;
 
-var DEBUG_ALL = 1;
+var DEBUG_ALL = 0;
 var DEBUG_FLAGS = [ 
     DEBUG_ALL | 0, //SCENE
     DEBUG_ALL | 0, //VIEWS
@@ -20,9 +20,9 @@ var DEBUG_FLAGS = [
     DEBUG_ALL | 0, //LIGHTS
     DEBUG_ALL | 0, //TEXTURES
     DEBUG_ALL | 0, //MATERIALS
-    DEBUG_ALL | 0, //TRANSFORMATIONS
-    DEBUG_ALL | 0, //PRIMITIVES
-    DEBUG_ALL | 0  //COMPONENTS
+    DEBUG_ALL | 1, //TRANSFORMATIONS
+    DEBUG_ALL | 1, //PRIMITIVES
+    DEBUG_ALL | 1  //COMPONENTS
 ];
 
 class MyParser {
@@ -176,6 +176,17 @@ class MyParser {
         }
 
         this.loadedOk = true;
+
+        // DEBUG
+        // if(DEBUG_FLAGS[SCENE_INDEX])            console.log(nodes[index]);
+        // if(DEBUG_FLAGS[VIEWS_INDEX])            console.log(nodes[index]);
+        // if(DEBUG_FLAGS[GLOBALS_INDEX])          console.log(nodes[index]);
+        // if(DEBUG_FLAGS[LIGHTS_INDEX])           console.log(nodes[index]);
+        if(DEBUG_FLAGS[TEXTURES_INDEX])         console.log("Textures: ", this.sceneGraph.textures);
+        if(DEBUG_FLAGS[MATERIALS_INDEX])        console.log("Materials: ", this.sceneGraph.materials);
+        if(DEBUG_FLAGS[TRANSFORMATIONS_INDEX])  console.log("Transformations: ", this.sceneGraph.transformations);
+        if(DEBUG_FLAGS[PRIMITIVES_INDEX])       console.log("Primitives: ", this.sceneGraph.primitives);
+        if(DEBUG_FLAGS[COMPONENTS_INDEX])       console.log("Components: ", this.sceneGraph.components);
 
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
         this.sceneGraph.scene.onGraphLoaded();
@@ -476,7 +487,6 @@ class MyParser {
         return null;
     }
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -646,7 +656,7 @@ class MyParser {
             var componentData = [];
             var nodeNames = [];
             var component = {
-                transformation: [],
+                transformationref: "",
                 texture: "",
                 materials: [],
                 children: []
@@ -684,11 +694,34 @@ class MyParser {
             
             // Transformations
             componentData = componentDataNodes[transformationIndex].children;
-            var transfMatrix = this.processTransformation(componentData, componentID);
-            if (!(transfMatrix instanceof Float32Array))
+            var ref;
+            
+            // has nothing
+            if(componentData.length == 0) {
+                if(this.sceneGraph.transformations["canonical"] == null)
+                this.sceneGraph.transformations["canonical"] = mat4.create();
+                ref = "canonical";
+            }
+            // has ref
+            else if (componentData.length == 1 && componentData[0].nodeName == "transformationref") {
+                ref = this.reader.getString(componentData[0], 'id');
+                if(ref == null)
+                    return "";
+                if(this.sceneGraph.transformations[ref] == null)
+                    return "";
+            } 
+            // has explicit
+            else {
+                var transfMatrix = this.processTransformation(componentData, componentID);
+                if (!(transfMatrix instanceof Float32Array))
                 return transfMatrix;
+                
+                this.sceneGraph.transformations[componentID] = transfMatrix;
+                ref = componentID;
+                    
+            }
+            component.transformationref = ref;
 
-            component.transformation = transfMatrix;
                     
             // TODO: Ver se referencias existem em todos os campos
             // Materials
@@ -838,6 +871,8 @@ class MyParser {
     
         for (var j = 0; j < transformation.length; j++) {
             switch (transformation[j].nodeName) {
+                case 'transformationref':
+                    return ("transformation can't contain both transformationref and explicit transformations: " + sourceName);
                 case 'translate':
                     var coordinates = this.parseCoordinates3D(transformation[j], "translate transformation from " + sourceName);
                     if (!Array.isArray(coordinates))

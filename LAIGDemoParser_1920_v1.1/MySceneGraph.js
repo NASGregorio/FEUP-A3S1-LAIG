@@ -45,7 +45,7 @@ class MySceneGraph {
         
         node.children.forEach(child => {
             this.scene.pushMatrix();
-            this.scene.multMatrix(node.transformation);
+            this.scene.multMatrix(this.transformations[node.transformationref]);
             this.traverseGraph(child, depth);
             this.scene.popMatrix();
         });
