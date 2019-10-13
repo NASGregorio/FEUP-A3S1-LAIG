@@ -30,6 +30,9 @@
 
     <textures>
         <texture id="demoTexture" file="scenes/images/vidral.jpg" />
+        <texture id="demoTexture2" file="scenes/images/bank.jpg" />
+        <texture id="demoTexture3" file="scenes/images/leaves.jpg" />
+        <texture id="demoTexture4" file="scenes/images/rocks.jpg" />
     </textures>
 
     <materials>
@@ -114,7 +117,7 @@
                 <material id="inherit" />
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture2"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="demoRectangle" />
             </children>
@@ -130,7 +133,7 @@
                 <material id="demoMaterial" />
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture2"/>
+            <texture id="demoTexture3"/>
             <children>
                 <primitiveref id="demoTorus" />
             </children>
