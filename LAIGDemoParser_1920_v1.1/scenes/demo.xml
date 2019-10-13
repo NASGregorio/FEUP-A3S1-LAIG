@@ -4,10 +4,10 @@
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
             <from x="30" y="15" z="30" />
-            <to x="0" y="-2" z="0" />
+            <to x="0" y="0" z="0" />
         </perspective>
 
-        <ortho id="orthoCamera"  near="0.1" far="500" left="-5" right="5" top="5" bottom="-5" >
+        <ortho id="orthoCamera"  near="0.1" far="100" left="-5" right="5" top="5" bottom="-5" >
             <from x="0" y="0" z="10" />
             <to x="0" y="0" z="0" />
             <up x="0" y="1" z="0" /> <!-- opcional, default 0,1,0 -->
@@ -22,7 +22,7 @@
     <lights>
         <omni id="demoLight" enabled="1">
             <location x="9.8" y="11.9" z="10" w="1.0" />
-            <ambient r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </omni>
@@ -39,7 +39,7 @@
         <material id="demoMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
 
@@ -60,20 +60,18 @@
 
     <transformations>
         <transformation id="demoTransform">
-            <rotate axis="z" angle="-45" />
-            <scale x="2" y="1" z="2" />
-        </transformation>
-        
-        <transformation id="demoTransform2">
-            <translate x="5" y="1" z="3" />
-            <scale x="5" y="1" z="5" />
+            <translate x="-2" y="0" z="0" />
         </transformation>
     </transformations>
 
     <primitives>
 
         <primitive id="demoRectangle">
-            <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
+            <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
+        </primitive>
+
+        <primitive id="demoTriangle">
+            <triangle x1="0" y1="0" z1="0" x2="1" y2="0" z2="0" x3="1" y3="1" z3="0" />
         </primitive>
 
         <primitive id="demoSphere">
@@ -81,7 +79,7 @@
         </primitive>
 
         <primitive id="demoCylinder">
-            <cylinder base="1" top="2" height="2" slices="6" stacks="6" />
+            <cylinder base="0.5" top="1" height="2" slices="6" stacks="6" />
         </primitive>
 
         <primitive id="demoTorus">
@@ -93,29 +91,25 @@
     <components>
         <component id="demoRoot">
             <transformation>
-                <transformationref id="demoTransform" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
-                <material id="demoMaterial2" />
-                <material id="demoMaterial3" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="demoTexture" length_s="1" length_t="1"/>
             <children>
-                <componentref id="demoRoot2" />
-                <componentref id="demoRoot3" />
+                <componentref id="demoRectangleC" />
+                <componentref id="demoTriangleC" />
+                <componentref id="demoSphereC" />
+                <componentref id="demoCylinderC" />
+                <componentref id="demoTorusC" />
             </children>
         </component>
         
-        <component id="demoRoot2">
+        <component id="demoRectangleC">
             <transformation>
-                <translate x="0" y="0" z="1" />
-                <scale x="1" y="2" z="1" />
             </transformation>
             <materials>
-                <material id="demoMaterial3" />
                 <material id="inherit" />
-                <material id="demoMaterial" />
             </materials>
             <texture id="inherit"/>
             <children>
@@ -123,20 +117,58 @@
             </children>
         </component>
 
-        <component id="demoRoot3">
+        <component id="demoTriangleC">
             <transformation>
-                <translate x="0" y="1" z="0" />
-                <rotate axis="y" angle="-90" />
+                <translate x="3" y="0" z="0" />
             </transformation>
             <materials>
-                <material id="demoMaterial2" />
-                <material id="demoMaterial" />
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture3"/>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoTriangle" />
+            </children>
+        </component>
+
+        <component id="demoSphereC">
+            <transformation>
+                <translate x="-3" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoSphere" />
+            </children>
+        </component>
+
+        <component id="demoCylinderC">
+            <transformation>
+                <translate x="0" y="3" z="0" />
+                <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+        <component id="demoTorusC">
+            <transformation>
+                <translate x="0" y="-3" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="demoTorus" />
             </children>
         </component>
+
     </components>
 </lxs>

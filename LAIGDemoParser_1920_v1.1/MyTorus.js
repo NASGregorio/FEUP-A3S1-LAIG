@@ -101,17 +101,15 @@ class MyTorus extends CGFobject
         this.initGLBuffers();
     }
     
-
-    /*calcUVCoords(tileScaleVec)
-    {
-        var uvSlice = 1 / this.slices;
-        for(var i = this.slices; i >= 0 ; i--)
-        {
-            this.texCoords.push(tileScaleVec[0] * uvSlice*i, tileScaleVec[1]);
-            this.texCoords.push(tileScaleVec[0] * uvSlice*i, 0);
-        }
-        this.updateTexCoordsGLBuffers();
-    }*/
+	/**
+	 * @method updateTexCoords
+	 * Updates the list of texture coordinates of the rectangle
+	 * @param {Array} coords - Array of texture coordinates
+	 */
+	updateTexCoords(coords) {
+		// this.texCoords = [...coords];
+		// this.updateTexCoordsGLBuffers();
+	}
 
     updateBuffers(slices) {
         this.slices = slices;

@@ -15,14 +15,14 @@ var COMPONENTS_INDEX = 8;
 var DEBUG_ALL = 0;
 var DEBUG_FLAGS = [ 
     DEBUG_ALL | 0, //SCENE
-    DEBUG_ALL | 0, //VIEWS
+    DEBUG_ALL | 1, //VIEWS
     DEBUG_ALL | 0, //GLOBALS
-    DEBUG_ALL | 1, //LIGHTS
-    DEBUG_ALL | 1, //TEXTURES
-    DEBUG_ALL | 1, //MATERIALS
-    DEBUG_ALL | 1, //TRANSFORMATIONS
-    DEBUG_ALL | 1, //PRIMITIVES
-    DEBUG_ALL | 1  //COMPONENTS
+    DEBUG_ALL | 0, //LIGHTS
+    DEBUG_ALL | 0, //TEXTURES
+    DEBUG_ALL | 0, //MATERIALS
+    DEBUG_ALL | 0, //TRANSFORMATIONS
+    DEBUG_ALL | 0, //PRIMITIVES
+    DEBUG_ALL | 0  //COMPONENTS
 ];
 
 /**
@@ -129,12 +129,17 @@ class MyParser {
             if (index != expectedIndex)
                 this.onXMLMinorError("tag <"+nodeName+"> out of order " + index);
 
-            if(DEBUG_FLAGS[expectedIndex]) console.log(nodes[index]); //DEBUG
+            // DEBUG
+            if(DEBUG_FLAGS[expectedIndex])
+                console.log(nodes[index]);
 
             //Parse scene block
             var res = parseFunc(nodes[index]);
-            if(res == null)
-                this.log("Parsed "+nodeName);
+
+            // DEBUG
+            if(DEBUG_FLAGS[expectedIndex] && res == null)
+                this.log("Parsed "+ nodeName);
+
             return res;
         }
     }
@@ -185,7 +190,7 @@ class MyParser {
 
         // DEBUG
         // if(DEBUG_FLAGS[SCENE_INDEX])            console.log(nodes[index]);
-        // if(DEBUG_FLAGS[VIEWS_INDEX])            console.log(nodes[index]);
+        if(DEBUG_FLAGS[VIEWS_INDEX])            console.log("Views: ", this.sceneGraph.views);
         // if(DEBUG_FLAGS[GLOBALS_INDEX])          console.log(nodes[index]);
         if(DEBUG_FLAGS[LIGHTS_INDEX])           console.log("Lights: ", this.sceneGraph.lights);
         if(DEBUG_FLAGS[TEXTURES_INDEX])         console.log("Textures: ", this.sceneGraph.textures);
@@ -232,14 +237,116 @@ class MyParser {
      */
     parseView(viewsNode) {
 
-        // var nodeNames = [];
+        // Get default view ID.
+        var defaultView = this.reader.getString(viewsNode, 'default');
+        if (defaultView == null)
+            return "no default view defined for scene";
+        this.sceneGraph.defaultView = defaultView;
+        
+        this.sceneGraph.views = [];
 
-        // for (var i = 0; i < viewNodes.length; i++) {
-        //     nodeNames.push(viewNodes[i].nodeName);
-        //     console.log(viewNodes[i].nodeName);
-        // }
+        var viewNodes = viewsNode.children;
+        var viewDataNodes = [];
+        var nodeNames = [];
 
-        //this.onXMLMinorError("To do: Parse views and create cameras.");
+        // Any number of cameras.
+        for (var i = 0; i < viewNodes.length; i++) {
+            
+            //Check type of light
+            var viewType = viewNodes[i].nodeName;
+            if (viewType != "perspective" && viewType != "ortho") {
+                this.onXMLMinorError("unknown tag <" + viewType + ">");
+                continue;
+            }
+
+            // Get id of the current view.
+            var viewID = this.reader.getString(viewNodes[i], 'id');
+            if (viewID == null)
+                return "no ID defined for view";
+
+            // Checks for repeated IDs.
+            if (this.sceneGraph.views[viewID] != null)
+                return "ID must be unique for each view (conflict: ID = " + viewID + ")";
+
+            // Get near plane of the current view.
+            var nearPlane = this.reader.getFloat(viewNodes[i], 'near');
+            if (nearPlane == null)
+                return "no ID defined for near";
+            if (nearPlane < 0)
+                return "Near plane from view " + viewID + " must have a positive value";
+
+            // Get far plane of the current view.
+            var farPlane = this.reader.getFloat(viewNodes[i], 'far');
+            if (farPlane == null)
+                return "no ID defined for far";
+            if (farPlane < 0)
+                return "Far plane from view " + viewID + " must have a positive value";
+
+            viewDataNodes = viewNodes[i].children;
+            nodeNames = [];
+            for (var j = 0; j < viewDataNodes.length; j++) {
+                nodeNames.push(viewDataNodes[j].nodeName);
+            }
+
+            var fromIndex = nodeNames.indexOf("from");
+            if(viewDataNodes[fromIndex] == null)
+                return "View " + viewID + " is missing \"from\" tag";
+            var position = this.parseCoordinates3D(viewDataNodes[fromIndex], '\"from\" tag in view ' + viewID);
+            if (!Array.isArray(position))
+                return position;
+
+            var toIndex = nodeNames.indexOf("to");
+            if(viewDataNodes[toIndex] == null)
+                return "View " + viewID + " is missing \"to\" tag";
+            var target = this.parseCoordinates3D(viewDataNodes[toIndex], '\"to\" tag in view ' + viewID);
+            if (!Array.isArray(target))
+                return target;
+
+            var view;
+
+            switch (viewType) {
+                case "perspective":
+                    var fov = this.reader.getFloat(viewNodes[i], 'angle');
+                    if (fov == null)
+                        return "no ID defined for near";
+                    if (fov < 0 || fov > 360)
+                        return "Field of view (" + viewID + ") must be between 0 and 360 degrees";
+                    view = new CGFcamera(fov, nearPlane, farPlane, vec3.clone(position), vec3.clone(target));
+                    break;
+            
+                case "ortho":
+                    var leftBound = this.reader.getFloat(viewNodes[i], 'left');
+                    if (leftBound == null)
+                        return "no ID defined for left bound";
+                    var rightBound = this.reader.getFloat(viewNodes[i], 'right');
+                    if (rightBound == null)
+                        return "no ID defined for right bound";
+                    if (rightBound < leftBound)
+                        return "Right bound from view " + viewID + " must be bigger than left bound";
+                    var topBound = this.reader.getFloat(viewNodes[i], 'top');
+                    if (topBound == null)
+                        return "no ID defined for top bound";
+                    var bottomBound = this.reader.getFloat(viewNodes[i], 'bottom');
+                    if (bottomBound == null)
+                        return "no ID defined for bottom bound";
+                    if (bottomBound > topBound)
+                        return "Bottom bound from view " + viewID + " must be bigger than top bound";
+                    var upIndex = nodeNames.indexOf("up");
+                    if(viewDataNodes[upIndex] == null)
+                        return "View " + viewID + " is missing \"up\" tag";
+                    var upVector = this.parseCoordinates3D(viewDataNodes[upIndex], '\"up\" tag in view ' + viewID);
+                    if (!Array.isArray(upVector))
+                        return upVector;
+                    view = new CGFcameraOrtho(leftBound, rightBound, bottomBound, topBound,
+                                nearPlane, farPlane, vec3.clone(position), vec3.clone(target), vec3.clone(upVector));
+                    break;
+
+                default:
+                    return "Can't reach."
+            }
+
+            this.sceneGraph.views[viewID] = view;
+        }
 
         return null;
     }
@@ -620,6 +727,56 @@ class MyParser {
 
                 this.sceneGraph.primitives[primitiveId] = rect;
             }
+            else if (primitiveType == 'triangle') {
+                // x1
+                var x1 = this.reader.getFloat(primitiveDataNodes[0], 'x1');
+                if (!(x1 != null && !isNaN(x1)))
+                    return "unable to parse x1 of the primitive coordinates for ID = " + primitiveId;
+
+                // y1
+                var y1 = this.reader.getFloat(primitiveDataNodes[0], 'y1');
+                if (!(y1 != null && !isNaN(y1)))
+                    return "unable to parse y1 of the primitive coordinates for ID = " + primitiveId;
+
+                // z1
+                var z1 = this.reader.getFloat(primitiveDataNodes[0], 'z1');
+                if (!(z1 != null && !isNaN(z1)))
+                    return "unable to parse y1 of the primitive coordinates for ID = " + primitiveId;
+
+                // x2
+                var x2 = this.reader.getFloat(primitiveDataNodes[0], 'x2');
+                if (!(x2 != null && !isNaN(x2)))
+                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+
+                // y2
+                var y2 = this.reader.getFloat(primitiveDataNodes[0], 'y2');
+                if (!(y2 != null && !isNaN(y2)))
+                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
+
+                // z2
+                var z2 = this.reader.getFloat(primitiveDataNodes[0], 'z2');
+                if (!(z2 != null && !isNaN(z2)))
+                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
+
+                // x3
+                var x3 = this.reader.getFloat(primitiveDataNodes[0], 'x3');
+                if (!(x3 != null && !isNaN(x3)))
+                    return "unable to parse x3 of the primitive coordinates for ID = " + primitiveId;
+
+                // y3
+                var y3 = this.reader.getFloat(primitiveDataNodes[0], 'y3');
+                if (!(y3 != null && !isNaN(y3)))
+                    return "unable to parse y3 of the primitive coordinates for ID = " + primitiveId;
+
+                // z3
+                var z3 = this.reader.getFloat(primitiveDataNodes[0], 'z3');
+                if (!(z3 != null && !isNaN(z3)))
+                    return "unable to parse z3 of the primitive coordinates for ID = " + primitiveId;
+
+                var rect = new MyTriangle(this.sceneGraph.scene, x1, x2, x3, y1, y2, y3, z1, z2, z3);
+
+                this.sceneGraph.primitives[primitiveId] = rect;
+            }
             else if (primitiveType == 'cylinder') {
                 // base radius
                 var base = this.reader.getFloat(primitiveDataNodes[0], 'base');
@@ -727,7 +884,7 @@ class MyParser {
             var nodeNames = [];
             var component = {
                 transformationref: "",
-                texture: "",
+                texture: [],
                 materials: [],
                 children: []
             };
@@ -808,7 +965,12 @@ class MyParser {
             // Texture
             if(componentDataNodes[textureIndex] == null)
                 return "Component " + componentID + " is missing texture tag";
-            component.texture = this.reader.getString(componentDataNodes[textureIndex], 'id');
+            component.texture.push(this.reader.getString(componentDataNodes[textureIndex], 'id'));
+
+            if(/^(?!.*(inherit|none))/.test(component.texture)) {
+                component.texture.push(this.reader.getString(componentDataNodes[textureIndex], 'length_s'));
+                component.texture.push(this.reader.getString(componentDataNodes[textureIndex], 'length_t'));
+            }
             
             // Children
             if(componentDataNodes[childrenIndex] == null)

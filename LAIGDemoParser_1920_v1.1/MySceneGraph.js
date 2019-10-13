@@ -25,35 +25,41 @@ class MySceneGraph {
     displayScene() {
 
 
-        this.count++;
+        // DEBUG
+        // this.count++;
         
-        if(this.count >= 60) {
-            this.count = 0;
-            this.matIndex++;
-        }
+        // if(this.count >= 60) {
+        //     this.count = 0;
+        //     this.matIndex++;
+        // }
+        ////////////////////////////
 
         //console.log("------------------START FRAME------------------");        
-        this.traverseGraph(this.idRoot, this.idRoot, 0);
+        this.traverseGraph(this.idRoot, null, null, 0);
         
         //this.DEBUG_displayDemo();
         //this.DEBUG_displayF1();
         //console.log("------------------END   FRAME------------------");
     }
 
-    traverseGraph(currentNodeName, parentMaterialName, parentTextureName, depth) {
+    traverseGraph(currentNodeName, parentMaterialName, parentTextureInfo, depth) {
         // var depthStr = "";
         // for(var i = 0; i < depth; i++) { depthStr = depthStr.concat(' '); }
         // console.log(depthStr + currentNodeName);
         // depth++;
 
+        //console.log(currentNodeName, ": ", parentTextureInfo);
         
         var node = this.components[currentNodeName];
 
         if(!node)
         {
-            this.materials[parentMaterialName].setTexture(this.textures[parentTextureName]);
+            this.materials[parentMaterialName].setTexture(this.textures[parentTextureInfo[0]]);
             //this.materials[parentMaterialName].setTextureWrap();
             this.materials[parentMaterialName].apply();
+            // this.primitives[currentNodeName].enableNormalViz();
+            
+            this.primitives[currentNodeName].updateTexCoords(parentTextureInfo[1], parentTextureInfo[2]);
             this.primitives[currentNodeName].display();
             return;
         }
@@ -63,23 +69,23 @@ class MySceneGraph {
                             node.materials[thisMatIndex] :
                             parentMaterialName;
 
-        var texName;
-        switch (node.texture) {
+        var texInfo = [];
+        switch (node.texture[0]) {
             case "inherit":
-                texName = parentTextureName;
+                texInfo = parentTextureInfo;
                 break;
             case "none":
-                texName = null;
+                texInfo = null;
                 break;
             default:
-                texName = node.texture;
+                texInfo = node.texture;
                 break;
         }
         
         node.children.forEach(childName => {
             this.scene.pushMatrix();
             this.scene.multMatrix(this.transformations[node.transformationref]);
-            this.traverseGraph(childName, matName, texName, depth);
+            this.traverseGraph(childName, matName, texInfo, depth);
             this.scene.popMatrix();
         });
     }
