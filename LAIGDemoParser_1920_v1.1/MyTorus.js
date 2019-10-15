@@ -22,40 +22,34 @@ class MyTorus extends CGFobject
         this.vertices = [];
         this.indices = [];
         this.normals = [];
+        this.unitTexCoords = [];
+        this.texCoords = [];
 
-        var theta = 0;
-        var thetaStep = 2 * Math.PI / this.slices;
         var alpha = 0;
+        var thetaStep = 2 * Math.PI / this.slices;
         var alphaStep = 2 * Math.PI / this.loops;
-        var cosAlpha = Math.cos(alpha);
-        var sinAlpha = Math.sin(alpha);
-        var cosTheta = Math.cos(theta);
-        var sinTheta = Math.sin(theta);
-        var cosAlphaNext;
-        var sinAlphaNext;
-        var cosThetaNext;
-        var sinThetaNext;
-        var counter = 0;
-
+        var cosAlpha, sinAlpha;
+        var cosTheta, sinTheta;
+        var v;
 
         //Outer loop
-        for(var i = 0; i < this.loops; i++){
+        for(var i = 0; i <= this.loops; i++){
 
-            cosAlphaNext = Math.cos(alpha + alphaStep);
-            sinAlphaNext = Math.sin(alpha + alphaStep);
+            cosAlpha = Math.cos(alpha);
+            sinAlpha = Math.sin(alpha);
+            var theta = 0;
 
             //Inner loop
-            for(var j = 0; j < this.slices; j++){
+            for(var j = 0; j <= this.slices; j++){
 
-                cosThetaNext = Math.cos(theta + thetaStep);
-                sinThetaNext = Math.sin(theta + thetaStep);
+                cosTheta = Math.cos(theta);
+                sinTheta = Math.sin(theta);
 
-                this.vertices.push((this.outer + this.inner*cosTheta)*cosAlpha,(this.outer + this.inner*cosTheta)*sinAlpha,this.inner*sinTheta);
+                v = [   (this.outer + this.inner * cosTheta) * cosAlpha,
+                            (this.outer + this.inner * cosTheta) * sinAlpha,
+                            this.inner * sinTheta];
 
-                var v = [   (this.outer + this.inner*cosTheta)*cosAlpha,
-                            (this.outer + this.inner*cosTheta)*sinAlpha,
-                            this.inner*sinTheta];
-
+                this.vertices.push(...v);
 
                 var cx = this.outer*cosAlpha;
                 var cy = this.outer*sinAlpha;
@@ -63,39 +57,20 @@ class MyTorus extends CGFobject
 
                 this.normals.push(v[0]-cx, v[1]-cy, v[2]-cz);
 
+                this.unitTexCoords.push(j / this.slices, i / this.loops);
+
                 theta = theta + thetaStep;
-                cosTheta = Math.cos(theta);
-                sinTheta = Math.sin(theta);
             }
-
-
+            
             alpha = alpha + alphaStep;
-            cosAlpha = Math.cos(alpha);
-            sinAlpha = Math.sin(alpha);
         }
 
-                    
-        var v = 0;
-        var lastIndex = this.slices * (this.loops - 1);
-
-        for (var k = 1; k <= lastIndex; k++) {
-            if(k % this.slices == 0) {
-                //console.log(v);
-                this.indices.push(v, v + 1, v + 1 - this.slices);
-                this.indices.push(v, v + this.slices, v + 1);
-            }
-            else {
+        for (var k = 0; k < this.loops; k++) {
+            for (var v = k * this.slices + k; v < k * (this.slices + 1) + this.slices; v++) {
                 this.indices.push(v, v + 1 + this.slices, v + 1);
-                this.indices.push(v, v + this.slices, v + 1 + this.slices);
+                this.indices.push(v + 1, v + 1 + this.slices, v + 2 + this.slices);
             }
-            v++;
         }
-        for (var k = 0; k < this.slices-1; k++) {
-            this.indices.push(k, k + 1, k + 1 + lastIndex);
-            this.indices.push(k, k + 1 + lastIndex, k + lastIndex);
-        }
-        this.indices.push(this.slices-1, 0, lastIndex+(this.slices-1));
-        this.indices.push(0, lastIndex, lastIndex+(this.slices-1));
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
@@ -106,9 +81,15 @@ class MyTorus extends CGFobject
 	 * Updates the list of texture coordinates of the rectangle
 	 * @param {Array} coords - Array of texture coordinates
 	 */
-	updateTexCoords(coords) {
+	updateTexCoords(length_s, length_t) {
+        
+        for(var i = 0; i < this.unitTexCoords.length; i+=2) {
+            this.texCoords[i] = this.unitTexCoords[i] / length_s;
+            this.texCoords[i + 1] = this.unitTexCoords[i+1] / length_t;
+        }
+
 		// this.texCoords = [...coords];
-		// this.updateTexCoordsGLBuffers();
+		this.updateTexCoordsGLBuffers();
 	}
 
     updateBuffers(slices) {

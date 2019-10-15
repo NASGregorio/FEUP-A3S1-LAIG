@@ -20,11 +20,18 @@ class MyInterface extends CGFinterface {
 
         this.gui = new dat.GUI();
 
+        this.lights = this.gui.addFolder('Lights');
+        this.lights.open();
+
         // add a group of controls (and open/expand by defult)
 
         this.initKeys();
 
         return true;
+    }
+
+    addLight(boolVal, id) {
+        this.lights.add(this.scene, boolVal).name(this.scene.graph.lights[id][1]);
     }
 
     /**

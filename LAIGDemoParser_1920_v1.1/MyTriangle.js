@@ -52,16 +52,6 @@ class MyTriangle extends CGFobject {
 		this.normals.push(perp[0], perp[1], perp[2]);
 		this.normals.push(perp[0], perp[1], perp[2]);
 		this.normals.push(perp[0], perp[1], perp[2]);
-		
-		/*
-		Texture coords (s,t)
-		+----------> s
-        |
-        |
-		|
-		v
-        t
-        */
 
 		var a = Math.sqrt(vec3.dot(v1, v1));
 		var b = Math.sqrt(vec3.dot(v3, v3));
@@ -75,8 +65,14 @@ class MyTriangle extends CGFobject {
 		this.cosA = cos;
 		this.sinA = sin;
 
+		this.unitTexCoords = [
+			0, 1,
+			this.aLen, 1,
+			this.cLen*this.cosA, 1-this.cLen*this.sinA
+		];
 		this.texCoords = [];
 		this.updateTexCoords(1, 1);
+		
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
@@ -87,11 +83,11 @@ class MyTriangle extends CGFobject {
 	 * @param {Array} coords - Array of texture coordinates
 	 */
 	updateTexCoords(length_s, length_t) {
-		this.texCoords = [
-			0, 0,
-			this.aLen/length_s, 0,
-			this.cLen*this.cosA/length_s, this.cLen*this.sinA/length_t
-		];
+		this.texCoords[0] = this.unitTexCoords[0];
+		this.texCoords[1] = this.texCoords[3] = this.unitTexCoords[1];
+		this.texCoords[2] = this.unitTexCoords[2] / length_s;
+		this.texCoords[4] = this.unitTexCoords[4] / length_s;
+		this.texCoords[5] = this.unitTexCoords[5] / length_t;
 		this.updateTexCoordsGLBuffers();
 	}
 }

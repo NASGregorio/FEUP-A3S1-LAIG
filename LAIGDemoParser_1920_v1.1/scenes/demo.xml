@@ -1,9 +1,9 @@
 <lxs>
-    <scene root="demoRoot" axis_length="1"/>
+    <scene root="demoRoot" axis_length="5"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
-            <from x="30" y="15" z="30" />
+            <from x="15" y="15" z="15" />
             <to x="0" y="0" z="0" />
         </perspective>
 
@@ -15,7 +15,7 @@
     </views>
 
     <globals>
-        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+        <ambient r="0.6" g="0.6" b="0.6" a="1.0" />
         <background r="0.0" g="0.0" b="0.0" a="1.0" />
     </globals>
 
@@ -26,6 +26,13 @@
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </omni>
+        <spot id="demoLight2" enabled="1" angle="30" exponent="2">
+            <location x="9.8" y="11.9" z="10" w="1.0" />
+            <target x="0" y="0" z="0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </spot>
     </lights>
 
     <textures>
@@ -33,6 +40,7 @@
         <texture id="demoTexture2" file="scenes/images/bank.jpg" />
         <texture id="demoTexture3" file="scenes/images/leaves.jpg" />
         <texture id="demoTexture4" file="scenes/images/rocks.jpg" />
+        <texture id="demoTexture5" file="scenes/images/trunk-image.jpg" />
     </textures>
 
     <materials>
@@ -79,11 +87,11 @@
         </primitive>
 
         <primitive id="demoCylinder">
-            <cylinder base="0.5" top="1" height="2" slices="6" stacks="6" />
+            <cylinder base="1" top="1" height="3" slices="6" stacks="6" />
         </primitive>
 
         <primitive id="demoTorus">
-            <torus inner="0.333" outer="1" slices="64" loops="64" />
+            <torus inner="0.333" outer="1" slices="32" loops="32" />
         </primitive>
         
     </primitives>
@@ -146,7 +154,7 @@
         <component id="demoCylinderC">
             <transformation>
                 <translate x="0" y="3" z="0" />
-                <rotate axis="x" angle="90"/>
+                <rotate axis="x" angle="-90"/>
             </transformation>
             <materials>
                 <material id="inherit" />

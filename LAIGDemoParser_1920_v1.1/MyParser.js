@@ -252,7 +252,7 @@ class MyParser {
         // Any number of cameras.
         for (var i = 0; i < viewNodes.length; i++) {
             
-            //Check type of light
+            //Check type of view
             var viewType = viewNodes[i].nodeName;
             if (viewType != "perspective" && viewType != "ortho") {
                 this.onXMLMinorError("unknown tag <" + viewType + ">");
@@ -311,7 +311,7 @@ class MyParser {
                         return "no ID defined for near";
                     if (fov < 0 || fov > 360)
                         return "Field of view (" + viewID + ") must be between 0 and 360 degrees";
-                    view = new CGFcamera(fov, nearPlane, farPlane, vec3.clone(position), vec3.clone(target));
+                    view = new CGFcamera(fov * DEGREE_TO_RAD, nearPlane, farPlane, vec3.clone(position), vec3.clone(target));
                     break;
             
                 case "ortho":
@@ -396,7 +396,7 @@ class MyParser {
     parseLights(lightsNode) {
         var children = lightsNode.children;
 
-        this.sceneGraph.lights = [];
+        this.sceneGraph.lights = []; //TODO: mover para sceneGraph e ver se é valido aqui
         var numLights = 0;
 
         var grandChildren = [];

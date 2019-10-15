@@ -21,49 +21,50 @@ class MyCylinder extends CGFobject
         this.vertices = [];
         this.indices = [];
         this.normals = [];
+        this.unitTexCoords = [];
+        this.texCoords = [];
 
         var dTheta = 2 * Math.PI / this.slices;
-        var currRadius = this.base;
-        var currHeight = 0;
         var dHeight = this.height / this.stacks;
+        var currRadius;
+        var currHeight;
+        var sinTheta;
+        var cosTheta;
 
-        for (var t = 0; t < this.stacks; t++)
+        var slope = -this.height/(this.base-this.top);
+        var perpSlope = -1/slope;
+
+        for (var t = 0; t <= this.stacks; t++)
         {
             var theta = 0;
             currRadius = this.base - t * (this.base - this.top) / this.stacks;
             currHeight = t * dHeight;
-
-            for (var l = 0; l < this.slices; l++)
+            
+            for (var l = 0; l <= this.slices; l++)
             {
-                this.vertices.push( currRadius * Math.sin(theta),
-                                    currRadius * Math.cos(theta),
+                sinTheta = Math.sin(theta);
+                cosTheta = Math.cos(theta);
+
+                this.vertices.push( currRadius * sinTheta,
+                                    currRadius * cosTheta,
                                     currHeight);
 
-                var slope = -this.height/(this.base-this.top);
-                var perpSlope = -1/slope;
+                this.normals.push(currRadius * sinTheta, currRadius * cosTheta, perpSlope);
 
-                //console.log(perpSlope);
-
-                this.normals.push(currRadius * Math.sin(theta), currRadius * Math.cos(theta), perpSlope);
+                this.unitTexCoords.push(theta / (2 * Math.PI), currHeight/this.height);
 
                 theta += dTheta;
             }
         }
-
-
-        var v = 0;
-        for (var k = 1; k <= this.slices * (this.stacks-1); k++) {
-            if(k % this.slices == 0) {
-                //console.log(v);
-                this.indices.push(v, v + 1, v + 1 - this.slices);
-                this.indices.push(v, v + this.slices, v + 1);
+        
+        for (var i = 0; i < this.stacks; i++) {
+            for (var j = i * this.slices + i; j < i * this.slices + i + this.slices; j++) {
+                this.indices.push(j + 1, j, j + 1 + this.slices);
+                this.indices.push(j + 1, j + 1 + this.slices, j + 2 + this.slices);
             }
-            else {
-                this.indices.push(v, v + 1 + this.slices, v + 1);
-                this.indices.push(v, v + this.slices, v + 1 + this.slices);
-            }
-            v++;
         }
+
+        this.updateTexCoords(1, 1);
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
@@ -74,9 +75,15 @@ class MyCylinder extends CGFobject
 	 * Updates the list of texture coordinates of the rectangle
 	 * @param {Array} coords - Array of texture coordinates
 	 */
-	updateTexCoords(coords) {
+	updateTexCoords(length_s, length_t) {
+        
+        for(var i = 0; i < this.unitTexCoords.length; i+=2) {
+            this.texCoords[i] = this.unitTexCoords[i] / length_s;
+            this.texCoords[i + 1] = this.unitTexCoords[i+1] / length_t;
+        }
+
 		// this.texCoords = [...coords];
-		// this.updateTexCoordsGLBuffers();
+		this.updateTexCoordsGLBuffers();
 	}
 
     updateBuffers(slices) {
