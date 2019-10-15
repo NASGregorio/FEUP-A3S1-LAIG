@@ -24,7 +24,7 @@ class MySceneGraph {
      */
     displayScene() {
 
-
+        ////////////////////////////
         // DEBUG
         // this.count++;
         
@@ -32,14 +32,9 @@ class MySceneGraph {
         //     this.count = 0;
         //     this.matIndex++;
         // }
-        ////////////////////////////
+        ////////////////////////////   
 
-        //console.log("------------------START FRAME------------------");        
         this.traverseGraph(this.idRoot, null, null, 0);
-        
-        //this.DEBUG_displayDemo();
-        //this.DEBUG_displayF1();
-        //console.log("------------------END   FRAME------------------");
     }
 
     traverseGraph(currentNodeName, parentMaterialName, parentTextureInfo, depth) {
@@ -47,16 +42,14 @@ class MySceneGraph {
         // for(var i = 0; i < depth; i++) { depthStr = depthStr.concat(' '); }
         // console.log(depthStr + currentNodeName);
         // depth++;
-
-        //console.log(currentNodeName, ": ", parentTextureInfo);
         
-        var node = this.components[currentNodeName];
+        var node = this.components.get(currentNodeName);
 
         if(!node)
         {
-            this.materials[parentMaterialName].setTexture(this.textures[parentTextureInfo[0]]);
-            //this.materials[parentMaterialName].setTextureWrap();
-            this.materials[parentMaterialName].apply();
+            this.materials.get(parentMaterialName).setTexture(this.textures.get(parentTextureInfo[0]));
+            this.materials.get(parentMaterialName).apply();
+            // this.materials[parentMaterialName].setTextureWrap();
             // this.primitives[currentNodeName].enableNormalViz();
             
             this.primitives[currentNodeName].updateTexCoords(parentTextureInfo[1], parentTextureInfo[2]);
@@ -75,7 +68,7 @@ class MySceneGraph {
                 texInfo = parentTextureInfo;
                 break;
             case "none":
-                texInfo = null;
+                texInfo = ["none", null, null];
                 break;
             default:
                 texInfo = node.texture;
@@ -84,67 +77,9 @@ class MySceneGraph {
         
         node.children.forEach(childName => {
             this.scene.pushMatrix();
-            this.scene.multMatrix(this.transformations[node.transformationref]);
+            this.scene.multMatrix(this.transformations.get(node.transformationref));
             this.traverseGraph(childName, matName, texInfo, depth);
             this.scene.popMatrix();
         });
-    }
-
-    DEBUG_displayDemo() {
-        this.scene.pushMatrix();
-            this.scene.translate(0,0,0);
-            this.primitives['demoSphere'].display();
-        this.scene.popMatrix();
-        
-        this.scene.pushMatrix();
-            this.scene.translate(2,-2,0);
-            //this.primitives['demoCylinder'].enableNormalViz();
-            this.primitives['demoCylinder'].display();
-        this.scene.popMatrix();
-        
-        this.scene.pushMatrix();
-            this.scene.translate(2,2,0);
-            this.scene.scale(1/2,1/2,1/2);
-            //this.primitives['demoTorus'].enableNormalViz();
-            this.primitives['demoTorus'].display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-            this.scene.translate(4,-2,0);
-            //this.primitives['demoRectangle'].enableNormalViz();
-            this.primitives['demoRectangle'].display();
-        this.scene.popMatrix();
-        
-        // this.scene.pushMatrix();
-        //     this.scene.translate(4,2,0);
-        //     //this.primitives['demoTriangle'].enableNormalViz();
-        //     this.primitives['demoTriangle'].display();
-        // this.scene.popMatrix();
-    }
-
-    DEBUG_displayF1(){
-        this.scene.pushMatrix();
-            this.scene.translate(0,0,0);
-            this.primitives['f1_car_splitter'].display();
-        this.scene.popMatrix();
-    
-        this.scene.pushMatrix();
-            this.scene.translate(2,-2,0);
-            this.scene.scale(0.5,0.5,0.25);
-            //this.primitives['demoCylinder'].enableNormalViz();
-            this.primitives['f1_car_body_cylinder'].display();
-        this.scene.popMatrix();
-    
-        this.scene.pushMatrix();
-            this.scene.translate(2,2,0);
-            //this.primitives['demoTorus'].enableNormalViz();
-            this.primitives['f1_car_tire_f_torus'].display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-            this.scene.translate(4,-2,0);
-            //this.primitives['demoRectangle'].enableNormalViz();
-            this.primitives['f1_car_wheel_rim_rect'].display();
-        this.scene.popMatrix();
     }
 }

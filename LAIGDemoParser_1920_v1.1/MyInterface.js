@@ -23,15 +23,17 @@ class MyInterface extends CGFinterface {
         this.lights = this.gui.addFolder('Lights');
         this.lights.open();
 
-        // add a group of controls (and open/expand by defult)
-
         this.initKeys();
 
         return true;
     }
 
-    addLight(boolVal, id) {
-        this.lights.add(this.scene, boolVal).name(this.scene.graph.lights[id][1]);
+    addLight(lightSwitches, idx, id) {
+        // var switch = lightSwitches[idx];
+
+        this.lights.add(lightSwitches,idx, lightSwitches[idx]).name(id);
+
+        //this.lights.add(this.scene, lightSwitches).name(id);
     }
 
     /**

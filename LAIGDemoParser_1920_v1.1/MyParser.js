@@ -15,7 +15,7 @@ var COMPONENTS_INDEX = 8;
 var DEBUG_ALL = 0;
 var DEBUG_FLAGS = [ 
     DEBUG_ALL | 0, //SCENE
-    DEBUG_ALL | 1, //VIEWS
+    DEBUG_ALL | 0, //VIEWS
     DEBUG_ALL | 0, //GLOBALS
     DEBUG_ALL | 0, //LIGHTS
     DEBUG_ALL | 0, //TEXTURES
@@ -189,9 +189,9 @@ class MyParser {
         this.loadedOk = true;
 
         // DEBUG
-        // if(DEBUG_FLAGS[SCENE_INDEX])            console.log(nodes[index]);
+        if(DEBUG_FLAGS[SCENE_INDEX])            console.log("Scene: ", this.sceneGraph.idRoot, this.sceneGraph.referenceLength);
         if(DEBUG_FLAGS[VIEWS_INDEX])            console.log("Views: ", this.sceneGraph.views);
-        // if(DEBUG_FLAGS[GLOBALS_INDEX])          console.log(nodes[index]);
+        if(DEBUG_FLAGS[GLOBALS_INDEX])          console.log("Globals: ", this.sceneGraph.ambient, this.sceneGraph.background);
         if(DEBUG_FLAGS[LIGHTS_INDEX])           console.log("Lights: ", this.sceneGraph.lights);
         if(DEBUG_FLAGS[TEXTURES_INDEX])         console.log("Textures: ", this.sceneGraph.textures);
         if(DEBUG_FLAGS[MATERIALS_INDEX])        console.log("Materials: ", this.sceneGraph.materials);
@@ -221,10 +221,10 @@ class MyParser {
         // Get axis length        
         var axis_length = this.reader.getFloat(sceneNode, 'axis_length');
         if (axis_length == null)
-        this.onXMLMinorError("no axis_length defined for scene; assuming 'length = 1'");
+            this.onXMLMinorError("no axis_length defined for scene; assuming 'length = 1'");
 
-        //this.referenceLength = axis_length || 1;
-        this.sceneGraph.referenceLength = axis_length != null ? axis_length : 1; //HACK
+        this.axis_length = axis_length;
+        this.sceneGraph.referenceLength = axis_length;
 
         return null;
     }
@@ -243,11 +243,11 @@ class MyParser {
             return "no default view defined for scene";
         this.sceneGraph.defaultView = defaultView;
         
-        this.sceneGraph.views = [];
+        this.sceneGraph.views = new Map();
 
         var viewNodes = viewsNode.children;
-        var viewDataNodes = [];
-        var nodeNames = [];
+        var viewDataNodes;
+        var nodeNames;
 
         // Any number of cameras.
         for (var i = 0; i < viewNodes.length; i++) {
@@ -265,7 +265,7 @@ class MyParser {
                 return "no ID defined for view";
 
             // Checks for repeated IDs.
-            if (this.sceneGraph.views[viewID] != null)
+            if (this.sceneGraph.views.has(viewID))
                 return "ID must be unique for each view (conflict: ID = " + viewID + ")";
 
             // Get near plane of the current view.
@@ -279,23 +279,25 @@ class MyParser {
             var farPlane = this.reader.getFloat(viewNodes[i], 'far');
             if (farPlane == null)
                 return "no ID defined for far";
-            if (farPlane < 0)
-                return "Far plane from view " + viewID + " must have a positive value";
+            if (farPlane < nearPlane)
+                return "Far plane from view " + viewID + " must have a bigger value than near plane";
 
-            viewDataNodes = viewNodes[i].children;
             nodeNames = [];
-            for (var j = 0; j < viewDataNodes.length; j++) {
+            viewDataNodes = viewNodes[i].children;
+            for (var j = 0; j < viewDataNodes.length; j++)
                 nodeNames.push(viewDataNodes[j].nodeName);
-            }
 
             var fromIndex = nodeNames.indexOf("from");
+            var toIndex = nodeNames.indexOf("to");
+            var upIndex = nodeNames.indexOf("up");
+
+
             if(viewDataNodes[fromIndex] == null)
                 return "View " + viewID + " is missing \"from\" tag";
             var position = this.parseCoordinates3D(viewDataNodes[fromIndex], '\"from\" tag in view ' + viewID);
             if (!Array.isArray(position))
                 return position;
 
-            var toIndex = nodeNames.indexOf("to");
             if(viewDataNodes[toIndex] == null)
                 return "View " + viewID + " is missing \"to\" tag";
             var target = this.parseCoordinates3D(viewDataNodes[toIndex], '\"to\" tag in view ' + viewID);
@@ -303,14 +305,14 @@ class MyParser {
                 return target;
 
             var view;
-
             switch (viewType) {
                 case "perspective":
                     var fov = this.reader.getFloat(viewNodes[i], 'angle');
                     if (fov == null)
-                        return "no ID defined for near";
+                        return "no ID defined for fov";
                     if (fov < 0 || fov > 360)
                         return "Field of view (" + viewID + ") must be between 0 and 360 degrees";
+
                     view = new CGFcamera(fov * DEGREE_TO_RAD, nearPlane, farPlane, vec3.clone(position), vec3.clone(target));
                     break;
             
@@ -331,12 +333,12 @@ class MyParser {
                         return "no ID defined for bottom bound";
                     if (bottomBound > topBound)
                         return "Bottom bound from view " + viewID + " must be bigger than top bound";
-                    var upIndex = nodeNames.indexOf("up");
                     if(viewDataNodes[upIndex] == null)
                         return "View " + viewID + " is missing \"up\" tag";
                     var upVector = this.parseCoordinates3D(viewDataNodes[upIndex], '\"up\" tag in view ' + viewID);
                     if (!Array.isArray(upVector))
                         return upVector;
+
                     view = new CGFcameraOrtho(leftBound, rightBound, bottomBound, topBound,
                                 nearPlane, farPlane, vec3.clone(position), vec3.clone(target), vec3.clone(upVector));
                     break;
@@ -345,7 +347,7 @@ class MyParser {
                     return "Can't reach."
             }
 
-            this.sceneGraph.views[viewID] = view;
+            this.sceneGraph.views.set(viewID, view);
         }
 
         return null;
@@ -361,11 +363,7 @@ class MyParser {
 
         var children = globalsNode.children;
 
-        this.sceneGraph.globals = [];
-        this.sceneGraph.background = [];
-
         var nodeNames = [];
-
         for (var i = 0; i < children.length; i++)
             nodeNames.push(children[i].nodeName);
 
@@ -375,14 +373,12 @@ class MyParser {
         var color = this.parseColor(children[ambientIndex], "ambient");
         if (!Array.isArray(color))
             return color;
-        else
-            this.sceneGraph.ambient = color;
+        this.sceneGraph.ambient = color;
 
         color = this.parseColor(children[backgroundIndex], "background");
         if (!Array.isArray(color))
             return color;
-        else
-            this.sceneGraph.background = color;
+        this.sceneGraph.background = color;
 
         return null;
     }
@@ -394,9 +390,11 @@ class MyParser {
      * @param {lights block element} lightsNode
      */
     parseLights(lightsNode) {
+
+        this.sceneGraph.lights = new Map();
+
         var children = lightsNode.children;
 
-        this.sceneGraph.lights = []; //TODO: mover para sceneGraph e ver se é valido aqui
         var numLights = 0;
 
         var grandChildren = [];
@@ -426,7 +424,7 @@ class MyParser {
                 return "no ID defined for light";
 
             // Checks for repeated IDs.
-            if (this.sceneGraph.lights[lightId] != null)
+            if (this.sceneGraph.lights.has(lightId))
                 return "ID must be unique for each light (conflict: ID = " + lightId + ")";
 
             // Light enable/disable
@@ -438,6 +436,7 @@ class MyParser {
             enableLight = aux || 1;
 
             //Add enabled boolean and type name to light info
+            global.push(numLights);
             global.push(enableLight);
             global.push(children[i].nodeName);
 
@@ -467,6 +466,22 @@ class MyParser {
                     return "light " + attributeNames[i] + " undefined for ID = " + lightId;
             }
 
+            var attenuationNode = nodeNames.indexOf("attenuation");
+            if(attenuationNode == null)
+                return "Light " + lightId + " is missing \"attenuation\" tag.";
+
+            var constantAtt = this.reader.getFloat(grandChildren[attenuationNode], 'constant');
+            if (constantAtt == null || isNaN(constantAtt) || constantAtt < 0 || constantAtt > 1)
+                return "Light " + lightId + " has invalid constant attenuation value.";
+            var linearAtt = this.reader.getFloat(grandChildren[attenuationNode], 'linear');
+            if (linearAtt == null || isNaN(linearAtt) || linearAtt < 0 || linearAtt > 1)
+                return "Light " + lightId + " has invalid linear attenuation value.";
+            var quadraticAtt = this.reader.getFloat(grandChildren[attenuationNode], 'quadratic');
+            if (quadraticAtt == null || isNaN(quadraticAtt) || quadraticAtt < 0 || quadraticAtt > 1)
+                return "Light " + lightId + " has invalid quadratic attenuation value.";
+
+            global.push(constantAtt, linearAtt, quadraticAtt);
+
             // Gets the additional attributes of the spot light
             if (children[i].nodeName == "spot") {
                 var angle = this.reader.getFloat(children[i], 'angle');
@@ -491,10 +506,12 @@ class MyParser {
                 else
                     return "light target undefined for ID = " + lightId;
 
-                global.push(...[angle, exponent, targetLight])
+                global.push(...[angle, exponent, targetLight]);
             }
 
-            this.sceneGraph.lights[lightId] = global;
+            if(numLights <= 8)
+                this.sceneGraph.lights.set(lightId, global);
+                
             numLights++;
         }
 
@@ -513,7 +530,7 @@ class MyParser {
      * @param {textures block element} texturesNode
      */
     parseTextures(texturesNode) {
-        this.sceneGraph.textures = [];
+        this.sceneGraph.textures = new Map();
 
         var textureNodes = texturesNode.children;
 
@@ -535,7 +552,7 @@ class MyParser {
                 return "no ID defined for texture";
 
             // Checks for repeated IDs.
-            if (this.sceneGraph.textures[textureID] != null)
+            if (this.sceneGraph.textures.has(textureID))
                 return "ID must be unique for each texture (conflict: ID = " + textureID + ")";
 
             // Get file name of the current texture.
@@ -549,7 +566,7 @@ class MyParser {
 
             var texture = new CGFtexture(this.sceneGraph.scene, textureFile);
             if(texture != null)
-                this.sceneGraph.textures[textureID] = texture;
+                this.sceneGraph.textures.set(textureID, texture);
             else
                 return "Failed to load texture " + textureID + " with file " + textureFile;
         }
@@ -564,7 +581,7 @@ class MyParser {
      * @param {materials block element} materialsNode
      */
     parseMaterials(materialsNode) {
-        this.sceneGraph.materials = [];
+        this.sceneGraph.materials = new Map();
 
         var materialNodes = materialsNode.children;
         var materialDataNodes = [];
@@ -587,7 +604,7 @@ class MyParser {
                 return "no ID defined for material";
 
             // Checks for repeated IDs.
-            if (this.sceneGraph.materials[materialID] != null)
+            if (this.sceneGraph.materials.has(materialID))
                 return "ID must be unique for each material (conflict: ID = " + materialID + ")";
 
             // Get shininess of the current material.
@@ -603,7 +620,7 @@ class MyParser {
             if (!(mat instanceof CGFappearance))
                 return mat;
             else
-                this.sceneGraph.materials[materialID] = mat;
+                this.sceneGraph.materials.set(materialID, mat);
         }
 
         return null;
@@ -616,7 +633,7 @@ class MyParser {
      * @param {transformations block element} transformationsNode
      */
     parseTransformations(transformationsNode) {
-        this.sceneGraph.transformations = [];
+        this.sceneGraph.transformations = new Map();
 
         var transformationNodes = transformationsNode.children;
         var transformationDataNodes = [];
@@ -639,7 +656,7 @@ class MyParser {
                 return "no ID defined for transformation";
 
             // Checks for repeated IDs.
-            if (this.sceneGraph.transformations[transformationID] != null)
+            if (this.sceneGraph.transformations.has(transformationID))
                 return "ID must be unique for each transformation (conflict: ID = " + transformationID + ")";
 
             // Get transformation data (translation, rotation and scaling nodes)            
@@ -650,7 +667,7 @@ class MyParser {
             if (!(transfMatrix instanceof Float32Array))
                 return transfMatrix;
 
-            this.sceneGraph.transformations[transformationID] = transfMatrix;
+            this.sceneGraph.transformations.set(transformationID, transfMatrix);
         }
         return null;
     }
@@ -867,7 +884,7 @@ class MyParser {
      * @param {components block element} componentsNode
      */
     parseComponents(componentsNode) {
-        this.sceneGraph.components = [];
+        this.sceneGraph.components = new Map();
 
         var componentNodes = componentsNode.children;
 
@@ -901,7 +918,7 @@ class MyParser {
                 return "no ID defined for componentID";
 
             // Checks for repeated IDs.
-            if (this.sceneGraph.components[componentID] != null)
+            if (this.sceneGraph.components.has(componentID))
                 return "ID must be unique for each component (conflict: ID = " + componentID + ")";
 
             
@@ -926,8 +943,8 @@ class MyParser {
             
             // has nothing
             if(componentData.length == 0) {
-                if(this.sceneGraph.transformations["canonical"] == null)
-                this.sceneGraph.transformations["canonical"] = mat4.create();
+                if(!this.sceneGraph.transformations.has("canonical"))
+                    this.sceneGraph.transformations.set("canonical", mat4.create());
                 ref = "canonical";
             }
             // has ref
@@ -935,7 +952,7 @@ class MyParser {
                 ref = this.reader.getString(componentData[0], 'id');
                 if(ref == null)
                     return "Component " + componentID + " has transformationref without id.";
-                if(this.sceneGraph.transformations[ref] == null)
+                if(!this.sceneGraph.transformations.has(ref))
                     return "Component " + componentID + " wants transformation with id " + ref + " that doesn't exist.";
             } 
             // has explicit
@@ -944,14 +961,12 @@ class MyParser {
                 if (!(transfMatrix instanceof Float32Array))
                 return transfMatrix;
                 
-                this.sceneGraph.transformations[componentID] = transfMatrix;
+                this.sceneGraph.transformations.set(componentID, transfMatrix);
                 ref = componentID;
                     
             }
             component.transformationref = ref;
 
-                    
-            // TODO: Ver se referencias existem em todos os campos
             // Materials
             if(componentDataNodes[materialsIndex] == null)
                 return "Component " + componentID + " is missing materials tag";
@@ -959,19 +974,38 @@ class MyParser {
 
             for (var k = 0; k < componentData.length; k++) {
                 var materialID = this.reader.getString(componentData[k], 'id');
-                component.materials.push(materialID);
+                if(materialID != "inherit" && !this.sceneGraph.materials.has(materialID))
+                    this.onXMLMinorError("Component " + componentID + " has non-existent material " + materialID);
+                else
+                    component.materials.push(materialID);
             }
+
+            if(component.materials.length == 0)
+                return "Component " + componentID + " needs to have at least one material.";
 
             // Texture
             if(componentDataNodes[textureIndex] == null)
                 return "Component " + componentID + " is missing texture tag";
-            component.texture.push(this.reader.getString(componentDataNodes[textureIndex], 'id'));
+            var textureFile = this.reader.getString(componentDataNodes[textureIndex], 'id');
 
-            if(/^(?!.*(inherit|none))/.test(component.texture)) {
-                component.texture.push(this.reader.getString(componentDataNodes[textureIndex], 'length_s'));
-                component.texture.push(this.reader.getString(componentDataNodes[textureIndex], 'length_t'));
+            var hasTexture = /^(?!.*(inherit|none))/.test(textureFile);
+            if(!hasTexture || this.sceneGraph.textures.has(textureFile))
+                component.texture.push(textureFile);
+            else
+                return "Component " + componentID + " has non-existent texture " + textureFile;
+
+            if(hasTexture) {
+                var length_s = this.reader.getFloat(componentDataNodes[textureIndex], 'length_s')
+                if (!(length_s != null && !isNaN(length_s)))
+                    return "unable to parse length_s of the texture from component " + componentID;
+                var length_t = this.reader.getFloat(componentDataNodes[textureIndex], 'length_t')
+                if (!(length_t != null && !isNaN(length_t)))
+                    return "unable to parse length_t of the texture from component " + componentID;
+
+                component.texture.push(length_s, length_t);
             }
-            
+
+            // TODO separar componentref de primitiveref
             // Children
             if(componentDataNodes[childrenIndex] == null)
                 return "Component " + componentID + " is missing children tag";
@@ -987,27 +1021,35 @@ class MyParser {
                 if(childID == null)
                     return "Component " + componentID + " has componentref without id.";
 
-                // if(this.sceneGraph.components[childID] == null)
-                //     missingNodes.push([componentID,childID]);
-
                 component.children.push(childID);
             }
 
             // Assign newly created component to components array
-            this.sceneGraph.components[componentID] = component;
+            this.sceneGraph.components.set(componentID, component);
         }
 
-        if(this.sceneGraph.components[this.sceneGraph.idRoot] == null) {
+        if(!this.sceneGraph.components.has(this.sceneGraph.idRoot)) {
             return "Scene is missing root node \"" + this.sceneGraph.idRoot + "\"";
         }
 
-        // for (var i = 0; i < missingNodes.length; i++)
-        // {
-        //     if(this.sceneGraph.components[missingNodes[i][1]] == null)
-        //         return "Component " + missingNodes[i][0] + " wants child with id " + missingNodes[i][1] + " that doesn't exist.";
-        // }
+        // var valid = true; //TODO ligar depois de primitiveref
+        // this.sceneGraph.components.forEach((value, key) => {
+        //     console.log(key);
+        //     for (var i = 0; i < value.children.length; i++) {
+        //         console.log(value.children[i]);
+        //         if(!this.sceneGraph.components.has(value.children[i])) {
+        //             this.onXMLError("Component " + key + " wants child with id " + value.children[i] + " that doesn't exist.");
+        //             valid = false;
+        //             break;
+        //         }
+        //     }
+        // });
+        
+        // if(valid)
+             return null;
+        // else
+        //     return "Missing components.";
 
-        return null;
     }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -47,40 +47,41 @@ class XMLscene extends CGFscene {
      * Initializes the scene lights with the values read from the XML file.
      */
     initLights() {
-        var i = 0;
-        // Lights index.
 
-        // Reads the lights from the scene graph.
-        for (var key in this.graph.lights) {
-            // Only eight lights allowed by WebGL.
-            if (i >= 8)
-                break;
+        this.lightSwitches = [];
 
-            if (this.graph.lights.hasOwnProperty(key)) {
-                var light = this.graph.lights[key];
+        this.graph.lights.forEach((value, key) => {
+            var light = value;
+            var i = light[0];
 
-                this.lights[i].setPosition(light[2][0], light[2][1], light[2][2], light[2][3]);
-                this.lights[i].setAmbient(light[3][0], light[3][1], light[3][2], light[3][3]);
-                this.lights[i].setDiffuse(light[4][0], light[4][1], light[4][2], light[4][3]);
-                this.lights[i].setSpecular(light[5][0], light[5][1], light[5][2], light[5][3]);
+            this.lights[i].setPosition(light[3][0], light[3][1], light[3][2], light[3][3]);
+            this.lights[i].setAmbient(light[4][0], light[4][1], light[4][2], light[4][3]);
+            this.lights[i].setDiffuse(light[5][0], light[5][1], light[5][2], light[5][3]);
+            this.lights[i].setSpecular(light[6][0], light[6][1], light[6][2], light[6][3]);
 
-                if (light[1] == "spot") {
-                    this.lights[i].setSpotCutOff(light[6]);
-                    this.lights[i].setSpotExponent(light[7]);
-                    this.lights[i].setSpotDirection(light[8][0], light[8][1], light[8][2]);
-                }
+            this.lights[i].setConstantAttenuation(light[7]);
+            this.lights[i].setLinearAttenuation(light[8]);
+            this.lights[i].setQuadraticAttenuation(light[9]);
 
-                this.lights[i].setVisible(true);
-                if (light[0])
-                    this.lights[i].enable();
-                else
-                    this.lights[i].disable();
-
-                this.lights[i].update();
-
-                i++;
+            if (light[2] == "spot") {
+                this.lights[i].setSpotCutOff(light[10]);
+                this.lights[i].setSpotExponent(light[11]);
+                this.lights[i].setSpotDirection(light[12][0], light[12][1], light[12][2]);
             }
-        }
+
+            this.lights[i].setVisible(true);
+            if (light[1])
+                this.lights[i].enable();
+            else
+                this.lights[i].disable();
+
+            this.lightSwitches.push(light[1] ? true : false);
+
+
+            this.interface.addLight(this.lightSwitches, i, key);
+
+            this.lights[i].update();
+        });
     }
 
     setDefaultAppearance() {
@@ -102,13 +103,8 @@ class XMLscene extends CGFscene {
 
         this.initLights();
         
-        this.camera = this.graph.views[this.graph.defaultView];
+        this.camera = this.graph.views.get(this.graph.defaultView);
         this.interface.setActiveCamera(this.camera);
-
-        this.light1 = true;
-        this.light2 = true;
-        this.interface.addLight("light1", "demoLight");
-        this.interface.addLight("light2", "demoLight2");
 
         this.sceneInited = true;
     }
@@ -132,15 +128,20 @@ class XMLscene extends CGFscene {
 
         this.pushMatrix();
 
-        if(this.graph.referenceLength != 0)
+        if(this.axis)
             this.axis.display();
 
-        for (var i = 0; i < this.lights.length; i++) {
-            this.lights[i].setVisible(true);
-            this.lights[i].enable();
-        }
-
         if (this.sceneInited) {
+
+            for (var i = 0; i < this.lights.length; i++) {
+                if(this.lightSwitches[i]) {
+                    this.lights[i].enable();
+                } else {
+                    this.lights[i].disable();
+                }
+                this.lights[i].update();
+            }
+
             // Draw axis
             this.setDefaultAppearance();
 
