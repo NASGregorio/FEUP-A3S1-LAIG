@@ -44,18 +44,6 @@ class MySceneGraph {
         // depth++;
         
         var node = this.components.get(currentNodeName);
-
-        if(!node)
-        {
-            this.materials.get(parentMaterialName).setTexture(this.textures.get(parentTextureInfo[0]));
-            this.materials.get(parentMaterialName).apply();
-            // this.materials[parentMaterialName].setTextureWrap();
-            // this.primitives[currentNodeName].enableNormalViz();
-            
-            this.primitives[currentNodeName].updateTexCoords(parentTextureInfo[1], parentTextureInfo[2]);
-            this.primitives[currentNodeName].display();
-            return;
-        }
  
         var thisMatIndex = this.matIndex % node.materials.length;
         var matName = (node.materials[thisMatIndex] != "inherit") ? 
@@ -75,11 +63,27 @@ class MySceneGraph {
                 break;
         }
         
-        node.children.forEach(childName => {
+        node.componentRefs.forEach(childName => {
             this.scene.pushMatrix();
             this.scene.multMatrix(this.transformations.get(node.transformationref));
             this.traverseGraph(childName, matName, texInfo, depth);
             this.scene.popMatrix();
         });
+        
+        node.primitiveRefs.forEach(childName => {
+            this.scene.pushMatrix();
+            this.scene.multMatrix(this.transformations.get(node.transformationref));
+            this.materials.get(matName).setTexture(this.textures.get(texInfo[0]));
+            this.materials.get(matName).apply();
+            // this.materials[parentMaterialName].setTextureWrap();
+
+            // this.primitives[currentNodeName].enableNormalViz();
+            this.primitives[childName].updateTexCoords(texInfo[1], texInfo[2]);
+            this.primitives[childName].display();
+            
+            this.scene.popMatrix();
+        });
+
+
     }
 }

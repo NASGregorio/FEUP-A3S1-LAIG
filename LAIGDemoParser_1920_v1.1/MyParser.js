@@ -758,7 +758,7 @@ class MyParser {
                 // z1
                 var z1 = this.reader.getFloat(primitiveDataNodes[0], 'z1');
                 if (!(z1 != null && !isNaN(z1)))
-                    return "unable to parse y1 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse z1 of the primitive coordinates for ID = " + primitiveId;
 
                 // x2
                 var x2 = this.reader.getFloat(primitiveDataNodes[0], 'x2');
@@ -857,7 +857,7 @@ class MyParser {
 
                 // slices
                 var slices = this.reader.getFloat(primitiveDataNodes[0], 'slices');
-                if (!(slices != null && !isNaN(slices) && slices > 2))
+                if (!(slices != null && !isNaN(slices) && slices > 1))
                     return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
 
                 // loops
@@ -903,7 +903,8 @@ class MyParser {
                 transformationref: "",
                 texture: [],
                 materials: [],
-                children: []
+                componentRefs: [],
+                primitiveRefs: [],
             };
 
             // Check for malformed components
@@ -1005,7 +1006,6 @@ class MyParser {
                 component.texture.push(length_s, length_t);
             }
 
-            // TODO separar componentref de primitiveref
             // Children
             if(componentDataNodes[childrenIndex] == null)
                 return "Component " + componentID + " is missing children tag";
@@ -1021,7 +1021,18 @@ class MyParser {
                 if(childID == null)
                     return "Component " + componentID + " has componentref without id.";
 
-                component.children.push(childID);
+                var nodeName = componentData[k].nodeName;
+
+                switch (nodeName) {
+                    case "componentref":
+                        component.componentRefs.push(childID);                        
+                        break;
+                    case "primitiveref":
+                        component.primitiveRefs.push(childID);   
+                        break;                                                                 
+                    default:
+                        return "unknown tag <" + nodeName + ">";
+                }
             }
 
             // Assign newly created component to components array
@@ -1032,23 +1043,23 @@ class MyParser {
             return "Scene is missing root node \"" + this.sceneGraph.idRoot + "\"";
         }
 
-        // var valid = true; //TODO ligar depois de primitiveref
-        // this.sceneGraph.components.forEach((value, key) => {
-        //     console.log(key);
-        //     for (var i = 0; i < value.children.length; i++) {
-        //         console.log(value.children[i]);
-        //         if(!this.sceneGraph.components.has(value.children[i])) {
-        //             this.onXMLError("Component " + key + " wants child with id " + value.children[i] + " that doesn't exist.");
-        //             valid = false;
-        //             break;
-        //         }
-        //     }
-        // });
+        var valid = true; //TODO
+        this.sceneGraph.components.forEach((value, key) => {
+            //console.log(key);
+            for (var i = 0; i < value.componentRefs.length; i++) {
+                //console.log(value.componentRefs[i]);
+                if(!this.sceneGraph.components.has(value.componentRefs[i])) {
+                    this.onXMLError("Component " + key + " wants child with id " + value.componentRefs[i] + " that doesn't exist.");
+                    valid = false;
+                    break;
+                }
+            }
+        });
         
-        // if(valid)
-             return null;
-        // else
-        //     return "Missing components.";
+        if(valid)
+            return null;
+        else
+            return "Missing components.";
 
     }
 
