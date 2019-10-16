@@ -6,41 +6,43 @@ var DEGREE_TO_RAD = Math.PI / 180;
 class XMLscene extends CGFscene {
     /**
      * @constructor
-     * @param {MyInterface} myinterface 
+     * @param {MyInterface} myinterface
      */
     constructor(myinterface) {
         super();
 
         this.interface = myinterface;
-    }
 
+        this.sceneInited = false;
+    }
+    
     /**
      * Initializes the scene, setting some WebGL defaults, initializing the camera and the axis.
      * @param {CGFApplication} application
      */
     init(application) {
         super.init(application);
-
-        this.sceneInited = false;
-
-        this.initCameras();
-
-        this.enableTextures(true);
-
-        this.gl.clearDepth(100.0);
-        this.gl.enable(this.gl.DEPTH_TEST);
-        this.gl.enable(this.gl.CULL_FACE);
-        this.gl.depthFunc(this.gl.LEQUAL);
-
-        this.axis = new CGFaxis(this);
-        this.setUpdatePeriod(100);
     }
-
+    
     /**
      * Initializes the scene cameras.
      */
     initCameras() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+        this.selectedView = 0;
+        this.viewNamesToIndex = {};
+        this.viewIndexToNames = {};
+
+        var i = 0;
+        this.graph.views.forEach((value, key) => {
+            this.viewNamesToIndex[key] = i;
+            this.viewIndexToNames[i] = key;
+            i++;
+        });
+        
+        this.interface.addViews();
+
+        this.camera = this.graph.views.get(this.graph.defaultView);
+        this.interface.setActiveCamera(this.camera);
     }
 
     /**
@@ -91,10 +93,21 @@ class XMLscene extends CGFscene {
         this.setShininess(10.0);
     }
 
-    /** Handler called when the graph is finally loaded. 
+    /** Handler called when the graph is finally loaded.
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
+        this.initCameras();
+
+        this.enableTextures(true);
+
+        this.gl.clearDepth(100.0);
+        this.gl.enable(this.gl.DEPTH_TEST);
+        this.gl.enable(this.gl.CULL_FACE);
+        this.gl.depthFunc(this.gl.LEQUAL);
+
+        this.setUpdatePeriod(100);
+
         this.axis = new CGFaxis(this, this.graph.referenceLength);
 
         this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
@@ -102,18 +115,24 @@ class XMLscene extends CGFscene {
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
         this.initLights();
-        
-        this.camera = this.graph.views.get(this.graph.defaultView);
-        this.interface.setActiveCamera(this.camera);
 
         this.sceneInited = true;
     }
+
+    onViewChanged() {
+        console.log(this.selectedView);
+
+        this.camera = this.graph.views.get(this.viewIndexToNames[this.selectedView]);
+        this.interface.setActiveCamera(this.camera);
+	}
 
     /**
      * Displays the scene.
      */
     display() {
-        // ---- BEGIN Background, camera and axis setup
+
+        if (!this.sceneInited)
+            return;
 
         // Clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
@@ -126,30 +145,25 @@ class XMLscene extends CGFscene {
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
 
-        this.pushMatrix();
-
+        
         if(this.axis)
-            this.axis.display();
-
-        if (this.sceneInited) {
-
-            for (var i = 0; i < this.lights.length; i++) {
-                if(this.lightSwitches[i]) {
-                    this.lights[i].enable();
-                } else {
-                    this.lights[i].disable();
-                }
-                this.lights[i].update();
+        this.axis.display();
+        
+        for (var i = 0; i < this.lights.length; i++) {
+            if(this.lightSwitches[i]) {
+                this.lights[i].enable();
+            } else {
+                this.lights[i].disable();
             }
-
-            // Draw axis
-            this.setDefaultAppearance();
-
-            // Displays the scene (MySceneGraph function).
-            this.graph.displayScene();
+            this.lights[i].update();
         }
-
+        
+        // Draw axis
+        this.setDefaultAppearance();
+        
+        // Displays the scene (MySceneGraph function).
+        this.pushMatrix();
+        this.graph.displayScene();
         this.popMatrix();
-        // ---- END Background, camera and axis setup
     }
 }

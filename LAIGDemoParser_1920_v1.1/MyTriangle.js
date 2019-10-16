@@ -60,15 +60,10 @@ class MyTriangle extends CGFobject {
 		var cos = (a*a-b*b+c*c)/(2*a*c);
 		var sin = Math.sqrt(1-cos*cos);
 
-		this.aLen = a;
-		this.cLen = c;
-		this.cosA = cos;
-		this.sinA = sin;
-
 		this.unitTexCoords = [
 			0, 1,
-			this.aLen, 1,
-			this.cLen*this.cosA, 1-this.cLen*this.sinA
+			a, 1,
+			c*cos, 1-c*sin
 		];
 		this.texCoords = [];
 		this.updateTexCoords(1, 1);

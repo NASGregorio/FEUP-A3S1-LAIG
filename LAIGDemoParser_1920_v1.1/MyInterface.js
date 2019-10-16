@@ -22,10 +22,15 @@ class MyInterface extends CGFinterface {
 
         this.lights = this.gui.addFolder('Lights');
         this.lights.open();
-
+        
+        
         this.initKeys();
-
+        
         return true;
+    }
+    
+    addViews() {
+        this.gui.add(this.scene, 'selectedView', this.scene.viewNamesToIndex).onChange(this.scene.onViewChanged.bind(this.scene)).name('Views');
     }
 
     addLight(lightSwitches, idx, id) {

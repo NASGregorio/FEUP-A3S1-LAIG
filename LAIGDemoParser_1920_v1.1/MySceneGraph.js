@@ -44,8 +44,14 @@ class MySceneGraph {
         // depth++;
         
         var node = this.components.get(currentNodeName);
+
+        if(node == null) {
+            console.log("Invalid node: " + currentNodeName);
+            return;
+        }
  
         var thisMatIndex = this.matIndex % node.materials.length;
+
         var matName = (node.materials[thisMatIndex] != "inherit") ? 
                             node.materials[thisMatIndex] :
                             parentMaterialName;
@@ -75,9 +81,9 @@ class MySceneGraph {
             this.scene.multMatrix(this.transformations.get(node.transformationref));
             this.materials.get(matName).setTexture(this.textures.get(texInfo[0]));
             this.materials.get(matName).apply();
-            // this.materials[parentMaterialName].setTextureWrap();
+            this.materials.get(matName).setTextureWrap('REPEAT', 'REPEAT');
 
-            // this.primitives[currentNodeName].enableNormalViz();
+            //this.primitives[childName].enableNormalViz();
             this.primitives[childName].updateTexCoords(texInfo[1], texInfo[2]);
             this.primitives[childName].display();
             
