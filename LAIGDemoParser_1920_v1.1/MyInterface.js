@@ -34,11 +34,7 @@ class MyInterface extends CGFinterface {
     }
 
     addLight(lightSwitches, idx, id) {
-        // var switch = lightSwitches[idx];
-
-        this.lights.add(lightSwitches,idx, lightSwitches[idx]).name(id);
-
-        //this.lights.add(this.scene, lightSwitches).name(id);
+        this.lights.add(lightSwitches, idx, lightSwitches[idx]).name(id);
     }
 
     /**
@@ -51,6 +47,11 @@ class MyInterface extends CGFinterface {
     }
 
     processKeyDown(event) {
+        
+        if(/m/i.test(event.key)) {
+            this.scene.graph.materialIndex++;
+        }
+
         this.activeKeys[event.code]=true;
     };
 

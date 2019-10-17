@@ -86,6 +86,7 @@ class XMLscene extends CGFscene {
         });
     }
 
+    
     setDefaultAppearance() {
         this.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
@@ -120,11 +121,9 @@ class XMLscene extends CGFscene {
     }
 
     onViewChanged() {
-        console.log(this.selectedView);
-
         this.camera = this.graph.views.get(this.viewIndexToNames[this.selectedView]);
         this.interface.setActiveCamera(this.camera);
-	}
+    }
 
     /**
      * Displays the scene.
@@ -147,7 +146,7 @@ class XMLscene extends CGFscene {
 
         
         if(this.axis)
-        this.axis.display();
+            this.axis.display();
         
         for (var i = 0; i < this.lights.length; i++) {
             if(this.lightSwitches[i]) {

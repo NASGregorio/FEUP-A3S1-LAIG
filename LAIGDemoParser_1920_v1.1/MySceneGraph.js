@@ -16,7 +16,7 @@ class MySceneGraph {
         this.parser = new MyParser(this, filename);
 
         this.count = 0;
-        this.matIndex = 0;
+        this.materialIndex = 0;
     }
 
     /**
@@ -50,7 +50,7 @@ class MySceneGraph {
             return;
         }
  
-        var thisMatIndex = this.matIndex % node.materials.length;
+        var thisMatIndex = this.materialIndex % node.materials.length;
 
         var matName = (node.materials[thisMatIndex] != "inherit") ? 
                             node.materials[thisMatIndex] :
