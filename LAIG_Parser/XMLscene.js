@@ -141,7 +141,6 @@ class XMLscene extends CGFscene {
      * Callback for light switching UI
      */
     onLightSwitched(i) {
-        console.log(i);
         if(this.lightSwitches[i])
             this.lights[i].enable();
         else

@@ -333,11 +333,16 @@ class MyParser {
                         return "no ID defined for bottom bound";
                     if (bottomBound > topBound)
                         return "Bottom bound from view " + viewID + " must be bigger than top bound";
-                    if(viewDataNodes[upIndex] == null)
-                        return "View " + viewID + " is missing \"up\" tag";
-                    var upVector = this.parseCoordinates3D(viewDataNodes[upIndex], '\"up\" tag in view ' + viewID);
-                    if (!Array.isArray(upVector))
-                        return upVector;
+                    var upVector;
+                    if(upIndex == -1)
+                        upVector = [0,1,0];
+                    else if(viewDataNodes[upIndex] != null) {
+                        upVector = this.parseCoordinates3D(viewDataNodes[upIndex], '\"up\" tag in view ' + viewID);
+                        if (!Array.isArray(upVector))
+                            return upVector;
+                    }
+                    else
+                        return "View " + viewID + " has an ivalid \"up\" tag";
 
                     view = new CGFcameraOrtho(leftBound, rightBound, bottomBound, topBound,
                                 nearPlane, farPlane, vec3.clone(position), vec3.clone(target), vec3.clone(upVector));
@@ -559,7 +564,7 @@ class MyParser {
             if (textureFile == null)
                 return "no file defined for texture " + textureID;
 
-            var valid = /^.*\.(jpg|png)$/i.test(textureFile);
+            var valid = /^.*\.(jpg|png|jpeg)$/i.test(textureFile);
             if(!valid)
                 return "Texture file must have a .jpg or .png extention";
 
@@ -1050,6 +1055,13 @@ class MyParser {
                 }
             }
         });
+
+        var rootMaterials = this.sceneGraph.components.get(this.sceneGraph.idRoot).materials;
+        for (var i = 0; i < rootMaterials.length; i++) {
+            if(rootMaterials == "inherit"){
+                return "Root node can't inherit materials.";
+            }
+        }
         
         if(valid)
             return null;

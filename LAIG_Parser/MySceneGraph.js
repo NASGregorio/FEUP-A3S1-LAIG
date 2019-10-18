@@ -74,6 +74,7 @@ class MySceneGraph {
         node.primitiveRefs.forEach(childName => {
             this.scene.pushMatrix();
             this.scene.multMatrix(this.transformations.get(node.transformationref));
+
             this.materials.get(matName).setTexture(this.textures.get(texInfo[0]));
             this.materials.get(matName).apply();
             this.materials.get(matName).setTextureWrap('REPEAT', 'REPEAT');

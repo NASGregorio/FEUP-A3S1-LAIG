@@ -59,7 +59,7 @@
         <texture id="tireTexture" file="scenes/images/tire.jpg" />
         <texture id="tireRimTexture" file="scenes/images/tire_rim.jpg" />
         <texture id="noseTexture" file="scenes/images/nose.jpg" />
-        <texture id="bodyTexture" file="scenes/images/body1.jpg" />
+        <texture id="bodyTexture" file="scenes/images/body.jpg" />
         <texture id="metalTexture" file="scenes/images/metal.jpg" />
         <texture id="rearTexture" file="scenes/images/rear.jpg" />
         <texture id="visorTexture" file="scenes/images/visor.jpg" />
@@ -97,6 +97,24 @@
             <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
             <diffuse r="0.2" g="0.2" b="0.2" a="1.0" />
             <specular r="0.2" g="0.2" b="0.2" a="1.0" />
+        </material>
+        <material id="red" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.45" g="0.19" b="0.22" a="1.0" />
+            <diffuse r="0.45" g="0.19" b="0.22" a="1.0" />
+            <specular r="0.45" g="0.19" b="0.22" a="1.0" />
+        </material>
+        <material id="cyan" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.19" g="0.45" b="0.42" a="1.0" />
+            <diffuse r="0.19" g="0.45" b="0.42" a="1.0" />
+            <specular r="0.19" g="0.45" b="0.42" a="1.0" />
+        </material>
+        <material id="green" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.10" g="0.24" b="0.15" a="1.0" />
+            <diffuse r="0.10" g="0.24" b="0.15" a="1.0" />
+            <specular r="0.10" g="0.24" b="0.15" a="1.0" />
         </material>
     </materials>
 
@@ -156,7 +174,7 @@
         </primitive>
 
         <primitive id="showroom_wall">
-            <rectangle x1="-10" y1="0" x2="10" y2="10" />
+            <rectangle x1="-15" y1="0" x2="15" y2="10" />
         </primitive>
 
     </primitives>
@@ -180,8 +198,9 @@
             </transformation>
             <materials>
                 <material id="grey" />
-                <material id="black" />
-                <material id="white" />
+                <material id="red" />
+                <material id="cyan" />
+                <material id="green" />
             </materials>
             <texture id="none" />
             <children>
@@ -193,7 +212,7 @@
 
         <component id="showroom_wall_back">
             <transformation>
-                <translate x="0" y="-1" z="-4" />
+                <translate x="0" y="-1" z="-8" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -207,7 +226,7 @@
         <component id="showroom_wall_side">
             <transformation>
                 <rotate axis="y" angle="90" />
-                <translate x="-6" y="-1" z="-10" />
+                <translate x="-7" y="-1" z="-15" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -221,13 +240,13 @@
         <component id="showroom_floor">
             <transformation>
                 <rotate axis="x" angle="-90" />
-                <translate x="0" y="-16" z="-1" />
-                <scale x="1" y="2" z="1" />
+                <translate x="0" y="-22" z="-1" />
+                <scale x="1" y="3" z="1" />
             </transformation>
             <materials>
-                <material id="white" />
+                <material id="grey" />
             </materials>
-            <texture id="asphaltTexture" length_s="1" length_t="1"/>
+            <texture id="asphaltTexture" length_s="8" length_t="6"/>
             <children>
                 <primitiveref id="showroom_wall" />
             </children>
@@ -552,7 +571,7 @@
                 <scale x="1" y="0.7" z="1.3" />
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="grey" />
             </materials>
             <texture id="inherit"/>
             <children>
@@ -566,7 +585,7 @@
                 <scale x="1" y="0.7" z="1.6" />
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="grey" />
             </materials>
             <texture id="inherit"/>
             <children>

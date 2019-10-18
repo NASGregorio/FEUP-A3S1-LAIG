@@ -36,6 +36,7 @@ main=function()
     //var filename=getUrlVars()['file'] || "LAIG_TP1_XML_T1_G02_v01.xml";
     var filename=getUrlVars()['file'] || "LAIG_TP1_XML_T1_G02_v02.xml";
 
+
 	// create and load graph, and associate it to scene. 
 	// Check console for loading errors
 	var myGraph = new MySceneGraph(filename, myScene);
