@@ -1,15 +1,20 @@
 <lxs>
-    <scene root="f1_car" axis_length="5"/>
+    <scene root="showroom" axis_length="5"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
-            <from x="-5" y="10" z="25" />
-            <to x="0" y="0" z="0" />
+            <from x="2" y="10" z="25" />
+            <to x="0" y="0" z="5" />
         </perspective>
 
         <perspective id="sideView" near="0.1" far="500" angle="45">
-            <from x="20" y="5" z="20" />
-            <to x="-10" y="0" z="-10" />
+            <from x="20" y="5" z="8" />
+            <to x="-10" y="1" z="6" />
+        </perspective>
+
+        <perspective id="topView" near="0.1" far="500" angle="90">
+            <from x="0.05" y="15" z="6" />
+            <to x="0" y="1" z="6" />
         </perspective>
 
         <ortho id="exhaustCamera"  near="0.1" far="500" left="-5" right="5" top="5" bottom="-5" >
@@ -20,8 +25,8 @@
     </views>
 
     <globals>
-        <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
-        <background r="0.8" g="0.8" b="0.8" a="1.0" />
+        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+        <background r="0.2" g="0.4" b="0.6" a="1.0" />
     </globals>
 
     <lights>
@@ -35,10 +40,10 @@
         <spot id="warmLight" enabled="0" angle="0" exponent="0">
             <location x="10" y="2" z="4" w="1.0" />
             <target x="0" y="0" z="4" />
-            <ambient r="0.6" g="0.4" b="0.3" a="1.0" />
-            <diffuse r="0.8" g="0.6" b="0.5" a="1.0" />
-            <specular r="0.8" g="0.6" b="0.5" a="1.0" />
-            <attenuation constant="0" linear="1" quadratic="0" />  
+            <ambient r="0.5" g="0.3" b="0.2" a="1.0" />
+            <diffuse r="0.5" g="0.3" b="0.2" a="1.0" />
+            <specular r="0.5" g="0.3" b="0.2" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0" />  
         </spot>
         <spot id="front" enabled="0" angle="0" exponent="0">
             <location x="0" y="0" z="18" w="1.0" />
@@ -46,7 +51,7 @@
             <ambient r="0.4" g="0.4" b="0.4" a="1.0" />
             <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
             <specular r="0.4" g="0.4" b="0.4" a="1.0" />
-            <attenuation constant="0" linear="1" quadratic="0" />  
+            <attenuation constant="1" linear="0" quadratic="0" />  
         </spot>
     </lights>
 
@@ -54,11 +59,12 @@
         <texture id="tireTexture" file="scenes/images/tire.jpg" />
         <texture id="tireRimTexture" file="scenes/images/tire_rim.jpg" />
         <texture id="noseTexture" file="scenes/images/nose.jpg" />
-        <texture id="bodyTexture" file="scenes/images/body.jpg" />
+        <texture id="bodyTexture" file="scenes/images/body1.jpg" />
         <texture id="metalTexture" file="scenes/images/metal.jpg" />
         <texture id="rearTexture" file="scenes/images/rear.jpg" />
         <texture id="visorTexture" file="scenes/images/visor.jpg" />
         <texture id="exhaustTexture" file="scenes/images/glowingMetal.jpg" />
+        <texture id="asphaltTexture" file="scenes/images/asphalt.jpg" />
     </textures>
 
     <materials>
@@ -71,8 +77,14 @@
         <material id="white" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.5" g="0.5" b="0.5" a="0.5" />
-            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <diffuse r="0.8" g="0.8" b="0.8" a="1.0" />
             <specular r="0.9" g="0.9" b="0.9" a="1.0" />
+        </material>
+        <material id="grey" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.4" g="0.4" b="0.4" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <specular r="0.5" g="0.5" b="0.5" a="1.0" />
         </material>
         <material id="glow_red" shininess="10">
             <emission r="0.5" g="0.15" b="0.15" a="1.0" />
@@ -82,9 +94,9 @@
         </material>
         <material id="black" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="0.3" g="0.3" b="0.3" a="1.0" />
-            <diffuse r="0.3" g="0.3" b="0.3" a="1.0" />
-            <specular r="0.3" g="0.3" b="0.3" a="1.0" />
+            <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+            <diffuse r="0.2" g="0.2" b="0.2" a="1.0" />
+            <specular r="0.2" g="0.2" b="0.2" a="1.0" />
         </material>
     </materials>
 
@@ -143,14 +155,89 @@
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
 
+        <primitive id="showroom_wall">
+            <rectangle x1="-10" y1="0" x2="10" y2="10" />
+        </primitive>
+
     </primitives>
 
     <components>
+        <component id="showroom">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="f1_car" />
+                <componentref id="showroom_walls" />
+            </children>
+        </component>
+
+        <component id="showroom_walls">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="grey" />
+                <material id="black" />
+                <material id="white" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="showroom_wall_back" />
+                <componentref id="showroom_wall_side" />
+                <componentref id="showroom_floor" />
+            </children>
+        </component>
+
+        <component id="showroom_wall_back">
+            <transformation>
+                <translate x="0" y="-1" z="-4" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="showroom_wall" />
+            </children>
+        </component>
+        
+        <component id="showroom_wall_side">
+            <transformation>
+                <rotate axis="y" angle="90" />
+                <translate x="-6" y="-1" z="-10" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="showroom_wall" />
+            </children>
+        </component>
+
+        <component id="showroom_floor">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+                <translate x="0" y="-16" z="-1" />
+                <scale x="1" y="2" z="1" />
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="asphaltTexture" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="showroom_wall" />
+            </children>
+        </component>
+
         <component id="f1_car">
             <transformation>
             </transformation>
             <materials>
-                <material id="british_racing_green" />
+                <material id="grey" />
             </materials>
             <texture id="none" />
             <children>
@@ -271,7 +358,7 @@
                 <transformationref id="f1_car_body_flatten" />
             </transformation>
             <materials>
-                <material id="white" />
+                <material id="grey" />
             </materials>
             <texture id="bodyTexture" length_s="1" length_t="1"/>
             <children>
@@ -329,7 +416,7 @@
                 <scale x="1" y="1" z="0.15" />
             </transformation>
             <materials>
-                <material id="white" />
+                <material id="inherit" />
             </materials>
             <texture id="noseTexture" length_s="1" length_t="1"/>
             <children>
@@ -547,6 +634,7 @@
             </transformation>
             <materials>
                 <material id="glow_red" />
+                <material id="grey" />
             </materials>
             <texture id="exhaustTexture" length_s="1" length_t="1"/>   
             <children>

@@ -84,6 +84,7 @@ class XMLscene extends CGFscene {
 
             this.lights[i].update();
         });
+        console.log(this.lightSwitches);
     }
 
     
@@ -164,5 +165,6 @@ class XMLscene extends CGFscene {
         this.pushMatrix();
         this.graph.displayScene();
         this.popMatrix();
+        console.log(this.camera);
     }
 }
