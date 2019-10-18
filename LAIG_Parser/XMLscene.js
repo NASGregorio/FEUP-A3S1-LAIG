@@ -28,6 +28,8 @@ class XMLscene extends CGFscene {
      * Initializes the scene cameras.
      */
     initCameras() {
+
+        // Arrays for camera UI selection
         this.selectedView = 0;
         this.viewNamesToIndex = {};
         this.viewIndexToNames = {};
@@ -39,8 +41,10 @@ class XMLscene extends CGFscene {
             i++;
         });
         
+        // Create camera UI
         this.interface.addViews();
 
+        // Set camera to XML's default
         this.camera = this.graph.views.get(this.graph.defaultView);
         this.interface.setActiveCamera(this.camera);
     }
@@ -50,8 +54,10 @@ class XMLscene extends CGFscene {
      */
     initLights() {
 
+        // Array for lights' UI
         this.lightSwitches = [];
 
+        // Setup lights with XML values
         this.graph.lights.forEach((value, key) => {
             var light = value;
             var i = light[0];
@@ -72,19 +78,21 @@ class XMLscene extends CGFscene {
             }
 
             this.lights[i].setVisible(true);
-            if (light[1])
+            if (light[1]) {
                 this.lights[i].enable();
-            else
+                this.lightSwitches.push(true);                
+            }
+            else {
                 this.lights[i].disable();
-
-            this.lightSwitches.push(light[1] ? true : false);
-
-
+                this.lightSwitches.push(false);
+            }
+            
+            // Create light UI
             this.interface.addLight(this.lightSwitches, i, key);
 
+            // Update light to reflect changes
             this.lights[i].update();
         });
-        console.log(this.lightSwitches);
     }
 
     
@@ -121,9 +129,24 @@ class XMLscene extends CGFscene {
         this.sceneInited = true;
     }
 
+    /**
+     * Callback for camera switching UI
+     */
     onViewChanged() {
         this.camera = this.graph.views.get(this.viewIndexToNames[this.selectedView]);
         this.interface.setActiveCamera(this.camera);
+    }
+
+    /**
+     * Callback for light switching UI
+     */
+    onLightSwitched(i) {
+        console.log(i);
+        if(this.lightSwitches[i])
+            this.lights[i].enable();
+        else
+            this.lights[i].disable();
+        this.lights[i].update();
     }
 
     /**
@@ -144,19 +167,10 @@ class XMLscene extends CGFscene {
 
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
-
         
+        // Show axis
         if(this.axis)
             this.axis.display();
-        
-        for (var i = 0; i < this.lights.length; i++) {
-            if(this.lightSwitches[i]) {
-                this.lights[i].enable();
-            } else {
-                this.lights[i].disable();
-            }
-            this.lights[i].update();
-        }
         
         // Draw axis
         this.setDefaultAppearance();
@@ -165,6 +179,5 @@ class XMLscene extends CGFscene {
         this.pushMatrix();
         this.graph.displayScene();
         this.popMatrix();
-        console.log(this.camera);
     }
 }

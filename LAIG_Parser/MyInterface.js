@@ -29,17 +29,15 @@ class MyInterface extends CGFinterface {
         return true;
     }
     
+
     addViews() {
         this.gui.add(this.scene, 'selectedView', this.scene.viewNamesToIndex).onChange(this.scene.onViewChanged.bind(this.scene)).name('Views');
     }
 
     addLight(lightSwitches, idx, id) {
-        this.lights.add(lightSwitches, idx, lightSwitches[idx]).name(id);
+        this.lights.add(lightSwitches, idx, lightSwitches[idx]).onChange(this.scene.onLightSwitched.bind(this.scene, idx)).name(id);          
     }
 
-    /**
-     * initKeys
-     */
     initKeys() {
         this.scene.gui=this;
         this.processKeyboard=function(){};
@@ -47,8 +45,7 @@ class MyInterface extends CGFinterface {
     }
 
     processKeyDown(event) {
-        
-        if(/m/i.test(event.key)) {
+        if(event.key === 'm') {
             this.scene.graph.materialIndex++;
         }
 

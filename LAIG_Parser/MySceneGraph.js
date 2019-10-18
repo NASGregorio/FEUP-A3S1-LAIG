@@ -15,7 +15,6 @@ class MySceneGraph {
         // Try to parse the XML file
         this.parser = new MyParser(this, filename);
 
-        this.count = 0;
         this.materialIndex = 0;
     }
 
@@ -23,17 +22,6 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-
-        ////////////////////////////
-        // DEBUG
-        // this.count++;
-        
-        // if(this.count >= 60) {
-        //     this.count = 0;
-        //     this.matIndex++;
-        // }
-        ////////////////////////////   
-
         this.traverseGraph(this.idRoot, null, null, 0);
     }
 
@@ -43,19 +31,24 @@ class MySceneGraph {
         // console.log(depthStr + currentNodeName);
         // depth++;
         
+        // Get current node
         var node = this.components.get(currentNodeName);
 
+        // Check if valid
         if(node == null) {
             console.log("Invalid node: " + currentNodeName);
             return;
         }
  
+        // Calculate material index
         var thisMatIndex = this.materialIndex % node.materials.length;
 
+        // Calculate material based on inheritance
         var matName = (node.materials[thisMatIndex] != "inherit") ? 
-                            node.materials[thisMatIndex] :
-                            parentMaterialName;
-
+        node.materials[thisMatIndex] :
+        parentMaterialName;
+        
+        // Calculate texture based on inheritance
         var texInfo = [];
         switch (node.texture[0]) {
             case "inherit":
@@ -69,6 +62,7 @@ class MySceneGraph {
                 break;
         }
         
+        // Recursive call for children nodes
         node.componentRefs.forEach(childName => {
             this.scene.pushMatrix();
             this.scene.multMatrix(this.transformations.get(node.transformationref));
@@ -76,6 +70,7 @@ class MySceneGraph {
             this.scene.popMatrix();
         });
         
+        // Display call for primitives
         node.primitiveRefs.forEach(childName => {
             this.scene.pushMatrix();
             this.scene.multMatrix(this.transformations.get(node.transformationref));
@@ -89,7 +84,5 @@ class MySceneGraph {
             
             this.scene.popMatrix();
         });
-
-
     }
 }

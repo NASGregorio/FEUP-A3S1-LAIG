@@ -218,7 +218,7 @@ class MyParser {
 
         this.sceneGraph.idRoot = root;
 
-        // Get axis length        
+        // Get axis length
         var axis_length = this.reader.getFloat(sceneNode, 'axis_length');
         if (axis_length == null)
             this.onXMLMinorError("no axis_length defined for scene; assuming 'length = 1'");
@@ -772,7 +772,7 @@ class MyParser {
                 // z2
                 var z2 = this.reader.getFloat(primitiveDataNodes[0], 'z2');
                 if (!(z2 != null && !isNaN(z2)))
-                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse z2 of the primitive coordinates for ID = " + primitiveId;
 
                 // x3
                 var x3 = this.reader.getFloat(primitiveDataNodes[0], 'x3');
@@ -797,27 +797,27 @@ class MyParser {
                 // base radius
                 var base = this.reader.getFloat(primitiveDataNodes[0], 'base');
                 if (!(base != null && !isNaN(base) && base > 0))
-                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse base radius of the primitive coordinates for ID = " + primitiveId;
 
                 // top radius
                 var top = this.reader.getFloat(primitiveDataNodes[0], 'top');
                 if (!(top != null && !isNaN(top) && top >= 0))
-                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse top radius of the primitive coordinates for ID = " + primitiveId;
 
                 // height
                 var height = this.reader.getFloat(primitiveDataNodes[0], 'height');
                 if (!(height != null && !isNaN(height) && height > 0))
-                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse height of the primitive coordinates for ID = " + primitiveId;
 
                 // slices
                 var slices = this.reader.getFloat(primitiveDataNodes[0], 'slices');
                 if (!(slices != null && !isNaN(slices) && slices > 0))
-                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
 
                 // stacks
                 var stacks = this.reader.getFloat(primitiveDataNodes[0], 'stacks');
                 if (!(stacks != null && !isNaN(stacks) && stacks > 0))
-                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
 
                 var cylinder = new MyCylinder(this.sceneGraph.scene, base, top, height, slices, stacks);
 
@@ -827,17 +827,17 @@ class MyParser {
                 // radius
                 var radius = this.reader.getFloat(primitiveDataNodes[0], 'radius');
                 if (!(radius != null && !isNaN(radius) && radius > 0))
-                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse radius of the primitive coordinates for ID = " + primitiveId;
 
                 // slices
                 var slices = this.reader.getFloat(primitiveDataNodes[0], 'slices');
                 if (!(slices != null && !isNaN(slices) && slices > 0))
-                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
 
                 // stacks
                 var stacks = this.reader.getFloat(primitiveDataNodes[0], 'stacks');
                 if (!(stacks != null && !isNaN(stacks) && stacks > 0))
-                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
 
                 var sphere = new MySphere(this.sceneGraph.scene, radius, stacks, slices);
 
@@ -847,12 +847,12 @@ class MyParser {
                 // inner
                 var inner = this.reader.getFloat(primitiveDataNodes[0], 'inner');
                 if (!(inner != null && !isNaN(inner) && inner > 0))
-                    return "unable to parse inner of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse inner radius of the primitive coordinates for ID = " + primitiveId;
 
                 // outer
                 var outer = this.reader.getFloat(primitiveDataNodes[0], 'outer');
                 if (!(outer != null && !isNaN(outer) && outer > 0))
-                    return "unable to parse outer of the primitive coordinates for ID = " + primitiveId;
+                    return "unable to parse outer radius  of the primitive coordinates for ID = " + primitiveId;
 
                 // slices
                 var slices = this.reader.getFloat(primitiveDataNodes[0], 'slices');
@@ -870,7 +870,7 @@ class MyParser {
                 this.sceneGraph.primitives[primitiveId] = torus;
             }
             else {
-                console.warn("To do: Parse other primitives.");
+                console.warn("Invalid primitive type.");
             }
         }
         return null;
@@ -890,8 +890,6 @@ class MyParser {
         if(componentNodes.length == 0) {
             return "Must declare at least one component."
         }
-
-        // var missingNodes = [];
 
         for (var i = 0; i < componentNodes.length; i++) {
             
@@ -1042,11 +1040,9 @@ class MyParser {
             return "Scene is missing root node \"" + this.sceneGraph.idRoot + "\"";
         }
 
-        var valid = true; //TODO
+        var valid = true;
         this.sceneGraph.components.forEach((value, key) => {
-            //console.log(key);
             for (var i = 0; i < value.componentRefs.length; i++) {
-                //console.log(value.componentRefs[i]);
                 if(!this.sceneGraph.components.has(value.componentRefs[i])) {
                     this.onXMLError("Component " + key + " wants child with id " + value.componentRefs[i] + " that doesn't exist.");
                     valid = false;
