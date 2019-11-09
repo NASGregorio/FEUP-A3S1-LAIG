@@ -24,16 +24,26 @@ class MyNURBSObject
             return;
 		}
 
-		console.log(degree1, degree2);
-		console.log(controlvertexes);
-
 		var nurbsSurface = new CGFnurbsSurface(degree1, degree2, controlvertexes);
 				
 		this.surface = new CGFnurbsObject( scene, npartsU, npartsV, nurbsSurface );
+
+		this.unitTexCoords = this.surface.texCoords;
 	}
 
 	display()
 	{
 		this.surface.display();
+	}
+
+	updateTexCoords(length_s, length_t) {
+        
+        for(var i = 0; i < this.unitTexCoords.length; i+=2) {
+            this.surface.texCoords[i] = this.unitTexCoords[i] / length_s;
+            this.surface.texCoords[i + 1] = this.unitTexCoords[i+1] / length_t;
+        }
+
+		// this.texCoords = [...coords];
+		this.surface.updateTexCoordsGLBuffers();
 	}
 }

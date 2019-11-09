@@ -35,7 +35,6 @@ class MyPatchNURBS
 
         for(var u = 0; u < npointsU; u++)
         {
-            console.log(u);
             controlPoints.push([]);
             for(var v = 0; v < npointsV; v++)
                 controlPoints[u].push(controlvertexes[ u * npointsV + v ]);
@@ -47,6 +46,11 @@ class MyPatchNURBS
     display()
 	{
 		this.patch.display();
+    }
+    
+    
+    updateTexCoords(length_s, length_t) {
+		this.patch.updateTexCoords(length_s, length_t);
 	}
 }
 

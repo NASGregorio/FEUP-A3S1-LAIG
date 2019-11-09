@@ -95,6 +95,31 @@
         <primitive id="demoTorus">
             <torus inner="0.333" outer="1" slices="32" loops="32" />
         </primitive>
+
+        <primitive id="demoPlane">
+            <plane npartsU="5" npartsV="8" />
+        </primitive>
+        
+        <primitive id="demoPatch">
+            <patch npointsU="3" npointsV="4" npartsU="20" npartsV="20" >
+                <controlpoint xx="-1.5" yy="-1.5" zz="0" />
+                <controlpoint xx="-2" yy="-2" zz="2" />
+                <controlpoint xx="-2" yy="2" zz="2" />
+                <controlpoint xx="-1.5" yy="1.5" zz="0" />
+                <controlpoint xx="0" yy="0" zz="3" />
+                <controlpoint xx="0" yy="-2" zz="3" />
+                <controlpoint xx="0" yy="2" zz="3" />
+                <controlpoint xx="0" yy="0" zz="3" />
+                <controlpoint xx="1.5" yy="-1.5" zz="0" />
+                <controlpoint xx="2" yy="-2" zz="2" />
+                <controlpoint xx="2" yy="2" zz="2" />
+                <controlpoint xx="1.5" yy="1.5" zz="0" />
+            </patch>
+        </primitive>
+        
+        <primitive id="demoCylinder2">
+            <cylinder2 base="1" top="1" height="3" slices="8" stacks="6" />
+        </primitive>
         
     </primitives>
 
@@ -112,6 +137,9 @@
                 <componentref id="demoSphereC" />
                 <componentref id="demoCylinderC" />
                 <componentref id="demoTorusC" />
+                <componentref id="demoPlaneC" />
+                <componentref id="demoPatchC" />
+                <componentref id="demoCylinder2C" />
             </children>
         </component>
         
@@ -148,7 +176,7 @@
             </transformation>
             <materials>
                 <material id="inherit" />
-                <material id="demoMaterial4" />
+                <material id="demoMaterial3" />
             </materials>
             <texture id="inherit"/>
             <children>
@@ -180,6 +208,48 @@
             <texture id="inherit"/>
             <children>
                 <primitiveref id="demoTorus" />
+            </children>
+        </component>
+
+        <component id="demoPlaneC">
+            <transformation>
+                <translate x="0" y="0" z="-1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+                <material id="demoMaterial2" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoPlane" />
+            </children>
+        </component>
+
+        <component id="demoPatchC">
+            <transformation>
+                <translate x="-2" y="1" z="-4" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+                <material id="demoMaterial3" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoPatch" />
+            </children>
+        </component>
+
+        <component id="demoCylinder2C">
+            <transformation>
+                <translate x="2" y="-2" z="-3" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+                <material id="demoMaterial2" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoCylinder2" />
             </children>
         </component>
 

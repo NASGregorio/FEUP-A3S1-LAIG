@@ -34,4 +34,8 @@ class MyPlaneNURBS
     {
         this.plane.display();
     }
+
+    updateTexCoords(length_s, length_t) {
+		this.plane.updateTexCoords(length_s, length_t);
+	}
 }

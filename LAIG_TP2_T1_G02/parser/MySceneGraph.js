@@ -79,9 +79,12 @@ class MySceneGraph {
             this.materials.get(matName).apply();
             this.materials.get(matName).setTextureWrap('REPEAT', 'REPEAT');
 
-            //this.primitives[childName].enableNormalViz();
-            this.primitives[childName].updateTexCoords(texInfo[1], texInfo[2]);
-            this.primitives[childName].display();
+            //this.primitives.get(childName).enableNormalViz();
+
+            //console.log(childName);
+
+            this.primitives.get(childName).updateTexCoords(texInfo[1], texInfo[2]);
+            this.primitives.get(childName).display();
             
             this.scene.popMatrix();
         });

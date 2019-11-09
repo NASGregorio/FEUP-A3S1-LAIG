@@ -7,59 +7,42 @@ class MyCylinderNURBS
 {
     constructor(scene, base, top, height, slices, stacks)
     {
-        var degree1 = 3;
-        var degree2 = 1;
-        // var controlVertices = [
-        //                         [
-        //                             [ -0.5, -1.5, 0.0, 1 ],
-        //                             [ -0.5,  1.5, 0.0, 1 ]
-        //                         ],
-        //                         [
-        //                             [ 0.5, -1.5, 1.5, 1 ],
-        //                             [ 0.5,  1.5, 1.5, 1 ]                             
-        //                         ],
-        //                         [
-        //                             [ 0.5, -1.5, -1.5, 1 ],
-        //                             [ 0.5,  1.5, -1.5, 1 ]                             
-        //                         ],
-        //                         [                             
-        //                             [ -0.5, -1.5, 0.0, 1 ],
-        //                             [ -0.5,  1.5, 0.0, 1 ]
-        //                         ]
-        // ];
+        this.scene = scene;
 
-        var controlVertices = this.prepareControlPoints(slices, stacks, height);
-
-        this.cylinder = new MyNURBSObject(scene, 2, stacks, degree1, degree2, controlVertices);
+        var controlpoints = [
+            [
+                [ base, 0, 0, 1 ],
+                [ base, 0, base, 1 ],
+                [ 0, 0, base, 1 ]
+            ],
+            [
+                [ top, height, 0, 1 ],
+                [ top, height, top, 1 ],
+                [ 0, height, top, 1 ]
+            ]
+        ];
+        
+        this.quarterCylinder = new MyNURBSObject(scene, stacks, slices/4, 1, 2, controlpoints);
     }
 
-    prepareControlPoints(slices, stacks, height)
-    {
-        var controlPoints = [];
-
-        var thetaStep = 2 * Math.PI / slices;
-        var theta = 0;
-
-        var heightStep = height / stacks;
-
-        for(var u = 0; u < slices; u++)
-        {
-            console.log(u, theta);
-            controlPoints.push([]);
-            for(var v = 0; v < stacks; v++)
-            {
-                controlPoints[u].push([Math.cos(theta), Math.sin(theta), v * heightStep]);
-                theta += thetaStep;
-            }
-            theta = 0;
-        }
-
-        return controlPoints;
-    }
-
-    
     display()
 	{
-		this.cylinder.display();
+        this.scene.pushMatrix();
+        this.scene.rotate(Math.PI/2, 1, 0, 0);
+
+        for (let index = 0; index < 4; index++)
+        {
+            this.scene.pushMatrix();
+            this.scene.rotate(index * Math.PI/2, 0, 1, 0);
+            this.quarterCylinder.display();
+            this.scene.popMatrix();
+        }
+        this.scene.popMatrix();
+    }
+    
+    
+    updateTexCoords(length_s, length_t) {
+        for (let index = 0; index < 4; index++)
+            this.quarterCylinder.updateTexCoords(length_s, length_t);
 	}
 }
