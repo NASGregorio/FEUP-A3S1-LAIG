@@ -21,7 +21,6 @@ class MySceneGraph {
     startAnimations() {
 
         this.animationsInUse.forEach(animationID => {
-            console.log(animationID);
     
             var animation = this.animations.get(animationID);
             animation.advanceKeyframe();

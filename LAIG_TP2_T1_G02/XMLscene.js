@@ -46,6 +46,11 @@ class XMLscene extends CGFscene {
         // Set camera to XML's default
         this.camera = this.graph.views.get(this.graph.defaultView);
         this.interface.setActiveCamera(this.camera);
+
+        this.rtt = new CGFtextureRTT(this, this.gl.canvas.width, this.gl.canvas.height);
+
+        this.securityCamera = new MySecurityCamera(this, this.rtt);
+
     }
 
     /**
@@ -128,6 +133,8 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = true;
 
+
+
         
         // Start animations
         this.graph.startAnimations();
@@ -157,13 +164,28 @@ class XMLscene extends CGFscene {
         this.graph.update(dt);
     }
 
-    /**
-     * Displays the scene.
-     */
     display() {
 
         if (!this.sceneInited)
             return;
+
+        this.rtt.attachToFrameBuffer();
+        this.render(this.graph.views.get(this.viewIndexToNames[0]));
+        this.rtt.detachFromFrameBuffer();
+
+        this.render(this.graph.views.get(this.viewIndexToNames[this.selectedView]));
+
+        this.gl.disable(this.gl.DEPTH_TEST);
+        this.securityCamera.display();
+        this.gl.enable(this.gl.DEPTH_TEST);
+    }
+
+    /**
+     * Displays the scene.
+     */
+    render(camera) {
+
+        this.camera = camera;
 
         // Clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);

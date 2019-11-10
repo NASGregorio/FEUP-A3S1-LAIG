@@ -19,6 +19,7 @@ serialInclude([ '../lib/CGF.js', 'XMLscene.js'  , 'MyInterface.js',
                 'primitives/MyPlaneNURBS.js'    , 'primitives/MyPatchNURBS.js', 
                 'primitives/MyCylinderNURBS.js' , 'animation/Keyframe.js',
                 'animation/Animation.js'        , 'animation/KeyframeAnimation.js',
+                'MySecurityCamera.js',
 
 main=function()
 {
