@@ -9,8 +9,9 @@ var LIGHTS_INDEX = 3;
 var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
 var TRANSFORMATIONS_INDEX = 6;
-var PRIMITIVES_INDEX = 7;
-var COMPONENTS_INDEX = 8;
+var ANIMATION_INDEX = 7
+var PRIMITIVES_INDEX = 8;
+var COMPONENTS_INDEX = 9;
 
 var DEBUG_ALL = 0;
 var DEBUG_FLAGS = [ 
@@ -21,6 +22,7 @@ var DEBUG_FLAGS = [
     DEBUG_ALL | 0, //TEXTURES
     DEBUG_ALL | 0, //MATERIALS
     DEBUG_ALL | 0, //TRANSFORMATIONS
+    DEBUG_ALL | 0, //ANIMATION
     DEBUG_ALL | 0, //PRIMITIVES
     DEBUG_ALL | 0  //COMPONENTS
 ];
@@ -98,6 +100,10 @@ class MyParser {
 
         // <transformations>
         if((error = this.processEntity("transformations", nodeNames, nodes, TRANSFORMATIONS_INDEX, this.parseTransformations.bind(this))) != null)
+            return error;
+
+        // <animations>
+        if((error = this.processEntity("animations", nodeNames, nodes, ANIMATION_INDEX, this.parseAnimations.bind(this))) != null)
             return error;
 
         // <primitives>
@@ -196,6 +202,7 @@ class MyParser {
         if(DEBUG_FLAGS[TEXTURES_INDEX])         console.log("Textures: ", this.sceneGraph.textures);
         if(DEBUG_FLAGS[MATERIALS_INDEX])        console.log("Materials: ", this.sceneGraph.materials);
         if(DEBUG_FLAGS[TRANSFORMATIONS_INDEX])  console.log("Transformations: ", this.sceneGraph.transformations);
+        if(DEBUG_FLAGS[ANIMATION_INDEX])        console.log("Animations: ", this.sceneGraph.animations);
         if(DEBUG_FLAGS[PRIMITIVES_INDEX])       console.log("Primitives: ", this.sceneGraph.primitives);
         if(DEBUG_FLAGS[COMPONENTS_INDEX])       console.log("Components: ", this.sceneGraph.components);
 
@@ -650,7 +657,7 @@ class MyParser {
         for (var i = 0; i < transformationNodes.length; i++) {
 
             if (transformationNodes[i].nodeName != "transformation") {
-                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                this.onXMLMinorError("unknown tag <" + transformationNodes[i].nodeName + ">");
                 continue;
             }
 
@@ -679,6 +686,54 @@ class MyParser {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
+     * Parses the <animations> block.
+     * @param {animations block element} animationsNode
+     */
+    parseAnimations(animationsNode) {
+
+        this.sceneGraph.animations = new Map();
+
+        var animationNodes = animationsNode.children;
+        var animationDataNodes = [];
+
+        // Any number of animations.
+        for (var i = 0; i < animationNodes.length; i++) {
+
+            if (animationNodes[i].nodeName != "animation") {
+                this.onXMLMinorError("unknown tag <" + animationNodes[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current animation.
+            var animationId = this.reader.getString(animationNodes[i], 'id');
+            if (animationId == null)
+                return "no ID defined for texture";
+            
+            // Checks for repeated IDs.
+            if (this.sceneGraph.animations.has(animationId))
+                return "ID must be unique for each animation (conflict: ID = " + animationId + ")";
+
+            animationDataNodes = animationNodes[i].children;
+
+            var animation = new KeyframeAnimation(this.sceneGraph.scene);
+
+            for (var i = 0; i < animationDataNodes.length; i++) {
+
+                var keyframe = this.processKeyframe(animationDataNodes[i], animationId);
+                if(typeof keyframe == "string" || keyframe instanceof String)
+                    return keyframe;
+
+                animation.addKeyframe(keyframe);
+            }
+
+            this.sceneGraph.animations.set(animationId, animation);
+        }
+        return null;
+    }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
      * Parses the <primitives> block.
      * @param {primitives block element} primitivesNode
      */
@@ -698,7 +753,7 @@ class MyParser {
         for (var i = 0; i < primitiveNodes.length; i++) {
 
             if (primitiveNodes[i].nodeName != "primitive") {
-                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                this.onXMLMinorError("unknown tag <" + primitiveNodes[i].nodeName + ">");
                 continue;
             }
 
@@ -978,6 +1033,7 @@ class MyParser {
      */
     parseComponents(componentsNode) {
         this.sceneGraph.components = new Map();
+        this.sceneGraph.animationsInUse = new Set();
 
         var componentNodes = componentsNode.children;
 
@@ -992,6 +1048,7 @@ class MyParser {
             var nodeNames = [];
             var component = {
                 transformationref: "",
+                animationRef: "",
                 texture: [],
                 materials: [],
                 componentRefs: [],
@@ -1023,6 +1080,7 @@ class MyParser {
             }
             
             var transformationIndex = nodeNames.indexOf("transformation");
+            var animationIndex = nodeNames.indexOf("animationref");
             var materialsIndex = nodeNames.indexOf("materials");
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
@@ -1058,6 +1116,18 @@ class MyParser {
                     
             }
             component.transformationref = ref;
+
+            // Animation
+            if(componentDataNodes[animationIndex] != null) {
+                var animationID = this.reader.getString(componentDataNodes[animationIndex], 'id');
+    
+                if(this.sceneGraph.animations.has(animationID)) {
+                    component.animationRef = animationID;
+                    this.sceneGraph.animationsInUse.add(animationID);
+                }
+                else
+                    return "Component " + componentID + " has non-existent animation " + animationID;
+            }
 
             // Materials
             if(componentDataNodes[materialsIndex] == null)
@@ -1230,6 +1300,11 @@ class MyParser {
         return position;
     }
 
+    /**
+     * Parse the coordinates from a node with ID = id
+     * @param {block element} node
+     * @param {message to be displayed in case of error} messageError
+     */
     parseCoordinates3D2(node, messageError) {
         var position = [];
 
@@ -1303,6 +1378,34 @@ class MyParser {
     }
 
     /**
+     * Parse the rotation from a node with ID = id
+     * @param {block element} node
+     * @param {message to be displayed in case of error} messageError
+     */
+    parseRotation2(node, messageError) {
+        var rotation = [];
+
+        // angle_x
+        var angle_x = this.reader.getFloat(node, 'angle_x');
+        if (!(angle_x != null && !isNaN(angle_x) && angle_x >= -360 && angle_x <= 360))
+            return "unable to parse angle_x of the " + messageError;
+
+        // angle_y
+        var angle_y = this.reader.getFloat(node, 'angle_y');
+        if (!(angle_y != null && !isNaN(angle_y) && angle_y >= -360 && angle_y <= 360))
+            return "unable to parse angle_y of the " + messageError;
+
+        // angle_z
+        var angle_z = this.reader.getFloat(node, 'angle_z');
+        if (!(angle_z != null && !isNaN(angle_z) && angle_z >= -360 && angle_z <= 360))
+            return "unable to parse angle_z of the " + messageError;
+
+        rotation.push(...[angle_x * DEGREE_TO_RAD, angle_y * DEGREE_TO_RAD, angle_z * DEGREE_TO_RAD]);
+
+        return rotation;
+    }
+
+    /**
      * Process content from a <transformation> XML block into a transformation object
      * @param {transformation block element} transformation
      * @param {block ID to be displayed in case of error} sourceName
@@ -1340,6 +1443,62 @@ class MyParser {
             }
         }
         return transfMatrix;
+    }
+
+    /**
+     * Process content from a <keyframe> XML block into a keyframe object
+     * @param {keyframe block element} keyframe
+     * @param {block ID to be displayed in case of error} sourceName
+     */
+    processKeyframe(keyframe, sourceName) {
+    
+        var time = 0;
+        var position = 0;
+        var rotation = 0;
+        var scale = 0;
+        var order = 0;
+
+        // Get time instant of the current keyframe.
+        time = this.reader.getFloat(keyframe, 'instant');
+        if (!(time != null && !isNaN(time) && time >= 0))
+            return "no instant defined for keyframe in animation " + sourceName;
+
+
+        var keyframeData = keyframe.children;
+
+        for (var j = 0; j < keyframeData.length; j++) {       
+
+            switch (keyframeData[j].nodeName) {
+                case 'translate':
+                    if (order > 0) return "translate data out of order (translate must come first) in animation \"" + sourceName + "\"";
+
+                    position = this.parseCoordinates3D(keyframeData[j], "translate data from keyframe " + time + " in animation \"" + sourceName + "\"");
+                    if (!Array.isArray(position))
+                        return position;
+                    break;
+
+                case 'rotate':
+                    if (order > 1) return "rotate data out of order (rotate before scale) in animation \"" + sourceName + "\"";
+                    order = 1;
+
+                    rotation = this.parseRotation2(keyframeData[j], "rotate data from keyframe " + time + " in animation \"" + sourceName + "\"");
+                    if (!Array.isArray(rotation))
+                        return rotation;
+                    break;
+
+                case 'scale':                        
+                    order = 2;
+
+                    scale = this.parseCoordinates3D(keyframeData[j], "scale data from keyframe " + time + " in animation \"" + sourceName + "\"");
+                    if (!Array.isArray(scale))
+                        return scale;
+                    break;
+
+                default:
+                    return "invalid keyframe attribute tag \"" + keyframeData[j].nodeName +"\" in \"" + sourceName + "\"";
+            }
+        }
+        return new Keyframe(time, position, rotation, scale);
     }
 
     /**

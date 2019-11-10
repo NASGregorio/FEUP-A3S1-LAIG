@@ -1,4 +1,3 @@
-var DEGREE_TO_RAD = Math.PI / 180;
 
 /**
  * XMLscene class, representing the scene that is to be rendered.
@@ -94,8 +93,7 @@ class XMLscene extends CGFscene {
             this.lights[i].update();
         });
     }
-
-    
+ 
     setDefaultAppearance() {
         this.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
@@ -116,7 +114,9 @@ class XMLscene extends CGFscene {
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
 
-        this.setUpdatePeriod(100);
+        this.setUpdatePeriod(1000/60);
+
+        this.lastUpdate = Date.now();
 
         this.axis = new CGFaxis(this, this.graph.referenceLength);
 
@@ -127,6 +127,10 @@ class XMLscene extends CGFscene {
         this.initLights();
 
         this.sceneInited = true;
+
+        
+        // Start animations
+        this.graph.startAnimations();
     }
 
     /**
@@ -146,6 +150,11 @@ class XMLscene extends CGFscene {
         else
             this.lights[i].disable();
         this.lights[i].update();
+    }
+
+    update(tNow) {
+        var dt = tNow - this.lastUpdate;
+        this.graph.update(dt);
     }
 
     /**

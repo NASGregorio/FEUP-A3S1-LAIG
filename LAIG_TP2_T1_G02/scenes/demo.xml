@@ -74,8 +74,35 @@
         </transformation>
     </transformations>
 
-    <primitives>
+    <animations>
+        <animation id="demoAnimation" >
+            <keyframe instant="0">
+                <translate x="0" y="-2" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
 
+            <keyframe instant="2.5">
+                <translate x="0" y="-2" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant="10">
+                <translate x="0" y="0" z="5" />
+                <rotate angle_x="0" angle_y="360" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant="15">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+        </animation>
+    </animations>
+
+    <primitives>
         <primitive id="demoRectangle">
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
@@ -120,13 +147,13 @@
         <primitive id="demoCylinder2">
             <cylinder2 base="1" top="1" height="3" slices="8" stacks="6" />
         </primitive>
-        
     </primitives>
 
     <components>
         <component id="demoRoot">
             <transformation>
             </transformation>
+            <animationref id="demoAnimation" />
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -202,6 +229,7 @@
             <transformation>
                 <translate x="0" y="-3" z="0" />
             </transformation>
+            <animationref id="demoAnimation" />
             <materials>
                 <material id="inherit" />
             </materials>
@@ -241,7 +269,7 @@
 
         <component id="demoCylinder2C">
             <transformation>
-                <translate x="2" y="-2" z="-3" />
+                <translate x="2" y="-2" z="-6" />
             </transformation>
             <materials>
                 <material id="inherit" />

@@ -18,6 +18,33 @@ class MySceneGraph {
         this.materialIndex = 0;
     }
 
+    startAnimations() {
+
+        this.animationsInUse.forEach(animationID => {
+            console.log(animationID);
+    
+            var animation = this.animations.get(animationID);
+            animation.advanceKeyframe();
+            animation.startAnimation();
+            
+        });
+
+        // for (var k = 0; k < this.animationsInUse.size; k++) {
+
+        // }
+    }
+
+    update(dt) {
+        // Update animations
+        this.animationsInUse.forEach(animationID => {
+            this.animations.get(animationID).updateKeyframe(dt);
+        });
+
+
+        // for (var k = 0; k < this.animationsInUse.size; k++) {
+        // }
+    }
+
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
@@ -65,7 +92,13 @@ class MySceneGraph {
         // Recursive call for children nodes
         node.componentRefs.forEach(childName => {
             this.scene.pushMatrix();
+
             this.scene.multMatrix(this.transformations.get(node.transformationref));
+            
+            var animation = this.animations.get(node.animationRef);
+            if(animation != null)
+                animation.apply();
+                
             this.traverseGraph(childName, matName, texInfo, depth);
             this.scene.popMatrix();
         });
@@ -73,15 +106,18 @@ class MySceneGraph {
         // Display call for primitives
         node.primitiveRefs.forEach(childName => {
             this.scene.pushMatrix();
+
             this.scene.multMatrix(this.transformations.get(node.transformationref));
 
+            var animation = this.animations.get(node.animationRef);
+            if(animation != null)
+                animation.apply();
+            
             this.materials.get(matName).setTexture(this.textures.get(texInfo[0]));
             this.materials.get(matName).apply();
             this.materials.get(matName).setTextureWrap('REPEAT', 'REPEAT');
 
             //this.primitives.get(childName).enableNormalViz();
-
-            //console.log(childName);
 
             this.primitives.get(childName).updateTexCoords(texInfo[1], texInfo[2]);
             this.primitives.get(childName).display();
