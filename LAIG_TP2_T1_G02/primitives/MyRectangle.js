@@ -26,7 +26,7 @@ class MyRectangle extends CGFobject {
 
 		//Counter-clockwise reference of vertices
 		this.indices = [
-			0, 1, 2,
+			2, 0, 1,
 			1, 3, 2
 		];
 
@@ -48,8 +48,12 @@ class MyRectangle extends CGFobject {
         t
         */
 
-		this.texCoords = [];
-		this.updateTexCoords(1,1);
+	   this.texCoords = [
+		0,0,
+		1,0,
+		0,1,
+		1,1
+		];
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}

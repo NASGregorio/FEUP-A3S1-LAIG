@@ -39,10 +39,10 @@
 
     <textures>
         <texture id="demoTexture" file="scenes/images/body.jpg" />
-        <texture id="demoTexture2" file="scenes/images/bank.jpg" />
+        <!-- <texture id="demoTexture2" file="scenes/images/bank.jpg" />
         <texture id="demoTexture3" file="scenes/images/leaves.jpg" />
         <texture id="demoTexture4" file="scenes/images/rocks.jpg" />
-        <texture id="demoTexture5" file="scenes/images/trunk-image.jpg" />
+        <texture id="demoTexture5" file="scenes/images/trunk-image.jpg" /> -->
     </textures>
 
     <materials>

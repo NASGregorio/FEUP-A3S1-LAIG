@@ -9,10 +9,9 @@ class XMLscene extends CGFscene {
      */
     constructor(myinterface) {
         super();
-
+        
         this.interface = myinterface;
-
-        this.sceneInited = false;
+        
     }
     
     /**
@@ -21,6 +20,8 @@ class XMLscene extends CGFscene {
      */
     init(application) {
         super.init(application);
+        this.rtt = new CGFtextureRTT(this, this.gl.canvas.width, this.gl.canvas.height);
+        this.renderC = false;
     }
     
     /**
@@ -43,11 +44,11 @@ class XMLscene extends CGFscene {
         // Create camera UI
         this.interface.addViews();
 
+
         // Set camera to XML's default
         this.camera = this.graph.views.get(this.graph.defaultView);
         this.interface.setActiveCamera(this.camera);
 
-        this.rtt = new CGFtextureRTT(this, this.gl.canvas.width, this.gl.canvas.height);
 
         this.securityCamera = new MySecurityCamera(this, this.rtt);
 
@@ -132,9 +133,6 @@ class XMLscene extends CGFscene {
         this.initLights();
 
         this.sceneInited = true;
-
-
-
         
         // Start animations
         this.graph.startAnimations();
@@ -192,7 +190,11 @@ class XMLscene extends CGFscene {
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
         // Initialize Model-View matrix as identity (no transformation
-        this.updateProjectionMatrix();
+        if(!this.renderC){
+            this.updateProjectionMatrix();
+            console.log('A');
+            this.renderC = true;
+        }
         this.loadIdentity();
 
         // Apply transformations corresponding to the camera position relative to the origin
@@ -200,7 +202,7 @@ class XMLscene extends CGFscene {
         
         // Show axis
         if(this.axis)
-            this.axis.display();
+            //this.axis.display();
         
         // Draw axis
         this.setDefaultAppearance();

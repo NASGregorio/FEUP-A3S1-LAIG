@@ -1,0 +1,795 @@
+<lxs>
+    <scene root="showroom" axis_length="5"/>
+
+    <views default="defaultCamera">
+
+        <perspective id="securityCamera" near="0.1" far="500" angle="45">
+            <from x="2" y="10" z="25" />
+            <to x="0" y="0" z="5" />
+        </perspective>
+
+        <perspective id="defaultCamera" near="0.1" far="500" angle="45">
+            <from x="2" y="10" z="25" />
+            <to x="0" y="0" z="5" />
+        </perspective>
+
+        <perspective id="sideView" near="0.1" far="500" angle="45">
+            <from x="20" y="5" z="8" />
+            <to x="-10" y="1" z="6" />
+        </perspective>
+
+        <perspective id="topView" near="0.1" far="500" angle="90">
+            <from x="0.05" y="15" z="6" />
+            <to x="0" y="1" z="6" />
+        </perspective>
+
+        <ortho id="exhaustCamera"  near="0.1" far="500" left="-5" right="5" top="5" bottom="-5" >
+            <from x="0" y="10" z="0.1" />
+            <to x="0" y="0" z="0" />
+            <up x="0" y="1" z="0" /> <!-- opcional, default 0,1,0 -->
+        </ortho>
+    </views>
+
+    <globals>
+        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+        <background r="0.2" g="0.4" b="0.6" a="1.0" />
+    </globals>
+
+    <lights>
+        <omni id="showRoom" enabled="1">
+            <location x="0" y="5" z="5" w="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0" />  
+        </omni>
+        <spot id="warmLight" enabled="0" angle="0" exponent="0">
+            <location x="10" y="2" z="4" w="1.0" />
+            <target x="0" y="0" z="4" />
+            <ambient r="0.5" g="0.3" b="0.2" a="1.0" />
+            <diffuse r="0.5" g="0.3" b="0.2" a="1.0" />
+            <specular r="0.5" g="0.3" b="0.2" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0" />  
+        </spot>
+        <spot id="front" enabled="0" angle="0" exponent="0">
+            <location x="0" y="0" z="18" w="1.0" />
+            <target x="0" y="0" z="12" />
+            <ambient r="0.4" g="0.4" b="0.4" a="1.0" />
+            <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
+            <specular r="0.4" g="0.4" b="0.4" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0" />  
+        </spot>
+    </lights>
+
+    <textures>
+        <texture id="tireTexture" file="scenes/images/tire.jpg" />
+        <texture id="tireRimTexture" file="scenes/images/tire_rim.jpg" />
+        <texture id="noseTexture" file="scenes/images/nose.jpg" />
+        <texture id="bodyTexture" file="scenes/images/body.jpg" />
+        <texture id="metalTexture" file="scenes/images/metal.jpg" />
+        <texture id="rearTexture" file="scenes/images/rear.jpg" />
+        <texture id="visorTexture" file="scenes/images/visor.jpg" />
+        <texture id="exhaustTexture" file="scenes/images/glowingMetal.jpg" />
+        <texture id="asphaltTexture" file="scenes/images/asphalt.jpg" />
+    </textures>
+
+    <materials>
+        <material id="british_racing_green" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.26" b="0.15" a="1.0" />
+            <diffuse r="0.0" g="0.26" b="0.15" a="1.0" />
+            <specular r="0.0" g="0.26" b="0.15" a="1.0" />
+        </material>
+        <material id="white" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.5" g="0.5" b="0.5" a="0.5" />
+            <diffuse r="0.8" g="0.8" b="0.8" a="1.0" />
+            <specular r="0.9" g="0.9" b="0.9" a="1.0" />
+        </material>
+        <material id="grey" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.4" g="0.4" b="0.4" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <specular r="0.5" g="0.5" b="0.5" a="1.0" />
+        </material>
+        <material id="glow_red" shininess="10">
+            <emission r="0.5" g="0.15" b="0.15" a="1.0" />
+            <ambient r="0.5" g="0.4" b="0.4" a="1.0" />
+            <diffuse r="0.5" g="0.4" b="0.4" a="1.0" />
+            <specular r="0.5" g="0.4" b="0.4" a="1.0" />
+        </material>
+        <material id="black" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+            <diffuse r="0.2" g="0.2" b="0.2" a="1.0" />
+            <specular r="0.2" g="0.2" b="0.2" a="1.0" />
+        </material>
+        <material id="red" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.45" g="0.19" b="0.22" a="1.0" />
+            <diffuse r="0.45" g="0.19" b="0.22" a="1.0" />
+            <specular r="0.45" g="0.19" b="0.22" a="1.0" />
+        </material>
+        <material id="cyan" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.19" g="0.45" b="0.42" a="1.0" />
+            <diffuse r="0.19" g="0.45" b="0.42" a="1.0" />
+            <specular r="0.19" g="0.45" b="0.42" a="1.0" />
+        </material>
+        <material id="green" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.10" g="0.24" b="0.15" a="1.0" />
+            <diffuse r="0.10" g="0.24" b="0.15" a="1.0" />
+            <specular r="0.10" g="0.24" b="0.15" a="1.0" />
+        </material>
+    </materials>
+
+    <transformations>
+        <transformation id="f1_car_body_flatten">
+            <scale x="1" y="0.6" z="1" />
+        </transformation>
+        
+        <transformation id="flip">
+            <scale x="1" y="-1" z="1" />
+        </transformation>
+
+        <transformation id="f1_car_axle_scale">
+            <translate x="1" y="0.5*0.6" z="3" />
+            <scale x="5" y="1" z="5" />
+        </transformation>
+
+        
+        <transformation id="f1_car_tire_thickness">
+            <scale x="1" y="1" z="2" />
+        </transformation>
+
+    </transformations>
+
+    <animations>
+        <animation id="demoAnimation" >
+            <keyframe instant="0">
+                <translate x="0" y="-2" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant="2.5">
+                <translate x="0" y="-2" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant="10">
+                <translate x="0" y="0" z="5" />
+                <rotate angle_x="0" angle_y="360" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant="15">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+        </animation>
+    </animations>
+
+
+    <primitives>
+
+        <primitive id="f1_car_body_cylinder">
+            <cylinder base="2" top="1" height="11.5" slices="24" stacks="24" />
+        </primitive>
+
+        <primitive id="f1_car_splitter">
+            <sphere radius="1" stacks="24" slices="24" />
+        </primitive>
+
+        <primitive id="f1_car_body_visor">
+            <cylinder base="1" top="1.25" height="1" stacks="24" slices="24" />
+        </primitive>
+
+        <primitive id="f1_car_body_exhaust">
+            <cylinder base="0.2" top="0.2" height="1.5" stacks="24" slices="24" />
+        </primitive>
+
+        <primitive id="f1_car_axle_cylinder">
+            <cylinder base="0.15" top="0.15" height="1" slices="3" stacks="6" />
+        </primitive>
+
+        <primitive id="f1_car_mirror_cylinder">
+            <cylinder base="0.15" top="0.05" height="0.2" slices="24" stacks="24" />
+        </primitive>
+
+        <primitive id="f1_car_tire_f_torus">
+            <torus inner="0.25" outer="0.75" slices="64" loops="64" />
+        </primitive>
+
+        <primitive id="f1_car_tire_b_torus">
+            <torus inner="0.3" outer="0.9" slices="64" loops="64" />
+        </primitive>
+        
+        <primitive id="f1_car_wheel_rim_rect">
+            <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
+        </primitive>
+
+        <primitive id="showroom_wall">
+            <rectangle x1="-15" y1="0" x2="15" y2="10" />
+        </primitive>
+
+        <primitive id="demoPatch">
+            <patch npointsU="3" npointsV="5" npartsU="20" npartsV="20" >
+                <controlpoint xx="1" yy="0" zz="1" />
+                <controlpoint xx="0.4" yy="0" zz="1" />
+                <controlpoint xx="0" yy="1" zz="1" />
+                <controlpoint xx="-0.4" yy="0" zz="1" />
+                <controlpoint xx="-1" yy="0" zz="1" />
+                <controlpoint xx="0.8" yy="0" zz="0" />
+                <controlpoint xx="0.4" yy="0" zz="0" />
+                <controlpoint xx="0" yy="0.3" zz="0" />
+                <controlpoint xx="-0.4" yy="0" zz="0" />
+                <controlpoint xx="-0.8" yy="0" zz="0" />
+                <controlpoint xx="0.1" yy="0" zz="-1" />
+                <controlpoint xx="0" yy="0" zz="-1" />
+                <controlpoint xx="0" yy="0" zz="-1" />
+                <controlpoint xx="0" yy="0" zz="-1" />
+                <controlpoint xx="-0.1" yy="0" zz="-1" />
+            </patch>
+        </primitive>
+
+    </primitives>
+
+    <components>
+        <component id="showroom">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <!-- <componentref id="lotus_43" /> -->
+                <componentref id="mclaren_mp4/4" />
+                <componentref id="showroom_walls" />
+            </children>
+        </component>
+
+        <component id="showroom_walls">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="grey" />
+                <material id="red" />
+                <material id="cyan" />
+                <material id="green" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="showroom_wall_back" />
+                <componentref id="showroom_wall_side" />
+                <componentref id="showroom_floor" />
+            </children>
+        </component>
+
+        <component id="showroom_wall_back">
+            <transformation>
+                <translate x="0" y="-1" z="-8" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="showroom_wall" />
+            </children>
+        </component>
+        
+        <component id="showroom_wall_side">
+            <transformation>
+                <rotate axis="y" angle="90" />
+                <translate x="-7" y="-1" z="-15" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="showroom_wall" />
+            </children>
+        </component>
+
+        <component id="showroom_floor">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+                <translate x="0" y="-22" z="-1" />
+                <scale x="1" y="3" z="1" />
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="asphaltTexture" length_s="8" length_t="6"/>
+            <children>
+                <primitiveref id="showroom_wall" />
+            </children>
+        </component>
+
+
+        <component id="mclaren_mp4/4">
+            <transformation>
+                <!-- <scale x="-1" y="1" z="1" /> -->
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="demoPatch" />
+            </children>
+        </component>
+
+
+        <component id="lotus_43">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="f1_car_body" />
+                <componentref id="f1_car_left" />
+                <componentref id="f1_car_right" />
+                <componentref id="f1_car_exhaust"/>
+                <componentref id="f1_car_mirror_right"/>
+                <componentref id="f1_car_mirror_left"/>
+            </children>
+        </component>
+
+        <component id="f1_car_mirror_right">
+            <transformation>
+                <translate x="2" y="1" z="6" />
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="metalTexture" length_s="1" length_t="1"/>            
+            <children>
+                <componentref id="f1_car_mirror_wing_right" />
+                <primitiveref id="f1_car_mirror_cylinder" />
+                <componentref id="f1_car_mirror_ends" />
+            </children>
+        </component>
+
+        <component id="f1_car_mirror_left">
+            <transformation>
+                <translate x="-2" y="1" z="6" />
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="metalTexture" length_s="1" length_t="1"/>            
+            <children>
+                <componentref id="f1_car_mirror_wing_left" />
+                <primitiveref id="f1_car_mirror_cylinder" />
+                <componentref id="f1_car_mirror_ends" />
+            </children>
+        </component>
+
+
+        <component id="f1_car_mirror_wing_right">
+            <transformation>
+                <rotate axis="z" angle="45" />
+                <rotate axis="y" angle="90" />
+                <translate x="-0.1" y="0" z="-1" />
+                <scale x="0.5" y="0.5" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="f1_car_axle_cylinder" />
+            </children>
+        </component>
+
+        <component id="f1_car_mirror_wing_left">
+            <transformation>
+                <rotate axis="z" angle="-45" />
+                <rotate axis="y" angle="-90" />
+                <translate x="0.1" y="0" z="-1" />
+                <scale x="0.5" y="0.5" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="f1_car_axle_cylinder" />
+            </children>
+        </component>
+
+        <component id="f1_car_mirror_ends">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="f1_car_mirror_f_end" />
+                <componentref id="f1_car_mirror_b_end" />
+            </children>
+        </component>
+        
+        <component id="f1_car_mirror_f_end">
+            <transformation>
+                <translate x="0" y="0" z="0.2" />
+                <scale x="0.05" y="0.05" z="0.001" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="f1_car_splitter" />
+            </children>
+        </component>
+
+        <component id="f1_car_mirror_b_end">
+            <transformation>
+                <scale x="0.15" y="0.15" z="0.001" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="f1_car_splitter" />
+            </children>
+        </component>
+
+        <component id="f1_car_body">
+            <transformation>
+                <transformationref id="f1_car_body_flatten" />
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="bodyTexture" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="f1_car_body_cylinder" />
+                <componentref id="f1_car_body_visor_ref" />
+                <componentref id="f1_car_nose_splitter" />
+                <componentref id="f1_car_rear_end" />
+            </children>
+        </component>
+
+        <component id="f1_car_body_visor_ref">
+            <transformation>
+                <translate x="0" y="1.5" z="6" />
+                <rotate axis="x" angle="60"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="visorTexture" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="f1_car_body_visor_in" />
+                <componentref id="f1_car_body_visor_out" />
+            </children>
+        </component>
+
+        <component id="f1_car_body_visor_out">
+            <transformation>
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="f1_car_body_visor" />
+            </children>
+        </component>
+
+        <component id="f1_car_body_visor_in">
+            <transformation>
+                <scale x="-1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="f1_car_body_visor" />
+            </children>
+        </component>
+    
+        <component id="f1_car_nose_splitter">
+            <transformation>
+                <translate x="0" y="0" z="11.5" />
+                <scale x="1" y="1" z="0.15" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="noseTexture" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="f1_car_splitter" />
+            </children>
+        </component>
+
+        <component id="f1_car_rear_end">
+            <transformation>
+                <scale x="2" y="2" z="0.001" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="rearTexture" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="f1_car_splitter" />
+            </children>
+        </component>
+
+        <component id="f1_car_left">
+            <transformation>
+                <rotate axis="y" angle="-90" />
+                <translate x="0" y="0" z="-0.25"/>
+            </transformation>
+            <materials>
+                <material id="black" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="f1_car_left_front" />
+                <componentref id="f1_car_left_back" />
+            </children>
+        </component>
+
+        <component id="f1_car_left_front">
+            <transformation>
+                <translate x="8" y="0" z="-2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="f1_car_tire_frame_front" />
+            </children>
+        </component>
+
+        <component id="f1_car_left_back">
+            <transformation>
+                <translate x="2" y="0" z="-2.65" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="f1_car_tire_frame_back" />
+            </children>
+        </component>
+
+        <component id="f1_car_right">
+            <transformation>
+                <rotate axis="y" angle="90" />
+                <translate x="0" y="0" z="-0.25"/>
+            </transformation>
+            <materials>
+                <material id="black" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="f1_car_right_front" />
+                <componentref id="f1_car_right_back" />
+            </children>
+        </component>
+
+        <component id="f1_car_right_front">
+            <transformation>
+                <translate x="-8" y="0" z="-2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="f1_car_tire_frame_front" />
+            </children>
+        </component>
+
+        <component id="f1_car_right_back">
+            <transformation>
+                <translate x="-2" y="0" z="-2.65" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="f1_car_tire_frame_back" />
+            </children>
+        </component>
+
+        <component id="f1_car_tire_frame_front">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="f1_car_horizontal_axle" />
+                <componentref id="f1_car_tilted_axle" />
+                <componentref id="f1_car_front_tire" />
+            </children>
+        </component>
+        
+        <component id="f1_car_tire_frame_back">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="f1_car_horizontal_axle" />
+                <componentref id="f1_car_tilted_axle" />
+                <componentref id="f1_car_back_tire" />
+            </children>
+        </component>
+
+        <component id="f1_car_horizontal_axle">
+            <transformation>
+                <scale x="1" y="0.7" z="1.3" />
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="f1_car_axle_cylinder" />
+            </children>
+        </component>
+
+        <component id="f1_car_tilted_axle">
+            <transformation>
+                <rotate axis="x" angle="-15" />
+                <scale x="1" y="0.7" z="1.6" />
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="f1_car_axle_cylinder" />
+            </children>
+        </component>
+
+        <component id="f1_car_front_tire">
+            <transformation>
+                <transformationref id="f1_car_tire_thickness" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="tireTexture" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="f1_car_tire_f_torus" />
+                <componentref id="f1_car_tire_rim" />             
+            </children>
+        </component>
+
+        <component id="f1_car_back_tire">
+            <transformation>
+                <transformationref id="f1_car_tire_thickness" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="tireTexture" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="f1_car_tire_b_torus" />
+                <componentref id="f1_car_tire_rim_back" />             
+            </children>
+        </component>
+
+        <component id="f1_car_tire_rim_back">
+            <transformation>
+                <scale x="1.2" y="1.2" z="1.2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="f1_car_tire_rim" />
+            </children>
+        </component>
+
+        <component id="f1_car_tire_rim">
+            <transformation>
+                <rotate axis="y" angle="180" />
+                <scale x="1.1" y="1.1" z="1.1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="tireRimTexture" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="f1_car_wheel_rim_rect" />
+            </children>
+        </component>
+
+        <component id="f1_car_exhaust">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="glow_red" />
+                <material id="grey" />
+            </materials>
+            <texture id="exhaustTexture" length_s="1" length_t="1"/>   
+            <children>
+                <componentref id="f1_car_body_exhaust_right" />
+                <componentref id="f1_car_body_exhaust_left" />
+            </children>
+        </component>
+
+        <component id="f1_car_body_exhaust_right">
+            <transformation>
+                <translate x="1" y="0" z="-1.25" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="f1_car_body_exhaust" />
+                <componentref id="f1_car_body_exhaust_r_end" />
+            </children>
+        </component>
+
+        <component id="f1_car_body_exhaust_r_end">
+            <transformation>
+                <scale x="0.2" y="0.2" z="0.001"/>
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="metalTexture" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="f1_car_splitter" />
+            </children>
+        </component>
+
+        <component id="f1_car_body_exhaust_left">
+            <transformation>
+                <translate x="-1" y="0" z="-1.25" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="f1_car_body_exhaust" />
+                <componentref id="f1_car_body_exhaust_l_end" />
+            </children>
+        </component>
+
+        <component id="f1_car_body_exhaust_l_end">
+            <transformation>
+                <scale x="0.2" y="0.2" z="0.001"/>
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="metalTexture" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="f1_car_splitter" />
+            </children>
+        </component>
+
+    </components>
+</lxs>
