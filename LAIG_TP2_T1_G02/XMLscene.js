@@ -41,13 +41,13 @@ class XMLscene extends CGFscene {
             i++;
         });
         
+        // Set camera to XML's default
+        this.selectedView = this.viewNamesToIndex["defaultCamera"];
+        this.onViewChanged();
+
+
         // Create camera UI
         this.interface.addViews();
-
-
-        // Set camera to XML's default
-        this.camera = this.graph.views.get(this.graph.defaultView);
-        this.interface.setActiveCamera(this.camera);
 
 
         this.securityCamera = new MySecurityCamera(this, this.rtt);
@@ -168,7 +168,7 @@ class XMLscene extends CGFscene {
             return;
 
         this.rtt.attachToFrameBuffer();
-        this.render(this.graph.views.get(this.viewIndexToNames[0]));
+        this.render(this.graph.views.get("securityCamera"));
         this.rtt.detachFromFrameBuffer();
 
         this.render(this.graph.views.get(this.viewIndexToNames[this.selectedView]));

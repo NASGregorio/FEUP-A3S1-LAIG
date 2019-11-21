@@ -216,29 +216,110 @@
             <rectangle x1="-15" y1="0" x2="15" y2="10" />
         </primitive>
 
-        <primitive id="demoPatch">
+        <primitive id="mp44_air_intake">
             <patch npointsU="3" npointsV="5" npartsU="20" npartsV="20" >
-                <controlpoint xx="1" yy="0" zz="1" />
-                <controlpoint xx="0.4" yy="0" zz="1" />
-                <controlpoint xx="0" yy="1" zz="1" />
-                <controlpoint xx="-0.4" yy="0" zz="1" />
-                <controlpoint xx="-1" yy="0" zz="1" />
-                <controlpoint xx="0.8" yy="0" zz="0" />
-                <controlpoint xx="0.4" yy="0" zz="0" />
-                <controlpoint xx="0" yy="0.3" zz="0" />
-                <controlpoint xx="-0.4" yy="0" zz="0" />
-                <controlpoint xx="-0.8" yy="0" zz="0" />
-                <controlpoint xx="0.1" yy="0" zz="-1" />
-                <controlpoint xx="0" yy="0" zz="-1" />
-                <controlpoint xx="0" yy="0" zz="-1" />
-                <controlpoint xx="0" yy="0" zz="-1" />
-                <controlpoint xx="-0.1" yy="0" zz="-1" />
+                <controlpoint xx="1" yy="0" zz="1.5" />
+                <controlpoint xx="0.4" yy="0" zz="1.5" />
+                <controlpoint xx="0" yy="1.5" zz="1.5" />
+                <controlpoint xx="-0.4" yy="0" zz="1.5" />
+                <controlpoint xx="-1" yy="0" zz="1.5" />
+                <controlpoint xx="0.8" yy="0" zz="0.75" />
+                <controlpoint xx="0.4" yy="0" zz="0.75" />
+                <controlpoint xx="0" yy="1.5" zz="0.75" />
+                <controlpoint xx="-0.4" yy="0" zz="0.75" />
+                <controlpoint xx="-0.8" yy="0" zz="0.75" />
+                <controlpoint xx="0.1" yy="0" zz="-1.5" />
+                <controlpoint xx="0" yy="0" zz="-1.5" />
+                <controlpoint xx="0" yy="0" zz="-1.5" />
+                <controlpoint xx="0" yy="0" zz="-1.5" />
+                <controlpoint xx="-0.1" yy="0" zz="-1.5" />
             </patch>
         </primitive>
 
+        <primitive id="mp44_nose">
+            <patch npointsU="3" npointsV="5" npartsU="10" npartsV="20" >
+                <controlpoint xx="0.5" yy="0.25" zz="3" />                 <!-- First X -->
+                <controlpoint xx="0.5" yy="0.5" zz="3" />
+                <controlpoint xx="0" yy="0.5" zz="3" />
+                <controlpoint xx="-0.5" yy="0.5" zz="3" />
+                <controlpoint xx="-0.5" yy="0.25" zz="3" />
+                <controlpoint xx="0.8" yy="0.5" zz="0" />                 <!-- Second X -->
+                <controlpoint xx="0.65" yy="0.4" zz="0" />
+                <controlpoint xx="0" yy="1.5" zz="0" />
+                <controlpoint xx="-0.65" yy="0.4" zz="0" />
+                <controlpoint xx="-0.8" yy="0.5" zz="0" />
+                <controlpoint xx="1.3" yy="1" zz="-3" />              <!-- Third X -->
+                <controlpoint xx="0.5" yy="0.8" zz="-3" />
+                <controlpoint xx="0" yy="3" zz="-3" />
+                <controlpoint xx="-0.5" yy="0.8" zz="-3" />
+                <controlpoint xx="-1.3" yy="1" zz="-3" />
+            </patch>
+        </primitive>
+
+        
+        <primitive id="mp44_nose_end">
+             <patch npointsU="3" npointsV="5" npartsU="20" npartsV="20" >
+                <controlpoint xx="-0.5" yy="0.25" zz="3" />             <!-- First X -->
+                <controlpoint xx="-0.5" yy="0.5" zz="3" />
+                <controlpoint xx="0" yy="0.5" zz="3" />
+                <controlpoint xx="0.5" yy="0.5" zz="3" />                 
+                <controlpoint xx="0.5" yy="0.25" zz="3" />
+                <controlpoint xx="-0.5" yy="0.25" zz="3" />            <!-- Second X-->
+                <controlpoint xx="-0.25" yy="0.25" zz="3.1" />
+                <controlpoint xx="0" yy="0.25" zz="3.2" />
+                <controlpoint xx="0.25" yy="0.25" zz="3.1" />          
+                <controlpoint xx="0.5" yy="0.25" zz="3" />
+                <controlpoint xx="-0.5" yy="0" zz="2.9" />                <!-- Third X -->
+                <controlpoint xx="-0.5" yy="0" zz="2.9" />
+                <controlpoint xx="0" yy="-0.2" zz="2.9" />
+                <controlpoint xx="0.5" yy="0" zz="2.9" />                 
+                <controlpoint xx="0.5" yy="0" zz="2.9" />
+            </patch>
+        </primitive>
+
+        <primitive id="mp44_nose_under">
+            <patch npointsU="3" npointsV="3" npartsU="10" npartsV="20" >
+                <controlpoint xx="-0.5" yy="0" zz="2.9" />      
+                <controlpoint xx="0" yy="-0.15" zz="2.9" />      
+                <controlpoint xx="0.5" yy="0" zz="2.9" />                 <!-- First X -->
+                <controlpoint xx="-0.8" yy="0" zz="0" />
+                <controlpoint xx="0" yy="-0.15" zz="0" />
+                <controlpoint xx="0.8" yy="0" zz="0" />                <!-- Second X -->
+                <controlpoint xx="-1.3" yy="0.25" zz="-3" />
+                <controlpoint xx="0" yy="0.125" zz="-3" />
+                <controlpoint xx="1.3" yy="0.25" zz="-3" />                <!-- Third X -->
+            </patch>
+        </primitive>
+
+        <primitive id="mp44_nose_side">
+            <patch npointsU="3" npointsV="2" npartsU="10" npartsV="2" >
+                <controlpoint xx="0.5" yy="0" zz="2.9" />
+                <controlpoint xx="0.5" yy="0.25" zz="3" />
+                <controlpoint xx="0.8" yy="0" zz="0" />
+                <controlpoint xx="0.8" yy="0.5" zz="0" />
+                <controlpoint xx="1.3" yy="0.25" zz="-3" />
+                <controlpoint xx="1.3" yy="1" zz="-3" />
+            </patch>
+        </primitive>
+
+        <primitive id="mp44_nose_side_left">
+            <patch npointsU="3" npointsV="2" npartsU="10" npartsV="2" >
+                <controlpoint xx="-0.5" yy="0.25" zz="3" />
+                <controlpoint xx="-0.5" yy="0" zz="2.9" />
+                <controlpoint xx="-0.8" yy="0.5" zz="0" />
+                <controlpoint xx="-0.8" yy="0" zz="0" />
+                <controlpoint xx="-1.3" yy="1" zz="-3" />
+                <controlpoint xx="-1.3" yy="0.25" zz="-3" />
+            </patch>
+        </primitive>
+
+
     </primitives>
 
+
+
     <components>
+        <!-- SHOW ROOM COMPONENTS --> 
         <component id="showroom">
             <transformation>
             </transformation>
@@ -312,21 +393,7 @@
             </children>
         </component>
 
-
-        <component id="mclaren_mp4/4">
-            <transformation>
-                <!-- <scale x="-1" y="1" z="1" /> -->
-            </transformation>
-            <materials>
-                <material id="grey" />
-            </materials>
-            <texture id="none" />
-            <children>
-                <primitiveref id="demoPatch" />
-            </children>
-        </component>
-
-
+        <!--        LOTUS 43 COMPONENTS         --> 
         <component id="lotus_43">
             <transformation>
             </transformation>
@@ -790,6 +857,159 @@
                 <primitiveref id="f1_car_splitter" />
             </children>
         </component>
+        <!--      END LOTUS 43 COMPONENTS       --> 
+
+        <!--        MCL MP4/4 COMPONENTS         --> 
+        <component id="mclaren_mp4/4">
+            <transformation>
+                <!-- <scale x="-1" y="1" z="1" /> -->
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="none"/>   
+            <children>
+                <componentref id="mp44_air_intake" />
+                <componentref id="mp44_nose" />
+            </children>
+        </component>
+
+        <component id="mp44_air_intake" >
+            <transformation>
+                <translate x="0" y="1" z="0" />
+                <scale x="2" y="2" z="2" />
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="mp44_air_intake_normal" />
+                <componentref id="mp44_air_intake_inverted" />
+            </children>
+        </component>
+
+         <component id="mp44_air_intake_normal" >
+          <transformation>
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_air_intake" />
+            </children>
+        </component>
+
+        <component id="mp44_air_intake_inverted" >
+          <transformation>
+                <scale x="-1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_air_intake" />
+            </children>
+        </component>
+
+        <component id="mp44_nose" >
+            <transformation>
+                <translate x="0" y="0" z="12" />
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="mp44_nose_normal" />
+                <componentref id="mp44_nose_sides" />
+                <componentref id="mp44_nose_inverted" />
+                <primitiveref id="mp44_nose_end" />
+            </children>
+        </component>
+
+         <component id="mp44_nose_normal" >
+          <transformation>
+                <!-- <scale x="-1" y="1" z="1" /> -->
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_nose" />
+                <primitiveref id="mp44_nose_under" />
+            </children>
+        </component>
+
+        <component id="mp44_nose_inverted" >
+          <transformation>
+                <scale x="-1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_nose" />
+                <primitiveref id="mp44_nose_under" />
+            </children>
+        </component>
+
+           <component id="mp44_nose_sides" >
+          <transformation>
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="mp44_nose_side_right" />
+                <!-- <componentref id="mp44_nose_side_left" /> -->
+            </children>
+        </component>
+
+        <component id="mp44_nose_side_right" >
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="mp44_nose_side_right_n" />
+                <componentref id="mp44_nose_side_right_i" />
+            </children>
+        </component>
+
+        <component id="mp44_nose_side_right_n" >
+          <transformation>
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_nose_side" />
+            </children>
+        </component>
+
+        <component id="mp44_nose_side_right_i" >
+            <transformation>
+                <!-- <scale x="-1" y="1" z="1" /> -->
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_nose_side_left" />
+            </children>
+        </component>
+        <!--    END MCL MP4/4 COMPONENTS         --> 
 
     </components>
 </lxs>
+
