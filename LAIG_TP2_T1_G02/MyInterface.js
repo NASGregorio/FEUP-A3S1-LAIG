@@ -23,7 +23,14 @@ class MyInterface extends CGFinterface {
         this.lights = this.gui.addFolder('Lights');
         this.lights.open();
         
-        
+        this.camera = this.gui.addFolder('Camera Settings');
+        this.camera.add(this.scene, 'outer_radius', 0, 1);
+        this.camera.add(this.scene, 'inner_radius', 0, 1);
+        this.camera.add(this.scene, 'strength_factor', 0, 1);
+
+        this.camera.add(this.scene, 'line_thickness', 0, 1);
+        this.camera.add(this.scene, 'line_count', 0, 20);
+
         this.initKeys();
         
         return true;

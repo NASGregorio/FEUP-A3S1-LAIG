@@ -11,7 +11,7 @@ class XMLscene extends CGFscene {
         super();
         
         this.interface = myinterface;
-        
+
     }
     
     /**
@@ -20,6 +20,14 @@ class XMLscene extends CGFscene {
      */
     init(application) {
         super.init(application);
+        this.noiseTex = new CGFtexture(this, "scenes/images/noise.png");
+        this.outer_radius = 0.7;
+        this.inner_radius = 0.3;
+        this.strength_factor = 0.7;
+
+        this.line_thickness = 0.99;
+        this.line_count = 1;
+        this.time = 0;
         this.rtt = new CGFtextureRTT(this, this.gl.canvas.width, this.gl.canvas.height);
         this.renderC = false;
     }
@@ -160,6 +168,7 @@ class XMLscene extends CGFscene {
     update(tNow) {
         var dt = tNow - this.lastUpdate;
         this.graph.update(dt);
+        this.time = tNow;
     }
 
     display() {

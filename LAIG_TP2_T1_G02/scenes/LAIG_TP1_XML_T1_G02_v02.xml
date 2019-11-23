@@ -71,6 +71,17 @@
         <texture id="visorTexture" file="scenes/images/visor.jpg" />
         <texture id="exhaustTexture" file="scenes/images/glowingMetal.jpg" />
         <texture id="asphaltTexture" file="scenes/images/asphalt.jpg" />
+        <texture id="mp44Nose" file="scenes/images/mp44_nose2.jpg" />
+        <texture id="mp44Body" file="scenes/images/mp44_body.jpg" />
+        <texture id="mp44Lateral" file="scenes/images/mp44_lateral.jpg" />
+        <texture id="mp44Sidepod" file="scenes/images/mp44_sidepod.jpg" />
+        <texture id="mp44SidepodLeft" file="scenes/images/mp44_sidepod_left.jpg" />
+        <texture id="mp44SidepodFront" file="scenes/images/mp44_sidepod_front.jpg" />
+        <texture id="mp44Wing" file="scenes/images/mp44_frontwing.jpg" />
+        <texture id="mp44AirIntake" file="scenes/images/mp44_air.jpg" />
+        <texture id="mp44End" file="scenes/images/mp44_sidepod_end.jpg" />
+        <texture id="mp44Spoiler" file="scenes/images/mp44_spoiler_wing.jpg" />
+        <texture id="mp44SpoilerEndPlate" file="scenes/images/mp44_spoiler_endplate.jpg" />
     </textures>
 
     <materials>
@@ -100,9 +111,9 @@
         </material>
         <material id="black" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
-            <diffuse r="0.2" g="0.2" b="0.2" a="1.0" />
-            <specular r="0.2" g="0.2" b="0.2" a="1.0" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="0.1" g="0.1" b="0.1" a="1.0" />
+            <specular r="0.1" g="0.1" b="0.1" a="1.0" />
         </material>
         <material id="red" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
@@ -252,7 +263,7 @@
         </primitive>
 
         <primitive id="mp44_nose">
-            <patch npointsU="3" npointsV="5" npartsU="10" npartsV="20" >
+            <patch npointsU="3" npointsV="5" npartsU="20" npartsV="20" >
                 <controlpoint xx="0.3" yy="-0.25" zz="3" />                 <!-- First X -->
                 <controlpoint xx="0.3" yy="-0.125" zz="3.2" />
                 <controlpoint xx="0" yy="-0.25" zz="3.2" />
@@ -346,7 +357,11 @@
         </primitive>
 
         <primitive id="mp44_sidepod">
-            <patch npointsU="3" npointsV="4" npartsU="20" npartsV="20" >
+            <patch npointsU="4" npointsV="4" npartsU="20" npartsV="20" >
+                <controlpoint xx="-1" yy="1" zz="-2.5" />
+                <controlpoint xx="0" yy="1" zz="-2.5" />
+                <controlpoint xx="0" yy="1" zz="-2.5" />
+                <controlpoint xx="1" yy="1" zz="-2.5" />
 
                 <controlpoint xx="-1" yy="1" zz="-2" />
                 <controlpoint xx="0" yy="1" zz="-2" />
@@ -384,7 +399,12 @@
         </primitive>
 
         <primitive id="mp44_sidepod_right_side">
-            <patch npointsU="3" npointsV="4" npartsU="20" npartsV="20" >
+            <patch npointsU="4" npointsV="4" npartsU="20" npartsV="20" >
+                <controlpoint xx="1" yy="1" zz="-2.5" />
+                <controlpoint xx="1" yy="0.5" zz="-2.5" />
+                <controlpoint xx="1" yy="0" zz="-2.5" />
+                <controlpoint xx="1" yy="-0.5" zz="-2.5" />
+
                 <controlpoint xx="1" yy="1" zz="-2" />
                 <controlpoint xx="1" yy="0.5" zz="-2" />
                 <controlpoint xx="1" yy="0" zz="-2" />
@@ -402,8 +422,22 @@
             </patch>
         </primitive>
 
+        <primitive id="mp44_sidepod_end_back">
+            <patch npointsU="2" npointsV="2" npartsU="20" npartsV="20" >
+                <controlpoint xx="-1" yy="1" zz="-2.5" />
+                <controlpoint xx="-1" yy="-0.5" zz="-2.5" />
+                <controlpoint xx="1" yy="1" zz="-2.5" />
+                <controlpoint xx="1" yy="-0.5" zz="-2.5" />
+            </patch>
+        </primitive>
+
         <primitive id="mp44_sidepod_left_side">
-            <patch npointsU="3" npointsV="4" npartsU="20" npartsV="20" >
+            <patch npointsU="4" npointsV="4" npartsU="20" npartsV="20" >
+                <controlpoint xx="-1" yy="-0.5" zz="-2.5" />
+                <controlpoint xx="-1" yy="0" zz="-2.5" />
+                <controlpoint xx="-1" yy="0.5" zz="-2.5" />
+                <controlpoint xx="-1" yy="1" zz="-2.5" />
+
                 <controlpoint xx="-1" yy="-0.5" zz="-2" />
                 <controlpoint xx="-1" yy="0" zz="-2" />
                 <controlpoint xx="-1" yy="0.5" zz="-2" />
@@ -447,43 +481,154 @@
 
         <primitive id="mp44_front_wing">
             <patch npointsU="3" npointsV="2" npartsU="10" npartsV="20" >
-                <controlpoint xx="3" yy="-0.4" zz="2.9" />
-                <controlpoint xx="-3" yy="-0.4" zz="2.9" />
-                <controlpoint xx="3" yy="-0.4" zz="2.4" />
-                <controlpoint xx="-3" yy="-0.4" zz="2.4" />
-                <controlpoint xx="3" yy="-0.1" zz="1.9" />
-                <controlpoint xx="-3" yy="-0.1" zz="1.9" />
-
+                <controlpoint xx="3.2" yy="-0.4" zz="2.9" />
+                <controlpoint xx="-3.2" yy="-0.4" zz="2.9" />
+                <controlpoint xx="3.2" yy="-0.4" zz="2.4" />
+                <controlpoint xx="-3.2" yy="-0.4" zz="2.4" />
+                <controlpoint xx="3.2" yy="-0.1" zz="1.9" />
+                <controlpoint xx="-3.2" yy="-0.1" zz="1.9" />
             </patch>
         </primitive>
 
         <primitive id="mp44_front_wing_endplate">
             <patch npointsU="3" npointsV="3" npartsU="10" npartsV="20" >
-                <controlpoint xx="3" yy="-0.5" zz="3" />
-                <controlpoint xx="3" yy="-0.4" zz="3" />
-                <controlpoint xx="3" yy="-0.4" zz="3" />
-                <controlpoint xx="3" yy="-0.5" zz="2.4" />
-                <controlpoint xx="3" yy="-0.5" zz="2.4" />
-                <controlpoint xx="3" yy="-0.2" zz="2.4" />
-                <controlpoint xx="3" yy="-0.5" zz="1.8" />
-                <controlpoint xx="3" yy="-0.2" zz="2" />
-                <controlpoint xx="3" yy="0.3" zz="1.8" />
+                <controlpoint xx="3.2" yy="-0.5" zz="3" />
+                <controlpoint xx="3.2" yy="-0.4" zz="3" />
+                <controlpoint xx="3.2" yy="-0.4" zz="3" />
+                <controlpoint xx="3.2" yy="-0.5" zz="2.4" />
+                <controlpoint xx="3.2" yy="-0.5" zz="2.4" />
+                <controlpoint xx="3.2" yy="-0.2" zz="2.4" />
+                <controlpoint xx="3.2" yy="-0.5" zz="1.8" />
+                <controlpoint xx="3.2" yy="-0.2" zz="2" />
+                <controlpoint xx="3.2" yy="0.3" zz="1.8" />
             </patch>
         </primitive>
         <primitive id="mp44_front_wing_endplate_left">
             <patch npointsU="3" npointsV="3" npartsU="10" npartsV="20" >
-                <controlpoint xx="-3" yy="-0.4" zz="3" />
-                <controlpoint xx="-3" yy="-0.4" zz="3" />
-                <controlpoint xx="-3" yy="-0.5" zz="3" />
-                <controlpoint xx="-3" yy="-0.2" zz="2.4" />
-                <controlpoint xx="-3" yy="-0.5" zz="2.4" />
-                <controlpoint xx="-3" yy="-0.5" zz="2.4" />
-                <controlpoint xx="-3" yy="0.3" zz="1.8" />
-                <controlpoint xx="-3" yy="-0.2" zz="2" />
-                <controlpoint xx="-3" yy="-0.5" zz="1.8" />
+                <controlpoint xx="-3.2" yy="-0.4" zz="3" />
+                <controlpoint xx="-3.2" yy="-0.4" zz="3" />
+                <controlpoint xx="-3.2" yy="-0.5" zz="3" />
+                <controlpoint xx="-3.2" yy="-0.2" zz="2.4" />
+                <controlpoint xx="-3.2" yy="-0.5" zz="2.4" />
+                <controlpoint xx="-3.2" yy="-0.5" zz="2.4" />
+                <controlpoint xx="-3.2" yy="0.3" zz="1.8" />
+                <controlpoint xx="-3.2" yy="-0.2" zz="2" />
+                <controlpoint xx="-3.2" yy="-0.5" zz="1.8" />
             </patch>
         </primitive>
 
+        <primitive id="mp44_axle">
+            <cylinder base="0.1" top="0.1" height="6" slices="8" stacks="6" />
+        </primitive>
+        
+        <primitive id="mp44_angled_axle">
+            <cylinder base="0.1" top="0.1" height="3" slices="8" stacks="6" />
+        </primitive>
+
+        <primitive id="mp44_tire_f_torus">
+            <torus inner="0.3" outer="0.8" slices="64" loops="64" />
+        </primitive>
+
+        <primitive id="mp44_tire_b_torus">
+            <torus inner="0.4" outer="0.85" slices="64" loops="64" />
+        </primitive>
+
+        <primitive id="mp44_back_axle">
+            <cylinder base="0.1" top="0.1" height="4" slices="8" stacks="6" />
+        </primitive>
+
+        <primitive id="mp44_back_angled_axle">
+            <cylinder base="0.1" top="0.1" height="1" slices="8" stacks="6" />
+        </primitive>
+
+        <primitive id="mp44_spoiler_stem">
+            <patch npointsU="3" npointsV="2" npartsU="10" npartsV="20" >
+                <controlpoint xx="0" yy="1" zz="-0.9" />
+                <controlpoint xx="0" yy="1" zz="-0.1" />
+                <controlpoint xx="0" yy="1.6" zz="-0.6" />
+                <controlpoint xx="0" yy="1.6" zz="-0.2" />
+                <controlpoint xx="0" yy="2.2" zz="-0.8" />
+                <controlpoint xx="0" yy="2.2" zz="-0.2" />
+                
+            </patch>
+        </primitive>
+        
+        <primitive id="mp44_spoiler_stem_l">
+            <patch npointsU="3" npointsV="2" npartsU="10" npartsV="20" >
+                <controlpoint xx="0" yy="1" zz="-0.1" />
+                <controlpoint xx="0" yy="1" zz="-0.9" />
+                <controlpoint xx="0" yy="1.6" zz="-0.2" />
+                <controlpoint xx="0" yy="1.6" zz="-0.6" />
+                <controlpoint xx="0" yy="2.2" zz="-0.2" />
+                <controlpoint xx="0" yy="2.2" zz="-0.8" />
+                
+            </patch>
+        </primitive>
+
+        <primitive id="mp44_spoiler_wing">
+            <patch npointsU="3" npointsV="2" npartsU="10" npartsV="20" >
+                <controlpoint xx="2.2" yy="2.2" zz="0.2" />
+                <controlpoint xx="-2.2" yy="2.2" zz="0.2" />
+                <controlpoint xx="2.2" yy="2.2" zz="-1" />
+                <controlpoint xx="-2.2" yy="2.2" zz="-1" />
+                <controlpoint xx="2.2" yy="2.4" zz="-1.2" />
+                <controlpoint xx="-2.2" yy="2.4" zz="-1.2" />
+            </patch>
+        </primitive>
+        
+        <primitive id="mp44_spoiler_wing_under">
+            <patch npointsU="3" npointsV="2" npartsU="10" npartsV="20" >
+                <controlpoint xx="-2.2" yy="2.2" zz="0.2" />
+                <controlpoint xx="2.2" yy="2.2" zz="0.2" />
+                <controlpoint xx="-2.2" yy="2.2" zz="-1" />
+                <controlpoint xx="2.2" yy="2.2" zz="-1" />
+                <controlpoint xx="-2.2" yy="2.4" zz="-1.2" />
+                <controlpoint xx="2.2" yy="2.4" zz="-1.2" />
+            </patch>
+        </primitive>
+
+        <primitive id="mp44_spoiler_endplate">
+            <patch npointsU="3" npointsV="2" npartsU="10" npartsV="20" >
+                <controlpoint xx="1.8" yy="0.5" zz="-1" />
+                <controlpoint xx="1.8" yy="0.5" zz="0" />
+                <controlpoint xx="2.2" yy="1" zz="-1.2" />
+                <controlpoint xx="2.2" yy="1" zz="0.2" />
+                <controlpoint xx="2.2" yy="2.6" zz="-1.4" />
+                <controlpoint xx="2.2" yy="2.6" zz="0.4" />
+            </patch>
+        </primitive>
+        <primitive id="mp44_spoiler_endplate_mirror">
+            <patch npointsU="3" npointsV="2" npartsU="10" npartsV="20" >
+                <controlpoint xx="1.8" yy="0.5" zz="0" />
+                <controlpoint xx="1.8" yy="0.5" zz="-1" />
+                <controlpoint xx="2.2" yy="1" zz="0.2" />
+                <controlpoint xx="2.2" yy="1" zz="-1.2" />
+                <controlpoint xx="2.2" yy="2.6" zz="0.4" />
+                <controlpoint xx="2.2" yy="2.6" zz="-1.4" />
+            </patch>
+        </primitive>
+
+        
+        <primitive id="mp44_spoiler_endplate_l">
+            <patch npointsU="3" npointsV="2" npartsU="10" npartsV="20" >
+                <controlpoint xx="-1.8" yy="0.5" zz="-1" />
+                <controlpoint xx="-1.8" yy="0.5" zz="0" />
+                <controlpoint xx="-2.2" yy="1" zz="-1.2" />
+                <controlpoint xx="-2.2" yy="1" zz="0.2" />
+                <controlpoint xx="-2.2" yy="2.6" zz="-1.4" />
+                <controlpoint xx="-2.2" yy="2.6" zz="0.4" />
+            </patch>
+        </primitive>
+        <primitive id="mp44_spoiler_endplate_mirror_l">
+            <patch npointsU="3" npointsV="2" npartsU="10" npartsV="20" >
+                <controlpoint xx="-1.8" yy="0.5" zz="0" />
+                <controlpoint xx="-1.8" yy="0.5" zz="-1" />
+                <controlpoint xx="-2.2" yy="1" zz="0.2" />
+                <controlpoint xx="-2.2" yy="1" zz="-1.2" />
+                <controlpoint xx="-2.2" yy="2.6" zz="0.4" />
+                <controlpoint xx="-2.2" yy="2.6" zz="-1.4" />
+            </patch>
+        </primitive>
 
     </primitives>
 
@@ -499,7 +644,7 @@
             </materials>
             <texture id="none" />
             <children>
-                <!-- <componentref id="lotus_43" /> -->
+                <componentref id="lotus_43" />
                 <componentref id="mclaren_mp4/4" />
                 <componentref id="showroom_walls" />
             </children>
@@ -567,6 +712,8 @@
         <!--        LOTUS 43 COMPONENTS         --> 
         <component id="lotus_43">
             <transformation>
+                <translate x="8" y="0" z="0" />
+                <scale x="0.85" y="0.85" z="0.85" />
             </transformation>
             <materials>
                 <material id="grey" />
@@ -1034,30 +1181,34 @@
         <!--        MCL MP4/4 COMPONENTS         --> 
         <component id="mclaren_mp4/4">
             <transformation>
+                <translate x="-4" y="0" z="0"/>
             </transformation>
             <materials>
-                <material id="grey" />
+                <material id="white" />
             </materials>
-            <texture id="none"/>   
+            <texture id="mp44Nose" length_s="1" length_t="1"/> 
             <children>
                 <componentref id="mp44_air_intake" />
+                <componentref id="mp44_spoiler" />
                 <componentref id="mp44_nose" />
                 <componentref id="mp44_cockpit" />
                 <componentref id="mp44_sidepod" />
+                <componentref id="mp44_front_suspension" />
+                <componentref id="mp44_back_suspension" />
             </children>
         </component>
 
         <component id="mp44_air_intake" >
             <transformation>
                 <translate x="0" y="1" z="-1" />
-                <scale x="1.5" y="1.75" z="2" />
+                <scale x="1.75" y="2" z="2" />
             </transformation>
             <materials>
-                <material id="grey" />
+                <material id="inherit" />
             </materials>
-            <texture id="inherit" />
+            <texture id="mp44AirIntake" length_s="1" length_t="1"/> 
             <children>
-                <primitiveref id="mp44_air_intake_cover" />
+                <componentref id="mp44_air_intake_cover" />
                 <primitiveref id="mp44_air_intake" />
                 <componentref id="mp44_air_intake_inverted" />
             </children>
@@ -1068,11 +1219,68 @@
                 <scale x="-1" y="1" z="1" />
             </transformation>
             <materials>
-                <material id="grey" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" />
             <children>
                 <primitiveref id="mp44_air_intake" />
+            </children>
+        </component>
+
+        <component id="mp44_air_intake_cover" >
+          <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="mp44_air_intake_cover" />
+            </children>
+        </component>
+
+
+        <component id="mp44_spoiler" >
+            <transformation>
+                <translate x="0" y="0" z="-4" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="mp44Spoiler" length_s="1" length_t="1"/> 
+            <children>
+                <componentref id="mp44_spoiler_inside" />
+                <primitiveref id="mp44_spoiler_wing" />
+                <primitiveref id="mp44_spoiler_wing_under" />
+                <componentref id="mp44_spoiler_endplate" />
+            </children>
+        </component>
+
+        <component id="mp44_spoiler_endplate" >
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="mp44SpoilerEndPlate" length_s="1" length_t="1"/> 
+            <children>
+                <primitiveref id="mp44_spoiler_endplate" />
+                <primitiveref id="mp44_spoiler_endplate_mirror_l" />
+            </children>
+        </component>
+
+        <component id="mp44_spoiler_inside" >
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="black" />
+            </materials>
+            <texture id="none"/> 
+            <children>
+                <primitiveref id="mp44_spoiler_stem" />
+                <primitiveref id="mp44_spoiler_stem_l" />
+                <primitiveref id="mp44_spoiler_endplate_mirror" />
+                <primitiveref id="mp44_spoiler_endplate_l" />
             </children>
         </component>
 
@@ -1081,9 +1289,9 @@
                 <translate x="0" y="0" z="8" />
             </transformation>
             <materials>
-                <material id="grey" />
+                <material id="black" />
             </materials>
-            <texture id="inherit" />
+            <texture id="none" />
             <children>
                 <primitiveref id="mp44_cockpit" />
             </children>
@@ -1094,30 +1302,55 @@
                 <translate x="0" y="0" z="8" />
             </transformation>
             <materials>
-                <material id="grey" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" />
             <children>
                 <componentref id="mp44_nose_normal" />
                 <componentref id="mp44_nose_sides" />
-                <componentref id="mp44_nose_inverted" />    <!--TODO: Will be deleted-->
+                <componentref id="mp44_nose_inverted" />
+                <componentref id="mp44_nose_end" />
+                <componentref id="mp44_front_wing" />
+            </children>
+        </component>
+
+        <component id="mp44_nose_end" >
+          <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
                 <primitiveref id="mp44_nose_end" />
+            </children>
+        </component>
+
+        <component id="mp44_front_wing" >
+          <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="mp44Wing" length_s="1" length_t="1"/>
+            <children>
                 <primitiveref id="mp44_front_wing" />
                 <primitiveref id="mp44_front_wing_endplate" />
                 <primitiveref id="mp44_front_wing_endplate_left" />
-                <componentref id="mp44_front_wing_endplate_inverted" />
+                <componentref id="mp44_front_wing_inverted" />
             </children>
         </component>
    
-        <component id="mp44_front_wing_endplate_inverted" >                <!--TODO: Will be deleted-->
+        <component id="mp44_front_wing_inverted" >
           <transformation>
                 <scale x="-1" y="1" z="1" />
             </transformation>
             <materials>
-                <material id="grey" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" />
             <children>
+                <primitiveref id="mp44_front_wing" />
                 <primitiveref id="mp44_front_wing_endplate" />
                 <primitiveref id="mp44_front_wing_endplate_left" />
             </children>
@@ -1127,21 +1360,21 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="grey" />
+                <material id="inherit" />
             </materials>
-            <texture id="inherit" />
+            <texture id="mp44Nose" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="mp44_nose" />
                 <primitiveref id="mp44_nose_under" />
             </children>
         </component>
 
-        <component id="mp44_nose_inverted" >                <!--TODO: Will be deleted-->
+        <component id="mp44_nose_inverted" >
           <transformation>
                 <scale x="-1" y="1" z="1" />
             </transformation>
             <materials>
-                <material id="grey" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" />
             <children>
@@ -1154,9 +1387,9 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="grey" />
+                <material id="inherit" />
             </materials>
-            <texture id="inherit" />
+            <texture id="mp44Lateral" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="mp44_nose_side_right" />
                 <primitiveref id="mp44_nose_side_left" />
@@ -1168,15 +1401,66 @@
                 <scale x="1" y="1" z="2" />
             </transformation>
             <materials>
-                <material id="grey" />
+                <material id="inherit" />
             </materials>
-            <texture id="inherit" />
+            <texture id="mp44Body" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="mp44_sidepod" />
                 <componentref id="mp44_sidepod_floor" />
-                <primitiveref id="mp44_sidepod_end" />
+                <componentref id="mp44_sidepod_front" />
+                <componentref id="mp44_sidepod_end_back" />
+                <componentref id="mp44_sidepod_right" />
+                <componentref id="mp44_sidepod_left" />
+
+            </children>
+        </component>
+
+        <component id="mp44_sidepod_right" >
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="mp44Sidepod" length_s="1" length_t="1"/>
+            <children>
                 <primitiveref id="mp44_sidepod_right_side" />
+            </children>
+        </component>
+
+        <component id="mp44_sidepod_left" >
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="mp44SidepodLeft" length_s="1" length_t="1"/>
+            <children>
                 <primitiveref id="mp44_sidepod_left_side" />
+            </children>
+        </component>
+
+        <component id="mp44_sidepod_front" >
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="mp44SidepodFront" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="mp44_sidepod_end" />
+            </children>
+        </component>
+
+        
+        <component id="mp44_sidepod_end_back" >
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="mp44End" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="mp44_sidepod_end_back" />
             </children>
         </component>
 
@@ -1185,11 +1469,292 @@
                 <scale x="-1" y="-0.5" z="1" />
             </transformation>
             <materials>
-                <material id="grey" />
+                <material id="black" />
             </materials>
             <texture id="inherit" />
             <children>
                 <primitiveref id="mp44_sidepod" />
+            </children>
+        </component>
+
+        <component id="mp44_front_suspension" >
+            <transformation>
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="black" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="mp44_axle_up" />
+                <componentref id="mp44_axle_down" />
+                <componentref id="mp44_angled_axle_up_l" />
+                <componentref id="mp44_angled_axle_down_l" />
+                <componentref id="mp44_angled_axle_up_r" />
+                <componentref id="mp44_angled_axle_down_r" />
+                <componentref id="mp44_front_tires" />
+            </children>
+        </component>
+
+        <component id="mp44_axle_up" >
+            <transformation>
+                <translate x="-7.5" y="0.1" z="-3" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_axle" />
+            </children>
+        </component>
+
+        <component id="mp44_axle_down" >
+            <transformation>
+                <translate x="-7.5" y="-0.25" z="-3" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_axle" />
+            </children>
+        </component>
+
+        <component id="mp44_angled_axle_down_l" >
+            <transformation>
+                <translate x="-7.5" y="-0.25" z="-3" />
+                <rotate axis="y" angle="-20" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_angled_axle" />
+            </children>
+        </component>
+
+        <component id="mp44_angled_axle_up_l" >
+            <transformation>
+                <translate x="-7.5" y="0.1" z="-3" />
+                <rotate axis="y" angle="-20" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_angled_axle" />
+            </children>
+        </component>
+        <component id="mp44_angled_axle_down_r" >
+            <transformation>
+                <translate x="-8.5" y="-0.25" z="0.25" />
+                <rotate axis="y" angle="20" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_angled_axle" />
+            </children>
+        </component>
+
+        <component id="mp44_angled_axle_up_r" >
+            <transformation>
+                <translate x="-8.5" y="0.1" z="0.25" />
+                <rotate axis="y" angle="20" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_angled_axle" />
+            </children>
+        </component>
+
+        <component id="mp44_front_tires">
+            <transformation>
+                <transformationref id="f1_car_tire_thickness" />
+            </transformation>
+            <materials>
+                <material id="black" />
+            </materials>
+            <texture id="tireTexture" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="mp44_front_tire_right" />    
+                <componentref id="mp44_front_tire_left" />    
+            </children>
+        </component>
+
+        <component id="mp44_front_tire_right">
+            <transformation>
+                <translate x="-7.5" y="0" z="1.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="mp44_tire_f_torus" />         
+            </children>
+        </component>
+
+         <component id="mp44_front_tire_left">
+            <transformation>
+                <translate x="-7.5" y="0" z="-1.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="mp44_tire_f_torus" />         
+            </children>
+        </component>
+
+
+        <component id="mp44_back_suspension" >
+            <transformation>
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="black" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="mp44_axle_up_b" />
+                <componentref id="mp44_axle_down_b" />
+                <componentref id="mp44_angled_axle_up_lb" />
+                <componentref id="mp44_angled_axle_down_lb" />
+                <componentref id="mp44_angled_axle_up_rb" />
+                <componentref id="mp44_angled_axle_down_rb" />
+                <componentref id="mp44_back_tires" />
+            </children>
+        </component>
+
+                <component id="mp44_axle_up_b" >
+            <transformation>
+                <translate x="4.5" y="0.1" z="-3" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_axle" />
+            </children>
+        </component>
+
+        <component id="mp44_axle_down_b" >
+            <transformation>
+                <translate x="4.5" y="-0.25" z="-3" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_axle" />
+            </children>
+        </component>
+
+        <component id="mp44_angled_axle_down_lb" >
+            <transformation>
+                <translate x="4.3" y="-0.25" z="-3" />
+                <rotate axis="y" angle="-20" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_angled_axle" />
+            </children>
+        </component>
+
+        <component id="mp44_angled_axle_up_lb" >
+            <transformation>
+                <translate x="4.3" y="0.1" z="-3" />
+                <rotate axis="y" angle="-20" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_angled_axle" />
+            </children>
+        </component>
+        <component id="mp44_angled_axle_down_rb" >
+            <transformation>
+                <translate x="3.3" y="-0.25" z="0" />
+                <rotate axis="y" angle="20" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_angled_axle" />
+            </children>
+        </component>
+
+        <component id="mp44_angled_axle_up_rb" >
+            <transformation>
+                <translate x="3.3" y="0.1" z="0" />
+                <rotate axis="y" angle="20" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="mp44_angled_axle" />
+            </children>
+        </component>
+
+        <component id="mp44_back_tires">
+            <transformation>
+                <transformationref id="f1_car_tire_thickness" />
+            </transformation>
+            <materials>
+                <material id="black" />
+            </materials>
+            <texture id="tireTexture" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="mp44_back_tire_right" />    
+                <componentref id="mp44_back_tire_left" />    
+            </children>
+        </component>
+
+        <component id="mp44_back_tire_right">
+            <transformation>
+                <translate x="4.5" y="0" z="1.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="mp44_tire_b_torus" />         
+            </children>
+        </component>
+
+         <component id="mp44_back_tire_left">
+            <transformation>
+                <translate x="4.5" y="0" z="-1.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="mp44_tire_b_torus" />         
             </children>
         </component>
 

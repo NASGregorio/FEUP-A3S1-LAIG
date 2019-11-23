@@ -45,7 +45,7 @@ class MyPatchNURBS
 
     display()
 	{
-		this.patch.display();
+        this.patch.display();
     }
     
     
