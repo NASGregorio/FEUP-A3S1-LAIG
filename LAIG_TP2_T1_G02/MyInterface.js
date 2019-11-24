@@ -21,9 +21,10 @@ class MyInterface extends CGFinterface {
         this.gui = new dat.GUI();
 
         this.lights = this.gui.addFolder('Lights');
-        this.lights.open();
         
         this.addSecurityCamera();
+
+        this.gui.add(this.scene,'timeFactor',0.0,1.0);
 
         this.initKeys();
         

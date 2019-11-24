@@ -21,7 +21,7 @@ class KeyframeAnimation extends Animation
 
         this.finished = false;
 
-        this.repeatN = 3;
+        this.repeatN = 1000;
     }
 
     resetAnimation() {

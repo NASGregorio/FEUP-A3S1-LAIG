@@ -36,7 +36,7 @@ class MySceneGraph {
     update(dt) {
         // Update animations
         this.animationsInUse.forEach(animationID => {
-            this.animations.get(animationID).updateKeyframe(dt);
+            this.animations.get(animationID).updateKeyframe(dt*this.scene.timeFactor);
         });
 
 

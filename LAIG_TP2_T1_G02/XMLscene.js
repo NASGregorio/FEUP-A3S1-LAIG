@@ -36,7 +36,8 @@ class XMLscene extends CGFscene {
         this.time = 0;
         this.blink_timer = 0;
         this.blink_marker = 0;
-
+        
+        this.timeFactor = 1;
         this.rtt = new CGFtextureRTT(this, this.gl.canvas.width, this.gl.canvas.height);
     }
     
@@ -58,7 +59,7 @@ class XMLscene extends CGFscene {
         });
         
         // Set camera to XML's default
-        this.selectedView = this.viewNamesToIndex["defaultCamera"];
+        this.selectedView = this.viewNamesToIndex[this.graph.defaultView];
         this.onViewChanged();
 
 
@@ -136,7 +137,7 @@ class XMLscene extends CGFscene {
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
 
-        this.setUpdatePeriod(1000/60);
+        this.setUpdatePeriod(1000/120);
 
         this.lastUpdate = Date.now();
 

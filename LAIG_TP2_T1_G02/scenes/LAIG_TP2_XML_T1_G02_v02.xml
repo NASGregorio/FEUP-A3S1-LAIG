@@ -1,7 +1,7 @@
 <lxs>
     <scene root="showroom" axis_length="5"/>
 
-    <views default="defaultCamera">
+    <views default="quickView">
 
         <perspective id="securityCamera" near="0.1" far="500" angle="45">
             <from x="-20" y="30" z="100" />
@@ -14,8 +14,8 @@
         </perspective>
 
         <perspective id="sideView" near="0.1" far="500" angle="45">
-            <from x="20" y="5" z="8" />
-            <to x="-10" y="1" z="6" />
+            <from x="20" y="5" z="40" />
+            <to x="-10" y="1" z="35" />
         </perspective>
 
         <perspective id="backView" near="0.1" far="500" angle="45">
@@ -24,35 +24,35 @@
         </perspective>
 
         <perspective id="quickView" near="0.1" far="500" angle="90">
-            <from x="-15" y="4" z="45" />
+            <from x="-15" y="4" z="60" />
             <to x="-11" y="7" z="5" />
         </perspective>
     </views>
 
     <globals>
         <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
-        <background r="0.2" g="0.4" b="0.6" a="1.0" />
+        <background r="0.3" g="0.3" b="0.3" a="1.0" />
     </globals>
 
     <lights>
-        <omni id="showRoom" enabled="1">
-            <location x="0" y="5" z="5" w="1.0" />
+        <omni id="track" enabled="1">
+            <location x="-10" y="10" z="0" w="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />  
         </omni>
         <spot id="warmLight" enabled="0" angle="0" exponent="0">
-            <location x="10" y="2" z="4" w="1.0" />
-            <target x="0" y="0" z="4" />
+            <location x="-10" y="10" z="20" w="1.0" />
+            <target x="-10" y="0" z="40" />
             <ambient r="0.5" g="0.3" b="0.2" a="1.0" />
             <diffuse r="0.5" g="0.3" b="0.2" a="1.0" />
             <specular r="0.5" g="0.3" b="0.2" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />  
         </spot>
         <spot id="front" enabled="0" angle="0" exponent="0">
-            <location x="0" y="0" z="18" w="1.0" />
-            <target x="0" y="0" z="12" />
+            <location x="0" y="0" z="60" w="1.0" />
+            <target x="0" y="0" z="45" />
             <ambient r="0.4" g="0.4" b="0.4" a="1.0" />
             <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
             <specular r="0.4" g="0.4" b="0.4" a="1.0" />
@@ -158,91 +158,92 @@
 
     <animations>
 
-        <animation id="steeringRotation2" >
-
+        <animation id="carMovement" >
             <keyframe instant="0">
                 <translate x="1000" y="-1000" z="-70" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="0.1" y="0.1" z="0.1" />
             </keyframe>
-
             <keyframe instant="0.5">
                 <translate x="-10" y="0" z="-70" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="0.85" y="0.85" z="0.85" />
             </keyframe>
-
             <keyframe instant="1">
                 <translate x="-12.5" y="0" z="-40" />
                 <rotate angle_x="0" angle_y="-2.5" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
-
             <keyframe instant="1.5">
                 <translate x="-15" y="0" z="-20" />
                 <rotate angle_x="0" angle_y="-5" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
-
             <keyframe instant="2">
                 <translate x="-15" y="0" z="0" />
                 <rotate angle_x="0" angle_y="-2.5" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
-
             <keyframe instant="2.5">
                 <translate x="-15" y="0" z="80" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
-
             <keyframe instant="3">
                 <translate x="1000" y="-1000" z="20" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
+        </animation>
 
-            <keyframe instant="3.5">
-                <translate x="-10" y="0" z="-70" />
+        <animation id="wheelSteering" >
+            <keyframe instant="0">
+                <translate x="0" y="0" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
-                <scale x="0.85" y="0.85" z="0.85" />
+                <scale x="1" y="1" z="1" />
             </keyframe>
-
-            <keyframe instant="4">
-                <translate x="-12.5" y="0" z="-40" />
+            <keyframe instant="0.5">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="1">
+                <translate x="0" y="0" z="0.25" />
                 <rotate angle_x="0" angle_y="-2.5" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
-
-            <keyframe instant="4.5">
-                <translate x="-15" y="0" z="-20" />
+            <keyframe instant="1.5">
+                <translate x="0" y="0" z="0.5" />
                 <rotate angle_x="0" angle_y="-5" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
-
-            <keyframe instant="5">
-                <translate x="-15" y="0" z="0" />
+            <keyframe instant="2">
+                <translate x="0" y="0" z="0.25" />
                 <rotate angle_x="0" angle_y="-2.5" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
-
-            <keyframe instant="5.5">
-                <translate x="-15" y="0" z="40" />
+            <keyframe instant="2.5">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="3">
+                <translate x="0" y="0" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
         </animation>
 
-        <animation id="steeringRotation" >
+         <animation id="wheel_rotation" >
             <keyframe instant="0">
-                <translate x="0" y="0" z="-1" />
-                <rotate angle_x="0" angle_y="-10" angle_z="0" />
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
 
-            <keyframe instant="10">
+            <keyframe instant="0.5">
                 <translate x="0" y="0" z="0" />
-                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="360" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
         </animation>
@@ -696,8 +697,8 @@
 
         <primitive id="track">
             <patch npointsU="7" npointsV="2" npartsU="10" npartsV="20" >
-                <controlpoint xx="-30" yy="-1" zz="-80" />
-                <controlpoint xx="0" yy="-1" zz="-80" />
+                <controlpoint xx="-30" yy="-1" zz="-100" />
+                <controlpoint xx="0" yy="-1" zz="-100" />
 
                 <controlpoint xx="-20" yy="-1" zz="-40" />
                 <controlpoint xx="10" yy="-1" zz="-40" />
@@ -714,15 +715,15 @@
                 <controlpoint xx="-30" yy="-1" zz="40" />
                 <controlpoint xx="0" yy="-1" zz="40" />
 
-                <controlpoint xx="-30" yy="-1" zz="80" />
-                <controlpoint xx="0" yy="-1" zz="80" />
+                <controlpoint xx="-30" yy="-1" zz="100" />
+                <controlpoint xx="0" yy="-1" zz="100" />
             </patch>
         </primitive>
         
         <primitive id="track_curb_left">
             <patch npointsU="7" npointsV="2" npartsU="10" npartsV="20" >
-                <controlpoint xx="-35" yy="-0.5" zz="-80" />
-                <controlpoint xx="-30" yy="-1" zz="-80" />
+                <controlpoint xx="-35" yy="-0.5" zz="-100" />
+                <controlpoint xx="-30" yy="-1" zz="-100" />
                 <controlpoint xx="-25" yy="-0.5" zz="-40" />
                 <controlpoint xx="-20" yy="-1" zz="-40" />
                 <controlpoint xx="-20" yy="-0.5" zz="-20" />
@@ -733,30 +734,79 @@
                 <controlpoint xx="-30" yy="-1" zz="20" />
                 <controlpoint xx="-35" yy="-0.5" zz="40" />
                 <controlpoint xx="-30" yy="-1" zz="40" />
-                <controlpoint xx="-35" yy="-0.5" zz="80" />
-                <controlpoint xx="-30" yy="-1" zz="80" />
+                <controlpoint xx="-35" yy="-0.5" zz="100" />
+                <controlpoint xx="-30" yy="-1" zz="100" />
+            </patch>
+        </primitive>
+
+        <primitive id="track_curb_side_l">
+            <patch npointsU="7" npointsV="2" npartsU="10" npartsV="20" >
+                <controlpoint xx="-70" yy="-0.5" zz="-100" />
+                <controlpoint xx="-35" yy="-0.5" zz="-100" />
+                <controlpoint xx="-65" yy="-0.5" zz="-40" />
+                <controlpoint xx="-25" yy="-0.5" zz="-40" />
+                <controlpoint xx="-60" yy="-0.5" zz="-20" />
+                <controlpoint xx="-20" yy="-0.5" zz="-20" />
+                <controlpoint xx="-65" yy="-0.5" zz="0" />
+                <controlpoint xx="-25" yy="-0.5" zz="0" />
+                <controlpoint xx="-70" yy="-0.5" zz="20" />
+                <controlpoint xx="-35" yy="-0.5" zz="20" />
+                <controlpoint xx="-70" yy="-0.5" zz="40" />
+                <controlpoint xx="-35" yy="-0.5" zz="40" />
+                <controlpoint xx="-70" yy="-0.5" zz="100" />
+                <controlpoint xx="-35" yy="-0.5" zz="100" />
             </patch>
         </primitive>
 
         <primitive id="track_curb_right">
             <patch npointsU="7" npointsV="2" npartsU="10" npartsV="20" >
-                <controlpoint xx="0" yy="-1" zz="-80" />
-                <controlpoint xx="5" yy="0" zz="-80" />
+                <controlpoint xx="0" yy="-1" zz="-100" />
+                <controlpoint xx="5" yy="0" zz="-100" />
+
                 <controlpoint xx="10" yy="-1" zz="-40" />
                 <controlpoint xx="15" yy="0" zz="-40" />
+
                 <controlpoint xx="15" yy="-1" zz="-20" />
                 <controlpoint xx="20" yy="0" zz="-20" />
+
                 <controlpoint xx="10" yy="-1" zz="0" />
                 <controlpoint xx="15" yy="0" zz="0" />
+
                 <controlpoint xx="0" yy="-1" zz="20" />
                 <controlpoint xx="5" yy="0" zz="20" />
+
                 <controlpoint xx="0" yy="-1" zz="40" />
                 <controlpoint xx="5" yy="0" zz="40" />
-                <controlpoint xx="0" yy="-1" zz="80" />
-                <controlpoint xx="5" yy="0" zz="80" />
+
+                <controlpoint xx="0" yy="-1" zz="100" />
+                <controlpoint xx="5" yy="0" zz="100" />
             </patch>
         </primitive>
 
+        <primitive id="track_curb_side_r">
+            <patch npointsU="7" npointsV="2" npartsU="10" npartsV="20" >
+                <controlpoint xx="5"  yy="0" zz="-100" />
+                <controlpoint xx="40"  yy="0" zz="-100" />
+
+                <controlpoint xx="15" yy="0" zz="-40" />
+                <controlpoint xx="50" yy="0" zz="-40" />
+
+                <controlpoint xx="20" yy="0" zz="-20" />
+                <controlpoint xx="55" yy="0" zz="-20" />
+
+                <controlpoint xx="15" yy="0" zz="0" />
+                <controlpoint xx="50" yy="0" zz="0" />
+
+                <controlpoint xx="5"  yy="0" zz="20" />
+                <controlpoint xx="40"  yy="0" zz="20" />
+
+                <controlpoint xx="5"  yy="0" zz="40" />
+                <controlpoint xx="40"  yy="0" zz="40" />
+                
+                <controlpoint xx="5"  yy="0" zz="100" />
+                <controlpoint xx="40"  yy="0" zz="100" />
+            </patch>
+        </primitive>
     </primitives>
 
 
@@ -831,6 +881,25 @@
             <children>
                 <primitiveref id="track" />
                 <componentref id="track_curb" />
+                <componentref id="track_sides" />
+            </children>
+        </component>
+
+        <component id="track_sides">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="green" />
+                <material id="grey" />
+                <material id="green" />
+                <material id="red" />
+                <material id="green" />
+                <material id="cyan" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="track_curb_side_l" />
+                <primitiveref id="track_curb_side_r" />
             </children>
         </component>
 
@@ -853,7 +922,7 @@
                 <translate x="8" y="0" z="0" />
                 <scale x="0.85" y="0.85" z="0.85" />
             </transformation>
-            <animationref id="steeringRotation2" />
+            <animationref id="carMovement" />
             <materials>
                 <material id="grey" />
             </materials>
@@ -1322,7 +1391,7 @@
             <transformation>
                 <translate x="-4" y="0" z="0"/>
             </transformation>
-            <animationref id="steeringRotation2" />
+            <animationref id="carMovement" />
             <materials>
                 <material id="white" />
             </materials>
@@ -1721,7 +1790,7 @@
             <transformation>
                 <transformationref id="f1_car_tire_thickness" />
             </transformation>
-             <!-- <animationref id="steeringRotation" /> -->
+             <animationref id="wheelSteering" />
             <materials>
                 <material id="black" />
             </materials>
@@ -1741,7 +1810,7 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="mp44_tire_f_torus" />         
+                <componentref id="mp44_tire_f" />           
             </children>
         </component>
 
@@ -1754,10 +1823,37 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="mp44_tire_f_torus" />         
+                <componentref id="mp44_tire_f" />    
             </children>
         </component>
 
+        <component id="mp44_tire_f">
+            <transformation>
+            </transformation>
+            <animationref id="wheel_rotation"/>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="mp44_rim" />         
+                <primitiveref id="mp44_tire_f_torus" />       
+            </children>
+        </component>
+
+        <component id="mp44_tire_b">
+            <transformation>
+            </transformation>
+            <animationref id="wheel_rotation"/>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="mp44_rim" />         
+                <primitiveref id="mp44_tire_b_torus" />       
+            </children>
+        </component>
 
         <component id="mp44_back_suspension" >
             <transformation>
@@ -1882,7 +1978,7 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="mp44_tire_b_torus" />         
+                <componentref id="mp44_tire_b" />         
             </children>
         </component>
 
@@ -1895,9 +1991,50 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="mp44_tire_b_torus" />         
+                <componentref id="mp44_tire_b" />         
             </children>
         </component>
+
+        <component id="mp44_rim">
+            <transformation>
+                <scale x="-1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="tireRimTexture" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="rim_n" />         
+                <componentref id="rim_i" />         
+            </children>
+        </component>
+
+        <component id="rim_n">
+            <transformation>
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="f1_car_wheel_rim_rect" />               
+            </children>
+        </component>
+        
+        <component id="rim_i">
+            <transformation>
+                <scale x="-1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="f1_car_wheel_rim_rect" />               
+            </children>
+        </component>
+
 
         <!--    END MCL MP4/4 COMPONENTS         --> 
 
