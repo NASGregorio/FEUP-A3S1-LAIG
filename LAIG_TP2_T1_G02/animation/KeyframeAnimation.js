@@ -20,6 +20,17 @@ class KeyframeAnimation extends Animation
         this.keyframeTimeElapsed = 0;
 
         this.finished = false;
+
+        this.repeatN = 3;
+    }
+
+    resetAnimation() {
+        this.running = false;
+        this.finished = false;
+        this.currKeyframe = 0;
+        this.timeInterval = 0;
+        this.totalTimeElapsed = 0;
+        this.keyframeTimeElapsed = 0;
     }
     
     addKeyframe(keyframe) {
@@ -56,6 +67,12 @@ class KeyframeAnimation extends Animation
 
         if(this.currKeyframe == this.keyframeCount-1) {
             this.finished = true;
+            this.repeatN--;
+            if(this.repeatN > 0) {
+                this.resetAnimation();
+                this.advanceKeyframe();
+                this.startAnimation();
+            }
             return;
         }
         
