@@ -4,13 +4,13 @@
     <views default="defaultCamera">
 
         <perspective id="securityCamera" near="0.1" far="500" angle="45">
-            <from x="2" y="10" z="25" />
-            <to x="0" y="0" z="5" />
+            <from x="-20" y="30" z="100" />
+            <to x="-10" y="10" z="5" />
         </perspective>
 
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
-            <from x="2" y="10" z="25" />
-            <to x="0" y="0" z="5" />
+            <from x="-20" y="30" z="100" />
+            <to x="-10" y="10" z="5" />
         </perspective>
 
         <perspective id="sideView" near="0.1" far="500" angle="45">
@@ -18,16 +18,15 @@
             <to x="-10" y="1" z="6" />
         </perspective>
 
-        <perspective id="topView" near="0.1" far="500" angle="90">
-            <from x="0.05" y="15" z="6" />
-            <to x="0" y="1" z="6" />
+        <perspective id="backView" near="0.1" far="500" angle="45">
+            <from x="-15" y="30" z="-120" />
+            <to x="-15" y="10" z="5" />
         </perspective>
 
-        <ortho id="exhaustCamera"  near="0.1" far="500" left="-5" right="5" top="5" bottom="-5" >
-            <from x="0" y="10" z="0.1" />
-            <to x="0" y="0" z="0" />
-            <up x="0" y="1" z="0" /> <!-- opcional, default 0,1,0 -->
-        </ortho>
+        <perspective id="quickView" near="0.1" far="500" angle="90">
+            <from x="-15" y="4" z="45" />
+            <to x="-11" y="7" z="5" />
+        </perspective>
     </views>
 
     <globals>
@@ -82,6 +81,7 @@
         <texture id="mp44End" file="scenes/images/mp44_sidepod_end.jpg" />
         <texture id="mp44Spoiler" file="scenes/images/mp44_spoiler_wing.jpg" />
         <texture id="mp44SpoilerEndPlate" file="scenes/images/mp44_spoiler_endplate.jpg" />
+        <texture id="curb" file="scenes/images/curb.png" />
     </textures>
 
     <materials>
@@ -159,15 +159,76 @@
     <animations>
 
         <animation id="steeringRotation2" >
+
             <keyframe instant="0">
-                <translate x="0" y="0" z="0" />
+                <translate x="1000" y="-1000" z="-70" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="0.1" y="0.1" z="0.1" />
+            </keyframe>
+
+            <keyframe instant="0.5">
+                <translate x="-10" y="0" z="-70" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="0.85" y="0.85" z="0.85" />
+            </keyframe>
+
+            <keyframe instant="1">
+                <translate x="-12.5" y="0" z="-40" />
+                <rotate angle_x="0" angle_y="-2.5" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant="1.5">
+                <translate x="-15" y="0" z="-20" />
+                <rotate angle_x="0" angle_y="-5" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant="2">
+                <translate x="-15" y="0" z="0" />
+                <rotate angle_x="0" angle_y="-2.5" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant="2.5">
+                <translate x="-15" y="0" z="80" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
 
+            <keyframe instant="3">
+                <translate x="1000" y="-1000" z="20" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant="3.5">
+                <translate x="-10" y="0" z="-70" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="0.85" y="0.85" z="0.85" />
+            </keyframe>
+
+            <keyframe instant="4">
+                <translate x="-12.5" y="0" z="-40" />
+                <rotate angle_x="0" angle_y="-2.5" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant="4.5">
+                <translate x="-15" y="0" z="-20" />
+                <rotate angle_x="0" angle_y="-5" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
             <keyframe instant="5">
-                <translate x="-4" y="0" z="4" />
-                <rotate angle_x="0" angle_y="-20" angle_z="0" />
+                <translate x="-15" y="0" z="0" />
+                <rotate angle_x="0" angle_y="-2.5" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant="5.5">
+                <translate x="-15" y="0" z="40" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
         </animation>
@@ -634,17 +695,65 @@
         </primitive>
 
         <primitive id="track">
-            <patch npointsU="5" npointsV="2" npartsU="10" npartsV="20" >
-                <controlpoint xx="-30" yy="-1" zz="-60" />
-                <controlpoint xx="0" yy="-1" zz="-60" />
+            <patch npointsU="7" npointsV="2" npartsU="10" npartsV="20" >
+                <controlpoint xx="-30" yy="-1" zz="-80" />
+                <controlpoint xx="0" yy="-1" zz="-80" />
+
                 <controlpoint xx="-20" yy="-1" zz="-40" />
                 <controlpoint xx="10" yy="-1" zz="-40" />
+
                 <controlpoint xx="-15" yy="-1" zz="-20" />
                 <controlpoint xx="15" yy="-1" zz="-20" />
+
                 <controlpoint xx="-20" yy="-1" zz="0" />
                 <controlpoint xx="10" yy="-1" zz="0" />
+
                 <controlpoint xx="-30" yy="-1" zz="20" />
                 <controlpoint xx="0" yy="-1" zz="20" />
+
+                <controlpoint xx="-30" yy="-1" zz="40" />
+                <controlpoint xx="0" yy="-1" zz="40" />
+
+                <controlpoint xx="-30" yy="-1" zz="80" />
+                <controlpoint xx="0" yy="-1" zz="80" />
+            </patch>
+        </primitive>
+        
+        <primitive id="track_curb_left">
+            <patch npointsU="7" npointsV="2" npartsU="10" npartsV="20" >
+                <controlpoint xx="-35" yy="-0.5" zz="-80" />
+                <controlpoint xx="-30" yy="-1" zz="-80" />
+                <controlpoint xx="-25" yy="-0.5" zz="-40" />
+                <controlpoint xx="-20" yy="-1" zz="-40" />
+                <controlpoint xx="-20" yy="-0.5" zz="-20" />
+                <controlpoint xx="-15" yy="-1" zz="-20" />
+                <controlpoint xx="-25" yy="-0.5" zz="0" />
+                <controlpoint xx="-20" yy="-1" zz="0" />
+                <controlpoint xx="-35" yy="-0.5" zz="20" />
+                <controlpoint xx="-30" yy="-1" zz="20" />
+                <controlpoint xx="-35" yy="-0.5" zz="40" />
+                <controlpoint xx="-30" yy="-1" zz="40" />
+                <controlpoint xx="-35" yy="-0.5" zz="80" />
+                <controlpoint xx="-30" yy="-1" zz="80" />
+            </patch>
+        </primitive>
+
+        <primitive id="track_curb_right">
+            <patch npointsU="7" npointsV="2" npartsU="10" npartsV="20" >
+                <controlpoint xx="0" yy="-1" zz="-80" />
+                <controlpoint xx="5" yy="0" zz="-80" />
+                <controlpoint xx="10" yy="-1" zz="-40" />
+                <controlpoint xx="15" yy="0" zz="-40" />
+                <controlpoint xx="15" yy="-1" zz="-20" />
+                <controlpoint xx="20" yy="0" zz="-20" />
+                <controlpoint xx="10" yy="-1" zz="0" />
+                <controlpoint xx="15" yy="0" zz="0" />
+                <controlpoint xx="0" yy="-1" zz="20" />
+                <controlpoint xx="5" yy="0" zz="20" />
+                <controlpoint xx="0" yy="-1" zz="40" />
+                <controlpoint xx="5" yy="0" zz="40" />
+                <controlpoint xx="0" yy="-1" zz="80" />
+                <controlpoint xx="5" yy="0" zz="80" />
             </patch>
         </primitive>
 
@@ -681,7 +790,7 @@
             <children>
                 <!-- <componentref id="showroom_wall_back" /> -->
                 <!-- <componentref id="showroom_wall_side" /> -->
-                <componentref id="showroom_floor" />
+                <componentref id="track" />
             </children>
         </component>
 
@@ -712,18 +821,29 @@
             </children>
         </component>
 
-        <component id="showroom_floor">
+        <component id="track">
             <transformation>
-                <!-- <rotate axis="x" angle="-90" /> -->
-                <!-- <translate x="0" y="-22" z="-1" /> -->
-                <!-- <scale x="1" y="3" z="1" /> -->
             </transformation>
             <materials>
                 <material id="grey" />
             </materials>
-            <texture id="asphaltTexture" length_s="8" length_t="6"/>
+            <texture id="asphaltTexture" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="track" />
+                <componentref id="track_curb" />
+            </children>
+        </component>
+
+        <component id="track_curb">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="curb" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="track_curb_left" />
+                <primitiveref id="track_curb_right" />
             </children>
         </component>
 
