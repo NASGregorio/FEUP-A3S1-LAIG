@@ -23,6 +23,14 @@ class MyInterface extends CGFinterface {
         this.lights = this.gui.addFolder('Lights');
         this.lights.open();
         
+        this.addSecurityCamera();
+
+        this.initKeys();
+        
+        return true;
+    }
+
+    addSecurityCamera() {
         var settings = this.gui.addFolder('Camera Settings');
 
         var linescan = settings.addFolder('Scanlines');
@@ -39,9 +47,6 @@ class MyInterface extends CGFinterface {
         vignette.add(this.scene, 'inner_radius', 0, 1);
         vignette.add(this.scene, 'strength_factor', 0, 1);
 
-        this.initKeys();
-        
-        return true;
     }
     
 

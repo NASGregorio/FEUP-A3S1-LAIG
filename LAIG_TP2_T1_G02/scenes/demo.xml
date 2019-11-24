@@ -256,6 +256,7 @@
             <transformation>
                 <translate x="0" y="-3" z="0" />
             </transformation>
+            <animationref id="demoAnimation2" />
             <materials>
                 <material id="inherit" />
             </materials>

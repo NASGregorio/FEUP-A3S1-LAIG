@@ -20,7 +20,8 @@ class XMLscene extends CGFscene {
      */
     init(application) {
         super.init(application);
-        this.noiseTex = new CGFtexture(this, "scenes/images/noise.png");
+        this.recTex = new CGFtexture(this, "scenes/images/rec.png");
+        this.blinkTex = new CGFtexture(this, "scenes/images/blinking_red.png");
         this.line_thickness = 0.99;
         this.line_count = 2;
         this.line_speed = 0.02;
@@ -29,10 +30,12 @@ class XMLscene extends CGFscene {
 
         this.darkness_factor = 0.3;
 
-        this.outer_radius = 0.7;
+        this.outer_radius = 0.6;
         this.inner_radius = 0.4;
         this.strength_factor = 0.9;
         this.time = 0;
+        this.blink_timer = 0;
+        this.blink_marker = 0;
 
         this.rtt = new CGFtextureRTT(this, this.gl.canvas.width, this.gl.canvas.height);
     }
@@ -174,6 +177,13 @@ class XMLscene extends CGFscene {
         var dt = tNow - this.lastUpdate;
         this.graph.update(dt);
         this.time = tNow;
+
+        this.blink_timer += (dt/1000);
+
+        if(this.blink_timer >= 1) {
+            this.blink_timer = 0;
+            this.blink_marker = (this.blink_marker == 0) ? 1.0 : 0.0;
+        }
     }
 
     display() {

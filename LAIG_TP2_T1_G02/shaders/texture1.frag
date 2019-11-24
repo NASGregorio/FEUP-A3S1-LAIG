@@ -4,6 +4,8 @@ precision highp float;
 
 varying vec2 vTextureCoord;
 uniform sampler2D uSampler;
+uniform sampler2D recTex;
+uniform sampler2D blinkTex;
 
 uniform vec2 resolution;
 uniform vec2 unit_origin;
@@ -19,6 +21,7 @@ uniform float darkness_factor;    //0 to 1
 uniform float noise_strength;    //0 to 1
 
 uniform float time;
+uniform float blink_timer;
 
 float random( vec2 p )
 {
@@ -33,6 +36,8 @@ void main() {
 
     // Texture
     vec4 color = texture2D(uSampler, vTextureCoord);
+    vec4 overlay = texture2D(recTex, vec2(vTextureCoord.x, 1.0-vTextureCoord.y));
+    vec4 blink = texture2D(blinkTex, vec2(vTextureCoord.x, 1.0-vTextureCoord.y));
 
     // Stripes
     float pos = vTextureCoord.y * line_count;
@@ -52,6 +57,10 @@ void main() {
     float len = length(position);
     float vignette = smoothstep(outer_radius, inner_radius, len);
     color.rgb = mix(color.rgb, color.rgb * vignette, strength_factor);
+
+    // Overlays
+    color.rgb = mix(color.rgb, overlay.rgb, overlay.a);
+    color.rgb = mix(color.rgb, blink.rgb, blink.a * blink_timer);
 
     gl_FragColor = color;
 }

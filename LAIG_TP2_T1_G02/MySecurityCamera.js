@@ -23,7 +23,8 @@ class MySecurityCamera extends CGFobject
 
         this.screenUI.setUniformsValues({resolution: [this.scene.gl.canvas.width/4,this.scene.gl.canvas.height/4]});
         this.screenUI.setUniformsValues({unit_origin: [3.5,0.5]});
-        this.screenUI.setUniformsValues({uSampler2: 1});
+        this.screenUI.setUniformsValues({recTex: 1});
+        this.screenUI.setUniformsValues({blinkTex: 2});
     }
     
     display() {
@@ -41,10 +42,12 @@ class MySecurityCamera extends CGFobject
         this.screenUI.setUniformsValues({strength_factor: this.scene.strength_factor});
 
         this.screenUI.setUniformsValues({time: this.scene.time / 100 % 1000});
+        this.screenUI.setUniformsValues({blink_timer: this.scene.blink_marker});
 
-        this.scene.noiseTex.bind(1);
-        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_WRAP_S, this.scene.gl.REPEAT);
-        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_WRAP_T, this.scene.gl.REPEAT);
+        this.scene.recTex.bind(1);
+        this.scene.blinkTex.bind(2);
+        // this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_WRAP_S, this.scene.gl.REPEAT);
+        // this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_WRAP_T, this.scene.gl.REPEAT);
         
         this.rtt.bind(0);
         this.scene.pushMatrix();

@@ -22,9 +22,9 @@ var DEBUG_FLAGS = [
     DEBUG_ALL | 0, //TEXTURES
     DEBUG_ALL | 0, //MATERIALS
     DEBUG_ALL | 0, //TRANSFORMATIONS
-    DEBUG_ALL | 1, //ANIMATION
+    DEBUG_ALL | 0, //ANIMATION
     DEBUG_ALL | 0, //PRIMITIVES
-    DEBUG_ALL | 1  //COMPONENTS
+    DEBUG_ALL | 0  //COMPONENTS
 ];
 
 /**
@@ -698,7 +698,6 @@ class MyParser {
 
         // Any number of animations.
         for (var i = 0; i < animationNodes.length; i++) {
-            console.log("Marca: ",i);
             if (animationNodes[i].nodeName != "animation") {
                 this.onXMLMinorError("unknown tag <" + animationNodes[i].nodeName + ">");
                 continue;
@@ -717,9 +716,9 @@ class MyParser {
 
             var animation = new KeyframeAnimation(this.sceneGraph.scene);
 
-            for (var i = 0; i < animationDataNodes.length; i++) {
+            for (var j = 0; j < animationDataNodes.length; j++) {
 
-                var keyframe = this.processKeyframe(animationDataNodes[i], animationId);
+                var keyframe = this.processKeyframe(animationDataNodes[j], animationId);
                 if(typeof keyframe == "string" || keyframe instanceof String)
                 {
                     console.log("No error pls");
@@ -729,7 +728,6 @@ class MyParser {
             }
 
             this.sceneGraph.animations.set(animationId, animation);
-            console.log(animationId, animation);
         }
         return null;
     }
@@ -1123,8 +1121,6 @@ class MyParser {
             // Animation
             if(componentDataNodes[animationIndex] != null) {
                 var animationID = this.reader.getString(componentDataNodes[animationIndex], 'id');
-                console.log(animationID);
-                console.log(this.sceneGraph.animations);
     
                 if(this.sceneGraph.animations.has(animationID)) {
                     component.animationRef = animationID;
