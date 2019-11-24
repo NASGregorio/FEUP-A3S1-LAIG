@@ -157,26 +157,29 @@
     </transformations>
 
     <animations>
-        <animation id="demoAnimation" >
+
+        <animation id="steeringRotation2" >
             <keyframe instant="0">
-                <translate x="0" y="-2" z="0" />
+                <translate x="0" y="0" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
 
-            <keyframe instant="2.5">
-                <translate x="0" y="-2" z="0" />
-                <rotate angle_x="0" angle_y="0" angle_z="0" />
+            <keyframe instant="5">
+                <translate x="-4" y="0" z="4" />
+                <rotate angle_x="0" angle_y="-20" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+        </animation>
+
+        <animation id="steeringRotation" >
+            <keyframe instant="0">
+                <translate x="0" y="0" z="-1" />
+                <rotate angle_x="0" angle_y="-10" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
 
             <keyframe instant="10">
-                <translate x="0" y="0" z="5" />
-                <rotate angle_x="0" angle_y="360" angle_z="0" />
-                <scale x="1" y="1" z="1" />
-            </keyframe>
-
-            <keyframe instant="15">
                 <translate x="0" y="0" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
@@ -630,6 +633,21 @@
             </patch>
         </primitive>
 
+        <primitive id="track">
+            <patch npointsU="5" npointsV="2" npartsU="10" npartsV="20" >
+                <controlpoint xx="-30" yy="-1" zz="-60" />
+                <controlpoint xx="0" yy="-1" zz="-60" />
+                <controlpoint xx="-20" yy="-1" zz="-40" />
+                <controlpoint xx="10" yy="-1" zz="-40" />
+                <controlpoint xx="-15" yy="-1" zz="-20" />
+                <controlpoint xx="15" yy="-1" zz="-20" />
+                <controlpoint xx="-20" yy="-1" zz="0" />
+                <controlpoint xx="10" yy="-1" zz="0" />
+                <controlpoint xx="-30" yy="-1" zz="20" />
+                <controlpoint xx="0" yy="-1" zz="20" />
+            </patch>
+        </primitive>
+
     </primitives>
 
 
@@ -645,7 +663,7 @@
             <texture id="none" />
             <children>
                 <componentref id="lotus_43" />
-                <componentref id="mclaren_mp4/4" />
+                <componentref id="mclaren_mp44" />
                 <componentref id="showroom_walls" />
             </children>
         </component>
@@ -661,8 +679,8 @@
             </materials>
             <texture id="none" />
             <children>
-                <componentref id="showroom_wall_back" />
-                <componentref id="showroom_wall_side" />
+                <!-- <componentref id="showroom_wall_back" /> -->
+                <!-- <componentref id="showroom_wall_side" /> -->
                 <componentref id="showroom_floor" />
             </children>
         </component>
@@ -696,16 +714,16 @@
 
         <component id="showroom_floor">
             <transformation>
-                <rotate axis="x" angle="-90" />
-                <translate x="0" y="-22" z="-1" />
-                <scale x="1" y="3" z="1" />
+                <!-- <rotate axis="x" angle="-90" /> -->
+                <!-- <translate x="0" y="-22" z="-1" /> -->
+                <!-- <scale x="1" y="3" z="1" /> -->
             </transformation>
             <materials>
                 <material id="grey" />
             </materials>
             <texture id="asphaltTexture" length_s="8" length_t="6"/>
             <children>
-                <primitiveref id="showroom_wall" />
+                <primitiveref id="track" />
             </children>
         </component>
 
@@ -715,6 +733,7 @@
                 <translate x="8" y="0" z="0" />
                 <scale x="0.85" y="0.85" z="0.85" />
             </transformation>
+            <animationref id="steeringRotation2" />
             <materials>
                 <material id="grey" />
             </materials>
@@ -1179,10 +1198,11 @@
 
 
         <!--        MCL MP4/4 COMPONENTS         --> 
-        <component id="mclaren_mp4/4">
+        <component id="mclaren_mp44">
             <transformation>
                 <translate x="-4" y="0" z="0"/>
             </transformation>
+            <animationref id="steeringRotation2" />
             <materials>
                 <material id="white" />
             </materials>
@@ -1581,6 +1601,7 @@
             <transformation>
                 <transformationref id="f1_car_tire_thickness" />
             </transformation>
+             <!-- <animationref id="steeringRotation" /> -->
             <materials>
                 <material id="black" />
             </materials>

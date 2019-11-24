@@ -28,12 +28,18 @@ class MySecurityCamera extends CGFobject
     
     display() {
         this.scene.setActiveShader(this.screenUI);
+        this.screenUI.setUniformsValues({line_thickness: this.scene.line_thickness});
+        this.screenUI.setUniformsValues({line_count: this.scene.line_count});
+        this.screenUI.setUniformsValues({line_speed: this.scene.line_speed});
+
+        this.screenUI.setUniformsValues({noise_strength: this.scene.noise_strength});
+
+        this.screenUI.setUniformsValues({darkness_factor: this.scene.darkness_factor});
+
         this.screenUI.setUniformsValues({outer_radius: this.scene.outer_radius});
         this.screenUI.setUniformsValues({inner_radius: this.scene.inner_radius});
         this.screenUI.setUniformsValues({strength_factor: this.scene.strength_factor});
 
-        this.screenUI.setUniformsValues({line_thickness: this.scene.line_thickness});
-        this.screenUI.setUniformsValues({line_count: this.scene.line_count});
         this.screenUI.setUniformsValues({time: this.scene.time / 100 % 1000});
 
         this.scene.noiseTex.bind(1);

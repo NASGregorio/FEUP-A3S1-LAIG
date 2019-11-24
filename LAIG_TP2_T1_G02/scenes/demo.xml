@@ -100,6 +100,32 @@
                 <scale x="1" y="1" z="1" />
             </keyframe>
         </animation>
+
+        <animation id="demoAnimation2" >
+            <keyframe instant="0">
+                <translate x="0" y="2" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant="2.5">
+                <translate x="0" y="2" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant="10">
+                <translate x="0" y="0" z="5" />
+                <rotate angle_x="0" angle_y="-360" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant="15">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+        </animation>
     </animations>
 
     <primitives>
@@ -201,6 +227,7 @@
             <transformation>
                 <translate x="-3" y="0" z="0" />
             </transformation>
+
             <materials>
                 <material id="inherit" />
                 <material id="demoMaterial3" />
@@ -229,7 +256,6 @@
             <transformation>
                 <translate x="0" y="-3" z="0" />
             </transformation>
-            <animationref id="demoAnimation" />
             <materials>
                 <material id="inherit" />
             </materials>

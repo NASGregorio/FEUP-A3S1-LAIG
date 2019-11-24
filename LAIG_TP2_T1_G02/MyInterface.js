@@ -23,13 +23,21 @@ class MyInterface extends CGFinterface {
         this.lights = this.gui.addFolder('Lights');
         this.lights.open();
         
-        this.camera = this.gui.addFolder('Camera Settings');
-        this.camera.add(this.scene, 'outer_radius', 0, 1);
-        this.camera.add(this.scene, 'inner_radius', 0, 1);
-        this.camera.add(this.scene, 'strength_factor', 0, 1);
+        var settings = this.gui.addFolder('Camera Settings');
 
-        this.camera.add(this.scene, 'line_thickness', 0, 1);
-        this.camera.add(this.scene, 'line_count', 0, 20);
+        var linescan = settings.addFolder('Scanlines');
+        linescan.add(this.scene, 'line_thickness', 0, 1);
+        linescan.add(this.scene, 'line_count', 0, 20);
+        linescan.add(this.scene, 'line_speed', 0, 1);
+
+        var noise = settings.addFolder('Noise/Darkening');
+        noise.add(this.scene, 'noise_strength', 0, 1);
+        noise.add(this.scene, 'darkness_factor', 0, 1);
+
+        var vignette = settings.addFolder('Vignette');
+        vignette.add(this.scene, 'outer_radius', 0, 1);
+        vignette.add(this.scene, 'inner_radius', 0, 1);
+        vignette.add(this.scene, 'strength_factor', 0, 1);
 
         this.initKeys();
         

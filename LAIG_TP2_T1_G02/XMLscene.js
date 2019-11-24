@@ -21,15 +21,20 @@ class XMLscene extends CGFscene {
     init(application) {
         super.init(application);
         this.noiseTex = new CGFtexture(this, "scenes/images/noise.png");
-        this.outer_radius = 0.7;
-        this.inner_radius = 0.3;
-        this.strength_factor = 0.7;
-
         this.line_thickness = 0.99;
-        this.line_count = 1;
+        this.line_count = 2;
+        this.line_speed = 0.02;
+
+        this.noise_strength = 0.3;
+
+        this.darkness_factor = 0.3;
+
+        this.outer_radius = 0.7;
+        this.inner_radius = 0.4;
+        this.strength_factor = 0.9;
         this.time = 0;
+
         this.rtt = new CGFtextureRTT(this, this.gl.canvas.width, this.gl.canvas.height);
-        this.renderC = false;
     }
     
     /**
@@ -199,11 +204,9 @@ class XMLscene extends CGFscene {
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
         // Initialize Model-View matrix as identity (no transformation
-        if(!this.renderC){
-            this.updateProjectionMatrix();
-            console.log('A');
-            this.renderC = true;
-        }
+
+        this.updateProjectionMatrix();
+
         this.loadIdentity();
 
         // Apply transformations corresponding to the camera position relative to the origin
