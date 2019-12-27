@@ -1,6 +1,7 @@
 :-use_module(library(sockets)).
 :-use_module(library(lists)).
 :-use_module(library(codesio)).
+:-use_module(library(json)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%                                        Server                                                   %%%%
@@ -48,8 +49,9 @@ server_loop(Socket) :-
 		format(Stream, 'HTTP/1.0 ~p~n', [Status]),
 		format(Stream, 'Access-Control-Allow-Origin: *~n', []),
 		format(Stream, 'Content-Type: text/plain~n~n', []),
-		format(Stream, '~p', [MyReply]),
-	
+		% format(Stream, '~p', [MyReply]),
+        json_write(Stream, MyReply),
+        
 		% write('Finnished Connection'),nl,nl,
 		close_stream(Stream),
 	(Request = quit), !.

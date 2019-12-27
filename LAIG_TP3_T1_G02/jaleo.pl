@@ -539,12 +539,12 @@ validate_moves(GameState, Action, Coords, T, TotalMoves) :-
 setup_pvp(GameState):-
 
 	% --- Choose one of the boards ---
-	initial_board(Board),
+	% initial_board(Board),
 	% Middle of the game boards
     % mid_board(Board),
     % mid_board2(Board),
 	% Last move to win boards
-    % end_game(Board),
+    end_game(Board),
     % end_game2(Board),
 	% ---------------------------------
 

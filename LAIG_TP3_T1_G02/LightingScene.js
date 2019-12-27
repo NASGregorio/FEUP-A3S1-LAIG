@@ -73,7 +73,7 @@ class LightingScene extends CGFscene{
 			this.popMatrix();
 		}
 		else {
-			this.makeRequest("initial_board(Board)");
+			this.makeRequest("setup_pvp(GameState)");
 			if(this.response != null) {
 				this.parseBoard(this.response);
 			}
@@ -108,19 +108,21 @@ class LightingScene extends CGFscene{
 
 	//Handle the Reply
 	handleReply(data){
-		this.response = data.target.response;
+        this.response = data.target.response;
 	}
 
 	parseBoard(boardString) {
 		console.log(boardString);
 
-		//this.board = new MyBoard(this);
-
-		var asd = JSON.parse(boardString);
+        var asd = JSON.parse(boardString);
 		console.log(asd);
-		// this.board.update_array(asd);
+		this.board = new MyBoard(this);
+        // for (let index = 0; index < boardString.length; index++) {
+        //     array[index];
+            
+        // }
+		this.board.update_array(asd[0]);
 
-		this.board = "A";
 	}
 
 	
