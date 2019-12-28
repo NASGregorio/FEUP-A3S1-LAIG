@@ -11,12 +11,26 @@ class MyBoard extends CGFobject {
         this.InnerRadius = this.OuterRadius * 0.866025404;
 
         this.hex = new CGFOBJModel(scene, 'models/RoundedHexagon.obj');
+        this.piece = new CGFOBJModel(scene, 'models/RoundedPiece.obj');
+        this.cylinder = new Cylinder(scene, 0.25, 0.25, 0.2, 15, 2);
 
         this.redMat = new CGFappearance(scene);
 		this.redMat.setAmbient(0.3, 0.3, 0.3, 1);
 		this.redMat.setDiffuse(0.7, 0.2, 0.2, 1);
 		this.redMat.setSpecular(0.0, 0.0, 0.0, 1);
-		this.redMat.setShininess(120);
+        this.redMat.setShininess(120);
+        
+        this.whiteMat = new CGFappearance(scene);
+		this.whiteMat.setAmbient(0.4, 0.4, 0.4, 1);
+		this.whiteMat.setDiffuse(0.6, 0.6, 0.6, 1);
+		this.whiteMat.setSpecular(0.0, 0.0, 0.0, 1);
+        this.whiteMat.setShininess(120);
+        
+        this.blackMat = new CGFappearance(scene);
+		this.blackMat.setAmbient(0.05, 0.05, 0.05, 1);
+		this.blackMat.setDiffuse(0.1, 0.1, 0.1, 1);
+		this.blackMat.setSpecular(0.0, 0.0, 0.0, 1);
+		this.blackMat.setShininess(120);
         
     };
 
@@ -39,8 +53,32 @@ class MyBoard extends CGFobject {
             for (let j = 0; j < row.length; j++) {
                 const cell = row[j];
 
-                if(cell[0] != 0)
+                if(cell[0] == "t")
                     this.redMat.apply();
+                else if(cell[0] == "b") {
+                    this.scene.pushMatrix();
+                    this.scene.translate(0,0.1,0);
+                    this.blackMat.apply();
+                    this.piece.display();
+                    // this.scene.translate(0,0.2,0);
+                    // this.piece.display();
+                    // this.scene.translate(0,0.2,0);
+                    // this.piece.display();
+                    this.scene.popMatrix();
+                    this.redMat.apply();
+                }
+                else if(cell[0] == "w") {
+                    this.scene.pushMatrix();
+                    this.scene.translate(0,0.1,0);
+                    this.whiteMat.apply();
+                    this.piece.display();
+                    // this.scene.translate(0,0.2,0);
+                    // this.piece.display();
+                    // this.scene.translate(0,0.2,0);
+                    // this.piece.display();
+                    this.scene.popMatrix();
+                    this.redMat.apply();
+                }
                 else
                     this.scene.appearance.apply();
 			    this.scene.registerForPick(k++, this.hex);
