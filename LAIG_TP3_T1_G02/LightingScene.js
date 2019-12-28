@@ -24,7 +24,8 @@ class LightingScene extends CGFscene{
 		this.appearance.setAmbient(0.3, 0.3, 0.3, 1);
 		this.appearance.setDiffuse(0.7, 0.7, 0.7, 1);
 		this.appearance.setSpecular(0.0, 0.0, 0.0, 1);
-		this.appearance.setShininess(120);
+        this.appearance.setShininess(120);
+        this.setPickEnabled(true);
 
         //this.hex = new CGFOBJModel(this, 'models/RoundedHexagon.obj');
 	}
@@ -45,9 +46,40 @@ class LightingScene extends CGFscene{
 	}
 	initCameras() {
 		this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 14, 13), vec3.fromValues(0, 0, 0));
+    }
+
+    logPicking() {
+		if (this.pickMode == false) {
+			if (this.pickResults != null && this.pickResults.length > 0) {
+				for (var i = 0; i < this.pickResults.length; i++) {
+					var obj = this.pickResults[i][0];
+					if (obj) {
+                        var customId = this.pickResults[i][1] - 1;
+                        var col = customId % 10;
+                        var row = Math.floor(customId / 10);
+                        console.log("Picked object: " + obj + ", in row: " + row + ", in column: " + col);
+                        var move =  'move,[' + row + ',' + col + '],[' + 5 + ',' + 5 + ']';
+                        // var extract_move =  "extract_move([" + move + "],Action,Arg1,Arg2)";
+                        // console.log(extract_move);
+                        // this.makeRequest(extract_move);
+                        var moveString = 'move(' + move + ',' + this.GameState + ',NewBoard)';
+                        console.log(moveString);
+                        this.makeRequest(moveString);				
+					}
+				}
+				this.pickResults.splice(0, this.pickResults.length);
+			}
+		}
 	}
 
+    // Move = [Action, [Col1, Row1], [Col2, Row2]];
+    // extract_move(Move, Action, Arg1, Arg2),
+    // extract_move([Action|[Arg1|[Arg2]]], Action, Arg1, Arg2).
+    // move(Move, GameState, NewBoard) :-
+
 	display() {
+        this.logPicking();
+		this.clearPickRegistration();
 		// Clear image and depth buffer every time we update the scene
 		this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
@@ -68,7 +100,7 @@ class LightingScene extends CGFscene{
 		this.appearance.apply();
 
 		if(this.board != null) {
-			this.pushMatrix();
+            this.pushMatrix();
 			this.board.display();
 			this.popMatrix();
 		}
@@ -123,7 +155,7 @@ class LightingScene extends CGFscene{
         // }
 		this.board.update_array(asd[0]);
 
+        this.GameState = boardString;
 	}
 
-	
 }

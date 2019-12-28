@@ -115,7 +115,9 @@ parse_input(initial_board(Board), Board) :- initial_board(Board).
 
 parse_input(setup_pvp(GameState), GameState) :- setup_pvp(GameState).
 
+parse_input(extract_move(Move,Action,Arg1,Arg2), [Action, Arg1, Arg2]) :- extract_move(Move, Action, Arg1, Arg2).
 
+parse_input(move(Move,GameState,NewBoard), NewBoard) :- move(Move,GameState,NewBoard).
 %parse_input(test(C,N), N).
 % parse_input(test(C,N), Res) :- test(C,Res,N).
 

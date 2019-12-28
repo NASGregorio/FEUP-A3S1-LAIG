@@ -1,8 +1,6 @@
 :- use_module(library(between)).
 :- use_module(library(lists)).
-:- include('menu.pl').
 :- include('boards.pl').
-:- include('display.pl').
 :- include('helpers.pl').
 
 action(move).

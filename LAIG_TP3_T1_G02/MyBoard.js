@@ -31,7 +31,7 @@ class MyBoard extends CGFobject {
         }
 
         // this.redMat.apply();
-
+        let k = 1;
         for (let i = 0; i < this.array.length; i++) {
             const row = this.array[i];
 
@@ -43,6 +43,7 @@ class MyBoard extends CGFobject {
                     this.redMat.apply();
                 else
                     this.scene.appearance.apply();
+			    this.scene.registerForPick(k++, this.hex);
                 this.hex.display();
                 this.scene.translate(this.InnerRadius*2, 0, 0);
             }
