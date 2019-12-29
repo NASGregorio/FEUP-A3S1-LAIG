@@ -1,16 +1,23 @@
-
 class LightingScene extends CGFscene{
-	constructor() {
+
+	/**
+     * @constructor
+     * @param {MyInterface} myinterface
+     */
+	constructor(myinterface) {
 		super();
+
+		this.interface = myinterface;
+
 		this.texture = null;
 		this.appearance = null;
-		this.surfaces = [];
-		this.translations = [];
 		this.response = null;
 		this.board = null;
 	}
+
 	init(application) {
 		super.init(application);
+		
 		this.initCameras();
 		this.initLights();
 		this.gl.clearColor(0, 0, 0, 1.0);
@@ -27,8 +34,13 @@ class LightingScene extends CGFscene{
 		this.appearance.setShininess(120);
 		this.setPickEnabled(true);
 
-		//this.hex = new CGFOBJModel(this, 'models/RoundedHexagon.obj');
+		this.states = {
+			"START": new UpdateBoardState(this, "Start")
+		};
+
+		this.fsm = new StateMachine(this);
 	}
+
 	initLights() {
 		this.lights[0].setPosition(4, 3, 4, 1);
 		this.lights[0].setAmbient(0.1, 0.1, 0.1, 1);
@@ -44,6 +56,7 @@ class LightingScene extends CGFscene{
 		this.lights[1].enable();
 		this.lights[1].update();
 	}
+
 	initCameras() {
 		this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 14, 13), vec3.fromValues(0, 0, 0));
 	}
@@ -58,11 +71,14 @@ class LightingScene extends CGFscene{
 						var col = customId % 10;
 						var row = Math.floor(customId / 10);
 						console.log("Picked object: " + obj + ", in row: " + row + ", in column: " + col);
-						var move =  '[move,[' + row + ',' + col + '],[' + 3 + ',' + 4 + ']]';
-						// var extract_move =  "extract_move([" + move + "],Action,Arg1,Arg2)";
-						// console.log(extract_move);
+						var move =  '[add,[' + row + ',' + col + '],[' + 2 + ',' + 0 + ']]';
+						var extract_move =  "extract_move(" + move + ",Action,Arg1,Arg2)";
+						//console.log(extract_move);
 						// this.makeRequest(extract_move);
+						console.log(move);
+						console.log(this.GameState);
 						var moveString = 'move(' + move + ',' + this.GameState + ',NewBoard)';
+						moveString = moveString.replace(/"| /g, '');
 						console.log(moveString);
 						this.makeRequest(moveString);
 					}
@@ -72,12 +88,8 @@ class LightingScene extends CGFscene{
 		}
 	}
 
-	// Move = [Action, [Col1, Row1], [Col2, Row2]];
-	// extract_move(Move, Action, Arg1, Arg2),
-	// extract_move([Action|[Arg1|[Arg2]]], Action, Arg1, Arg2).
-	// move(Move, GameState, NewBoard) :-
-
 	display() {
+
 		this.logPicking();
 		this.clearPickRegistration();
 		// Clear image and depth buffer every time we update the scene
@@ -99,48 +111,17 @@ class LightingScene extends CGFscene{
 		this.axis.display();
 		this.appearance.apply();
 
-		if(this.board != null) {
-			this.pushMatrix();
-			this.board.display();
-			this.popMatrix();
-		}
-		else {
-			this.makeRequest("setup_pvp(GameState)");
-			if(this.response != null) {
-				this.parseBoard(this.response);
-			}
-		}
-	}
-
-	getPrologRequest(requestString, onSuccess, onError, port)
-	{
-		var requestPort = port || 8081
-		var request = new XMLHttpRequest();
-		request.open('GET', 'http://localhost:'+requestPort+'/'+requestString, true);
-
-		request.onload = onSuccess || function(data){console.log("Request successful. Reply: " + data.target.response);};
-		request.onerror = onError || function(){console.log("Error waiting for response");};
-
-		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-		request.send();
-	}
-	
-	makeRequest(requestString)
-	{				
-		// Make Request
-		this.getPrologRequest(requestString, this.handleReply.bind(this));
-	}
-
-	sendQuit()
-	{
-		// Make Request
-		this.getPrologRequest("quit", this.handleReply);
-	}
-		
-
-	//Handle the Reply
-	handleReply(data){
-		this.response = data.target.response;
+		// if(this.board != null) {
+		// 	this.pushMatrix();
+		// 	this.board.display();
+		// 	this.popMatrix();
+		// }
+		// else {
+		// 	this.makeRequest("setup_pvp(GameState)");
+		// 	if(this.response != null) {
+		// 		this.parseBoard(this.response);
+		// 	}
+		// }
 	}
 
 	parseBoard(boardString) {
@@ -158,4 +139,11 @@ class LightingScene extends CGFscene{
 		this.GameState = boardString;
 	}
 
+	start_game() {
+		this.fsm.init(this.states["START"]);
+	}
+
+	how_to_play() {
+		console.log("How to play?");
+	}
 }

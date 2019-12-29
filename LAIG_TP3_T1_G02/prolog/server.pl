@@ -117,8 +117,8 @@ parse_input(setup_pvp(GameState), GameState) :- setup_pvp(GameState).
 
 parse_input(extract_move(Move,Action,Arg1,Arg2), [Action, Arg1, Arg2]) :- extract_move(Move, Action, Arg1, Arg2).
 
-parse_input(move(Move,GameState,NewBoard), [NewBoard]) :- move(Move,GameState,NewBoard).
-% move(move,[4,4],[5,5],[[[[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]],[[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]],[[0],[0],[0],[w],[t],[t],[0],[0],[0],[0]],[[0],[0],[b,w],[w,w],[b],[b,w],[0],[0],[0],[0]],[[0],[0],[0],[b],[w],[w,b],[0],[0],[0],[0]],[[0],[0],[0],[t],[b,w],[w],[b],[0],[0],[0]],[[0],[0],[0],[0],[0],[0],[t],[0],[0],[0]],[[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]]],8,10,black,[[4,2],[5,2],[3,5],[6,6]],[[2,3],[4,3],[5,3],[3,4],[4,5],[6,5]],[[3,2],[3,3],[4,4],[5,4],[5,5]]],NewBoard)
+parse_input(move(Move,GameState,NewBoard), NewBoard) :- move(Move, GameState, NewBoard).
+
 %parse_input(test(C,N), N).
 % parse_input(test(C,N), Res) :- test(C,Res,N).
 

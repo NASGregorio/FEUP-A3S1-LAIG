@@ -542,10 +542,11 @@ setup_pvp(GameState):-
     % mid_board(Board),
     % mid_board2(Board),
 	% Last move to win boards
-    end_game(Board),
-    % end_game2(Board),
+    %end_game(Board),
+	% end_game2(Board),
 	% ---------------------------------
-
+	
+    test_board(Board),
 	
 	length(Board, RowSize),
 	

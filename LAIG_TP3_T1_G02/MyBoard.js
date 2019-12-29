@@ -3,6 +3,7 @@
  * @constructor
  */
 class MyBoard extends CGFobject {
+    
 	constructor(scene) {
 
 		super(scene);
@@ -12,7 +13,6 @@ class MyBoard extends CGFobject {
 
         this.hex = new CGFOBJModel(scene, 'models/RoundedHexagon.obj');
         this.piece = new CGFOBJModel(scene, 'models/RoundedPiece.obj');
-        this.cylinder = new Cylinder(scene, 0.25, 0.25, 0.2, 15, 2);
 
         this.redMat = new CGFappearance(scene);
 		this.redMat.setAmbient(0.3, 0.3, 0.3, 1);
@@ -37,6 +37,8 @@ class MyBoard extends CGFobject {
     update_array(array) {
         this.array = array;
     }
+
+
     
     display() {
 
