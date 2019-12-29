@@ -9,36 +9,36 @@ class LightingScene extends CGFscene{
 
 		this.interface = myinterface;
 
-		this.texture = null;
-		this.appearance = null;
-		this.response = null;
 		this.board = null;
 	}
 
 	init(application) {
+
 		super.init(application);
 		
 		this.initCameras();
 		this.initLights();
+
 		this.gl.clearColor(0, 0, 0, 1.0);
 		this.gl.clearDepth(10000.0);
 		this.gl.enable(this.gl.DEPTH_TEST);
 		this.gl.enable(this.gl.CULL_FACE);
 		this.gl.depthFunc(this.gl.LEQUAL);
+
 		this.axis = new CGFaxis(this);
 
-		this.appearance = new CGFappearance(this);
-		this.appearance.setAmbient(0.3, 0.3, 0.3, 1);
-		this.appearance.setDiffuse(0.7, 0.7, 0.7, 1);
-		this.appearance.setSpecular(0.0, 0.0, 0.0, 1);
-		this.appearance.setShininess(120);
-		this.setPickEnabled(true);
+		this.game_state = null;
 
-		this.states = {
-			"START": new UpdateBoardState(this, "Start")
-		};
+		this.board = new MyBoard(this);
 
 		this.fsm = new StateMachine(this);
+		this.states = {
+			"SETUP": new SetupState(this, "Setup"),
+			"UPDATE": new UpdateBoardState(this, "Update"),
+			"MOVE": new MoveState(this, "Move")
+		};
+
+		this.setPickEnabled(true);
 	}
 
 	initLights() {
@@ -71,16 +71,6 @@ class LightingScene extends CGFscene{
 						var col = customId % 10;
 						var row = Math.floor(customId / 10);
 						console.log("Picked object: " + obj + ", in row: " + row + ", in column: " + col);
-						var move =  '[add,[' + row + ',' + col + '],[' + 2 + ',' + 0 + ']]';
-						var extract_move =  "extract_move(" + move + ",Action,Arg1,Arg2)";
-						//console.log(extract_move);
-						// this.makeRequest(extract_move);
-						console.log(move);
-						console.log(this.GameState);
-						var moveString = 'move(' + move + ',' + this.GameState + ',NewBoard)';
-						moveString = moveString.replace(/"| /g, '');
-						console.log(moveString);
-						this.makeRequest(moveString);
 					}
 				}
 				this.pickResults.splice(0, this.pickResults.length);
@@ -92,6 +82,7 @@ class LightingScene extends CGFscene{
 
 		this.logPicking();
 		this.clearPickRegistration();
+		
 		// Clear image and depth buffer every time we update the scene
 		this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
@@ -109,38 +100,16 @@ class LightingScene extends CGFscene{
 
 		// Draw axis
 		this.axis.display();
-		this.appearance.apply();
 
-		// if(this.board != null) {
-		// 	this.pushMatrix();
-		// 	this.board.display();
-		// 	this.popMatrix();
-		// }
-		// else {
-		// 	this.makeRequest("setup_pvp(GameState)");
-		// 	if(this.response != null) {
-		// 		this.parseBoard(this.response);
-		// 	}
-		// }
-	}
-
-	parseBoard(boardString) {
-		console.log(boardString);
-
-		var asd = JSON.parse(boardString);
-		console.log(asd);
-		this.board = new MyBoard(this);
-		// for (let index = 0; index < boardString.length; index++) {
-		//     array[index];
-			
-		// }
-		this.board.update_array(asd[0]);
-
-		this.GameState = boardString;
+		if(this.board != null) {
+			this.pushMatrix();
+			this.board.display();
+			this.popMatrix();
+		}
 	}
 
 	start_game() {
-		this.fsm.init(this.states["START"]);
+		this.fsm.init(this.states["SETUP"]);
 	}
 
 	how_to_play() {

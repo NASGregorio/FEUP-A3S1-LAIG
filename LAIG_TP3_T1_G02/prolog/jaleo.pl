@@ -132,6 +132,11 @@ move(Move, GameState, NewBoard) :-
 	validate_move(Move, GameState),
 	execute_move(Move, GameState, NewBoard).
 
+moveAndUpdate(Move, GameState, NewGameState) :-
+	validate_move(Move, GameState),
+	execute_move(Move, GameState, NewBoard),
+	update_gamestate(GameState, NewBoard, NewGameState).
+
 
 validate_move(Move, GameState) :-
 
@@ -543,7 +548,7 @@ setup_pvp(GameState):-
     % mid_board2(Board),
 	% Last move to win boards
     %end_game(Board),
-	% end_game2(Board),
+	%end_game2(Board),
 	% ---------------------------------
 	
     test_board(Board),

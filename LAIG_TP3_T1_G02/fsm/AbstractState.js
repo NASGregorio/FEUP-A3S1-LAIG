@@ -7,10 +7,15 @@ class AbstractState {
         }
 
         this.scene = scene; 
+        this.fsm = scene.fsm;
         this.name = name;
     };
 
-    init() {
-        console.log(this.name);
+    enter() {
+        console.log("Entering ", this.name);
+    }
+
+    exit() {
+        console.log("Exiting ", this.name);
     }
 }

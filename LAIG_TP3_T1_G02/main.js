@@ -7,7 +7,7 @@ serialInclude([ '../lib/CGF.js', 'MyInterface.js', 'LightingScene.js',
                 'prolog/PrologInterpreter.js',
                 'MyBoard.js',
                 'fsm/StateMachine.js', 'fsm/AbstractState.js',
-                'fsm/UpdateBoardState.js',
+                'fsm/SetupState.js', 'fsm/UpdateBoardState.js', 'fsm/MoveState.js',
 
 main=function()
 {

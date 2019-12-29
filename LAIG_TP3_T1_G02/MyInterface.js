@@ -27,6 +27,7 @@ class MyInterface extends CGFinterface {
         
         this.show_start_options(this.scene);
 
+        this.initKeys();
         
         return true;
     }
@@ -102,10 +103,6 @@ class MyInterface extends CGFinterface {
     }
 
     processKeyDown(event) {
-        if(event.key === 'm') {
-            this.scene.graph.materialIndex++;
-        }
-
         this.activeKeys[event.code]=true;
     };
 

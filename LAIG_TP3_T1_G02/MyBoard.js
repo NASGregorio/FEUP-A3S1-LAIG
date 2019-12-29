@@ -11,8 +11,18 @@ class MyBoard extends CGFobject {
         this.OuterRadius = 0.5;
         this.InnerRadius = this.OuterRadius * 0.866025404;
 
+        this.init_materials(scene);
+
         this.hex = new CGFOBJModel(scene, 'models/RoundedHexagon.obj');
         this.piece = new CGFOBJModel(scene, 'models/RoundedPiece.obj');
+    };
+
+    init_materials(scene) {
+        this.appearance = new CGFappearance(scene);
+		this.appearance.setAmbient(0.3, 0.3, 0.3, 1);
+		this.appearance.setDiffuse(0.7, 0.7, 0.7, 1);
+		this.appearance.setSpecular(0.0, 0.0, 0.0, 1);
+		this.appearance.setShininess(120);
 
         this.redMat = new CGFappearance(scene);
 		this.redMat.setAmbient(0.3, 0.3, 0.3, 1);
@@ -31,25 +41,39 @@ class MyBoard extends CGFobject {
 		this.blackMat.setDiffuse(0.1, 0.1, 0.1, 1);
 		this.blackMat.setSpecular(0.0, 0.0, 0.0, 1);
 		this.blackMat.setShininess(120);
-        
-    };
-
-    update_array(array) {
-        this.array = array;
     }
 
+    update_board(data) {
+        this.scene.game_state = data;
+        this.new_board = data[0];
 
+        this.print_board(data[0]);
+    }
+
+    print_board(board) {
+
+        let str = '';
+
+        board.forEach(line => {
+            str = str.concat('| ');
+            line.forEach(element => {
+                str = str.concat(element, ' | ');
+            });
+            str = str.concat('\n');
+        });
+        console.log(str);
+    }
     
     display() {
 
-        if(this.array == null) {
+        if(this.new_board == null) {
             return;
         }
 
         // this.redMat.apply();
         let k = 1;
-        for (let i = 0; i < this.array.length; i++) {
-            const row = this.array[i];
+        for (let i = 0; i < this.new_board.length; i++) {
+            const row = this.new_board[i];
 
             this.scene.pushMatrix();
             for (let j = 0; j < row.length; j++) {
@@ -78,7 +102,7 @@ class MyBoard extends CGFobject {
                     }
 
                     else
-                    this.scene.appearance.apply();
+                    this.appearance.apply();
                 }
 
 			    this.scene.registerForPick(k++, this.hex);
@@ -92,15 +116,3 @@ class MyBoard extends CGFobject {
         }
     }
 };
-
-
-/*
-            // for (int r = 0; r < height; r++)
-            // {
-            //     int r_offset = r >> 1; // Floor(r/2);
-            //     for (int q = -r_offset; q < width - r_offset; q++)
-            //     {
-            //         CreateCell(q, r, 0);
-            //     }
-            // }
-*/

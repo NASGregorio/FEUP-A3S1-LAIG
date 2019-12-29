@@ -23,14 +23,13 @@ class PrologInterpreter {
 
     static send_quit() { PrologInterpreter.send_request("quit"); }
 
-    static send_move(from, to, gamestate) {
-
-        from = JSON.stringify(from);
-        to = JSON.stringify(to);
+    static send_action(action, arg1, arg2, gamestate, onSuccess) {
+        arg1 = JSON.stringify(arg1);
+        arg2 = JSON.stringify(arg2);
         gamestate = JSON.stringify(gamestate).replace(/"| /g, '');
 
-        let cmd = `move([add,${from},${to}],${gamestate},NewBoard)`;
+        let cmd = `moveAndUpdate([${action},${arg1},${arg2}],${gamestate},NewBoard)`;
         console.log(cmd);
-        PrologInterpreter.send_request(cmd); 
+        PrologInterpreter.send_request(cmd, onSuccess); 
     }
 }
