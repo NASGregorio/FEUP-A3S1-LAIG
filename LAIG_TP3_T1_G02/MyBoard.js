@@ -4,14 +4,25 @@
  */
 class MyBoard extends CGFobject {
     
-	constructor(scene) {
+	constructor(scene, rows, cols) {
 
 		super(scene);
 
         this.OuterRadius = 0.5;
         this.InnerRadius = this.OuterRadius * 0.866025404;
+        this.sqrt3 = Math.sqrt(3);
 
         this.init_materials(scene);
+        
+        // this.rows = rows;
+        // this.cols = cols;
+        // this.tiles = new Map();
+
+        // for (let r = 0; r < this.rows; r++) {
+        //     for (let c = 0; c < this.cols; c++) {
+                
+        //     }
+        // }
 
         this.hex = new CGFOBJModel(scene, 'models/RoundedHexagon.obj');
         this.piece = new CGFOBJModel(scene, 'models/RoundedPiece.obj');
@@ -63,15 +74,44 @@ class MyBoard extends CGFobject {
         });
         console.log(str);
     }
+
+    get_all_occupied_tiles() {
+
+    }
+
+    draw_cell(cell, idx, coords) {
+        this.redMat.apply();
+        this.scene.registerForPick(idx, this.hex);
+        this.scene.pickIDs.set(idx, coords);
+        this.hex.display();
+
+        if(cell[0] === 't')
+            return;
+
+        for (let y = 0; y < cell.length; y++) {
+                    
+            this.scene.pushMatrix();
+
+            if(cell[y] == "b")
+                this.blackMat.apply();
+
+            else if(cell[y] == "w")
+                this.whiteMat.apply();
+
+            this.scene.translate(0,0.1+0.2*(cell.length-1-y),0);
+            this.piece.display();
+            this.scene.popMatrix();
+        }
+    }
     
     display() {
 
-        if(this.new_board == null) {
+        if(this.new_board == null)
             return;
-        }
 
-        // this.redMat.apply();
-        let k = 1;
+        this.scene.pushMatrix();
+        this.scene.translate(- (this.scene.game_state[1]-1) * this.InnerRadius, 0, -(this.scene.game_state[2]/2*this.InnerRadius*this.sqrt3));
+
         for (let i = 0; i < this.new_board.length; i++) {
             const row = this.new_board[i];
 
@@ -79,40 +119,17 @@ class MyBoard extends CGFobject {
             for (let j = 0; j < row.length; j++) {
                 const cell = row[j];
 
-                for (let y = 0; y < cell.length; y++) {
-                    if(cell[0] == "t")
-                        this.redMat.apply();
-                    
-                    else if(cell[y] == "b") {
-                        this.scene.pushMatrix();
-                        this.scene.translate(0,0.1+0.2*y,0);
-                        this.blackMat.apply();
-                        this.piece.display();
-                        this.scene.popMatrix();
-                        this.redMat.apply();
-                    }
+                if(cell[0] != 0)
+                    this.draw_cell(cell, j+i*row.length, [i,j]);
 
-                    else if(cell[y] == "w") {
-                        this.scene.pushMatrix();
-                        this.scene.translate(0,0.1+0.2*y,0);
-                        this.whiteMat.apply();
-                        this.piece.display();
-                        this.scene.popMatrix();
-                        this.redMat.apply();
-                    }
-
-                    else
-                    this.appearance.apply();
-                }
-
-			    this.scene.registerForPick(k++, this.hex);
-                this.hex.display();
                 this.scene.translate(this.InnerRadius*2, 0, 0);
             }
             this.scene.popMatrix();
-
+            
             let offset = (i % 2 == 0) ? this.InnerRadius : -this.InnerRadius;
-            this.scene.translate(offset, 0, this.InnerRadius*1.75);
+            this.scene.translate(offset, 0, this.InnerRadius*this.sqrt3);
         }
+
+        this.scene.popMatrix();
     }
 };

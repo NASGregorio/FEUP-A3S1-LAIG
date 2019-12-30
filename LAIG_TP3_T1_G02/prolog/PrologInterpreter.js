@@ -24,8 +24,8 @@ class PrologInterpreter {
     static send_quit() { PrologInterpreter.send_request("quit"); }
 
     static send_action(action, arg1, arg2, gamestate, onSuccess) {
-        arg1 = JSON.stringify(arg1);
-        arg2 = JSON.stringify(arg2);
+        arg1 = JSON.stringify(arg1.reverse());
+        arg2 = JSON.stringify(arg2.reverse());
         gamestate = JSON.stringify(gamestate).replace(/"| /g, '');
 
         let cmd = `moveAndUpdate([${action},${arg1},${arg2}],${gamestate},NewBoard)`;

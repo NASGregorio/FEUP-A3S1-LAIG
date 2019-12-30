@@ -10,6 +10,8 @@ class LightingScene extends CGFscene{
 		this.interface = myinterface;
 
 		this.board = null;
+
+		this.pickIDs = new Map();
 	}
 
 	init(application) {
@@ -67,10 +69,12 @@ class LightingScene extends CGFscene{
 				for (var i = 0; i < this.pickResults.length; i++) {
 					var obj = this.pickResults[i][0];
 					if (obj) {
-						var customId = this.pickResults[i][1] - 1;
-						var col = customId % 10;
-						var row = Math.floor(customId / 10);
-						console.log("Picked object: " + obj + ", in row: " + row + ", in column: " + col);
+						var customId = this.pickResults[i][1];
+						let coords = this.pickIDs.get(customId);
+
+						// var col = customId % this.game_state[2];
+						// var row = Math.floor(customId / this.game_state[1]);
+						console.log("Picked object: " + obj + ", in row: " + coords[0] + ", in column: " + coords[1]);
 					}
 				}
 				this.pickResults.splice(0, this.pickResults.length);

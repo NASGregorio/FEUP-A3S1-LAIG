@@ -18,6 +18,8 @@ class MoveState extends AbstractState {
     }
 
     action_success(data) {
-        this.fsm.switch_state(this.scene.states["UPDATE"], data);
+
+        if(data !== 'Bad Request')
+            this.fsm.switch_state(this.scene.states["UPDATE"], data);
     }
 }

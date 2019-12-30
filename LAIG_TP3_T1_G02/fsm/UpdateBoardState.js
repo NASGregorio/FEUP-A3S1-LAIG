@@ -22,7 +22,7 @@ class UpdateBoardState extends AbstractState {
         this.scene.board.update_board(data);
 
         if(!this.do_once) {
-            this.fsm.switch_state(this.scene.states["MOVE"], ['add', [0,0], [2,0]]);
+            this.fsm.switch_state(this.scene.states["MOVE"], ['add', [11,11], [11,10]]);
             this.do_once = true;
         }
     }
