@@ -71,9 +71,6 @@ class LightingScene extends CGFscene{
 					if (obj) {
 						var customId = this.pickResults[i][1];
 						let coords = this.pickIDs.get(customId);
-
-						// var col = customId % this.game_state[2];
-						// var row = Math.floor(customId / this.game_state[1]);
 						console.log("Picked object: " + obj + ", in row: " + coords[0] + ", in column: " + coords[1]);
 					}
 				}
@@ -120,3 +117,26 @@ class LightingScene extends CGFscene{
 		console.log("How to play?");
 	}
 }
+
+
+/*
+
+(Não está por ordem de prioridade)
+
+limpar nome das funçoes das tiles adjacentes no UpdateBoardState. (usei o do_stuff porque ja lá estava)
+
+Ver situação manhosa da ordem das coordenadas x,y / y,x
+
+Preparar cenas(xml) para a board
+
+Estado de recolha de inputs do jogador:
+	Decidir add ou move mediante o tile.
+	Nao permitir se peça é do outro jogador (ou deixar fazer o pedido e ao falhar a request, indicar ao player)
+
+Estado antes do input para ver situações de stack (o que o player vê é o mesmo, tem de clicar no pc onde quer fazer stack por exemplo)
+
+Ajustar camera de acordo com o tamanho e usar funçao orbit com toggle na interface
+
+Coisas do enunciado que ainda nao li (que podem ou nao existir)
+
+*/

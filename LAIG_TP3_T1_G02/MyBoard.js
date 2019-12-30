@@ -13,16 +13,6 @@ class MyBoard extends CGFobject {
         this.sqrt3 = Math.sqrt(3);
 
         this.init_materials(scene);
-        
-        // this.rows = rows;
-        // this.cols = cols;
-        // this.tiles = new Map();
-
-        // for (let r = 0; r < this.rows; r++) {
-        //     for (let c = 0; c < this.cols; c++) {
-                
-        //     }
-        // }
 
         this.hex = new CGFOBJModel(scene, 'models/RoundedHexagon.obj');
         this.piece = new CGFOBJModel(scene, 'models/RoundedPiece.obj');
@@ -58,7 +48,11 @@ class MyBoard extends CGFobject {
         this.scene.game_state = data;
         this.new_board = data[0];
 
-        this.print_board(data[0]);
+        //this.print_board(data[0]);
+    }
+
+    update_adj(data) {
+        this.adj_tiles = data;
     }
 
     print_board(board) {
@@ -76,16 +70,24 @@ class MyBoard extends CGFobject {
     }
 
     get_all_occupied_tiles() {
-
+        let all_tiles = this.scene.game_state[4];
+        all_tiles = all_tiles.concat(this.scene.game_state[5]);
+        all_tiles = all_tiles.concat(this.scene.game_state[6]);
+        return all_tiles;
     }
 
     draw_cell(cell, idx, coords) {
-        this.redMat.apply();
+
+        if(cell[0] === 0)
+            this.appearance.apply();
+        else
+            this.redMat.apply();
+
         this.scene.registerForPick(idx, this.hex);
         this.scene.pickIDs.set(idx, coords);
         this.hex.display();
 
-        if(cell[0] === 't')
+        if(cell[0] === 't' || cell[0] === 0)
             return;
 
         for (let y = 0; y < cell.length; y++) {
@@ -103,6 +105,14 @@ class MyBoard extends CGFobject {
             this.scene.popMatrix();
         }
     }
+
+
+    find_in_list(list, cell) {
+        for (let i = 0; i < list.length; i++)
+            if(cell[0] == list[i][0] && cell[1] == list[i][1])
+                return true;
+        return false;
+    }
     
     display() {
 
@@ -119,7 +129,7 @@ class MyBoard extends CGFobject {
             for (let j = 0; j < row.length; j++) {
                 const cell = row[j];
 
-                if(cell[0] != 0)
+                if(cell[0] != 0 || (this.adj_tiles != null && this.find_in_list(this.adj_tiles, [j,i])) )
                     this.draw_cell(cell, j+i*row.length, [i,j]);
 
                 this.scene.translate(this.InnerRadius*2, 0, 0);

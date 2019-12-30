@@ -119,6 +119,8 @@ parse_input(extract_move(Move,Action,Arg1,Arg2), [Action, Arg1, Arg2]) :- extrac
 
 parse_input(moveAndUpdate(Move,GameState,NewGameState), NewGameState) :- moveAndUpdate(Move, GameState, NewGameState).
 
+parse_input(get_empty_adjacent_spaces(Board,AllTiles,EmptyAdjSpaces), EmptyAdjSpaces) :- get_empty_adjacent_spaces(Board, AllTiles, [], EmptyAdjSpaces).
+
 %parse_input(test(C,N), N).
 % parse_input(test(C,N), Res) :- test(C,Res,N).
 
