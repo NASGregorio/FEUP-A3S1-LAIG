@@ -77,40 +77,90 @@ class LightingScene extends CGFscene{
 						var customId = this.pickResults[i][1];
 						let coords = this.pickIDs.get(customId);
                         console.log("Picked object: " + obj + ", in row: " + coords[0] + ", in column: " + coords[1]);
-                        console.log(this.board.player);
-                        if(this.board.new_board[coords[0]][coords[1]] == "t"){
-                            this.addMove = true;
-                            this.addCoords = coords;
-                        }
-                        else if((this.board.new_board[coords[0]][coords[1]] == "0") && this.addMove){
-                            this.fsm.switch_state(this.states["MOVE"], ['add', [this.addCoords[0],this.addCoords[1]], [coords[0],coords[1]]]);
-                            this.addMove = false;
-                        }
-                        else if(((this.board.new_board[coords[0]][coords[1]] == "w" && this.board.player == "white") || (this.board.new_board[coords[0]][coords[1]] == "b" && this.board.player == "black")) && !this.moveMove){
-                            this.moveMove = true;
-                            this.moveCoords = coords;
-                        }
-                        else if((this.board.new_board[coords[0]][coords[1]] != "0") && this.moveMove){
-                            this.fsm.switch_state(this.states["MOVE"], ['move', [this.moveCoords[0],this.moveCoords[1]], [coords[0],coords[1]]]);
-                            this.moveMove = false;
-                        }
-                        else if((this.board.new_board[coords[0]][coords[1]] == "w" && this.board.player == "black") || (this.board.new_board[coords[0]][coords[1]] == "b" && this.board.player == "white")) {
-                            console.log("Invalid move, please choose one of your pieces");
-                            this.addMove = false;
-                            this.moveMove = false;
-                        }
-                        else{
-                            console.log("Cleared parameters");
-                            this.addMove = false;
-                            this.moveMove = false;
-                        }
+                        this.game_logic(coords);
                     }                            
                 }
             }
             this.pickResults.splice(0, this.pickResults.length);
         }
     }
-	
+    
+    game_logic(coords) {
+        this.force_stack();
+        if(this.board.new_board[coords[0]][coords[1]] == "t") {
+            this.addMove = true;
+            this.addCoords = coords;
+        }
+        else if((this.board.new_board[coords[0]][coords[1]] == "0") && this.addMove) {
+            this.fsm.switch_state(this.states["MOVE"], ['add', [this.addCoords[0],this.addCoords[1]], [coords[0],coords[1]]]);
+            this.addMove = false;
+        }
+        else if(((this.board.new_board[coords[0]][coords[1]] == "w" && this.board.player == "white") || (this.board.new_board[coords[0]][coords[1]] == "b" && this.board.player == "black")) && !this.moveMove) {
+            this.moveMove = true;
+            this.moveCoords = coords;
+        }
+        else if((this.board.new_board[coords[0]][coords[1]] != "0") && this.moveMove) {
+            this.fsm.switch_state(this.states["MOVE"], ['move', [this.moveCoords[0],this.moveCoords[1]], [coords[0],coords[1]]]);
+            this.moveMove = false;
+        }
+        else if((this.board.new_board[coords[0]][coords[1]] == "w" && this.board.player == "black") || (this.board.new_board[coords[0]][coords[1]] == "b" && this.board.player == "white")) {
+            console.log("Invalid move, please choose one of your pieces");
+            this.addMove = false;
+            this.moveMove = false;
+        }
+        else {
+            console.log("Cleared parameters");
+            this.addMove = false;
+            this.moveMove = false;
+        }
+    }
+
+    force_stack() {
+        //console.log(this.board.new_board);
+        //console.log(this.game_state);
+        for (let i = 0; i < this.board.new_board.length; i++) {
+            for (let j = 0; j < this.board.new_board[i].length; j++) {
+                if(this.board.new_board[i][j].length == 1 && (this.board.new_board[i][j] == "b" || this.board.new_board[i][j] == "w")) {
+                    if(this.check_force_stack(i,j,this.board.new_board[i][j])) {
+                        // DO FORCE STACK
+                    }
+                }
+            }
+        }
+    }
+
+    check_force_stack(y,x,piece) {
+
+        // COORDENADAS DA VISINHANCA ERRADAS
+        console.log("Coords: ",x,y," Piece:    ",piece);
+        console.log("Coords: ",x,y-1," Neighbour:",this.board.new_board[y-1][x]);
+        console.log("Coords: ",x+1,y-1," Neighbour:",this.board.new_board[y-1][x+1]);
+        console.log("Coords: ",x-1,y," Neighbour:",this.board.new_board[y][x-1]);
+        console.log("Coords: ",x+1,y," Neighbour:",this.board.new_board[y][x+1]);
+        console.log("Coords: ",x,y+1," Neighbour:",this.board.new_board[y+1][x]);
+        console.log("Coords: ",x+1,y+1," Neighbour:",this.board.new_board[y+1][x+1]);
+
+        if(this.board.new_board[y-1][x] == piece) {
+            return true;
+        }
+        else if(this.board.new_board[y-1][x+1] == piece) {
+            return true;
+        }
+        else if(this.board.new_board[y][x-1] == piece) {
+            return true;
+        }
+        else if(this.board.new_board[y][x+1] == piece) {
+            return true;
+        }
+        else if(this.board.new_board[y+1][x] == piece) {
+            return true;
+        }
+        else if(this.board.new_board[y+1][x+1] == piece) {
+            return true;
+        }
+        else return false;
+    }
+
 
 	display() {
 
