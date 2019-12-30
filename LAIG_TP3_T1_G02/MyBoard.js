@@ -11,6 +11,8 @@ class MyBoard extends CGFobject {
         this.OuterRadius = 0.5;
         this.InnerRadius = this.OuterRadius * 0.866025404;
         this.sqrt3 = Math.sqrt(3);
+        this.player = "";
+
 
         this.init_materials(scene);
 
@@ -47,6 +49,8 @@ class MyBoard extends CGFobject {
     update_board(data) {
         this.scene.game_state = data;
         this.new_board = data[0];
+        this.player = this.scene.game_state[3];
+
 
         //this.print_board(data[0]);
     }

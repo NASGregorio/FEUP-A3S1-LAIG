@@ -11,6 +11,11 @@ class LightingScene extends CGFscene{
 
 		this.board = null;
 
+        this.addMove = false;
+        this.addCoords = [];
+        this.moveMove = false;
+        this.moveCoords = [];
+
 		this.pickIDs = new Map();
 	}
 
@@ -71,13 +76,41 @@ class LightingScene extends CGFscene{
 					if (obj) {
 						var customId = this.pickResults[i][1];
 						let coords = this.pickIDs.get(customId);
-						console.log("Picked object: " + obj + ", in row: " + coords[0] + ", in column: " + coords[1]);
-					}
-				}
-				this.pickResults.splice(0, this.pickResults.length);
-			}
-		}
-	}
+                        console.log("Picked object: " + obj + ", in row: " + coords[0] + ", in column: " + coords[1]);
+                        console.log(this.board.player);
+                        if(this.board.new_board[coords[0]][coords[1]] == "t"){
+                            this.addMove = true;
+                            this.addCoords = coords;
+                        }
+                        else if((this.board.new_board[coords[0]][coords[1]] == "0") && this.addMove){
+                            this.fsm.switch_state(this.states["MOVE"], ['add', [this.addCoords[0],this.addCoords[1]], [coords[0],coords[1]]]);
+                            this.addMove = false;
+                        }
+                        else if(((this.board.new_board[coords[0]][coords[1]] == "w" && this.board.player == "white") || (this.board.new_board[coords[0]][coords[1]] == "b" && this.board.player == "black")) && !this.moveMove){
+                            this.moveMove = true;
+                            this.moveCoords = coords;
+                        }
+                        else if((this.board.new_board[coords[0]][coords[1]] != "0") && this.moveMove){
+                            this.fsm.switch_state(this.states["MOVE"], ['move', [this.moveCoords[0],this.moveCoords[1]], [coords[0],coords[1]]]);
+                            this.moveMove = false;
+                        }
+                        else if((this.board.new_board[coords[0]][coords[1]] == "w" && this.board.player == "black") || (this.board.new_board[coords[0]][coords[1]] == "b" && this.board.player == "white")) {
+                            console.log("Invalid move, please choose one of your pieces");
+                            this.addMove = false;
+                            this.moveMove = false;
+                        }
+                        else{
+                            console.log("Cleared parameters");
+                            this.addMove = false;
+                            this.moveMove = false;
+                        }
+                    }                            
+                }
+            }
+            this.pickResults.splice(0, this.pickResults.length);
+        }
+    }
+	
 
 	display() {
 
@@ -140,3 +173,6 @@ Ajustar camera de acordo com o tamanho e usar funçao orbit com toggle na interf
 Coisas do enunciado que ainda nao li (que podem ou nao existir)
 
 */
+
+
+// TODO: adicionar error handeling para moves que tenham sido efetuadas, mas sejam invalidas
