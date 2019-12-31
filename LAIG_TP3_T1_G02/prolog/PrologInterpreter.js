@@ -28,7 +28,7 @@ class PrologInterpreter {
         arg2 = JSON.stringify(arg2.reverse());
         gamestate = JSON.stringify(gamestate).replace(/"| /g, '');
 
-        let cmd = `moveAndUpdate([${action},${arg1},${arg2}],${gamestate},NewBoard)`;
+        let cmd = `move_and_update([${action},${arg1},${arg2}],${gamestate},NewBoard)`;
         //console.log(cmd);
         PrologInterpreter.send_request(cmd, onSuccess); 
     }
@@ -48,6 +48,15 @@ class PrologInterpreter {
         gamestate = JSON.stringify(gamestate).replace(/"| /g, '');
 
         let cmd = `get_stack_options(${gamestate},AllActions,Len)`;
+        //console.log(cmd);
+        PrologInterpreter.send_request(cmd, onSuccess); 
+    }
+
+    static send_stack_action(action, gamestate, onSuccess) {
+        action = JSON.stringify(action);
+        gamestate = JSON.stringify(gamestate).replace(/"| /g, '');
+
+        let cmd = `execute_stack_action(${gamestate},${action},NewGameState)`;
         //console.log(cmd);
         PrologInterpreter.send_request(cmd, onSuccess); 
     }

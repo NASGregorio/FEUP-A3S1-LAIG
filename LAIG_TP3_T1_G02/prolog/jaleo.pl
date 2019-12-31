@@ -132,7 +132,7 @@ move(Move, GameState, NewBoard) :-
 	validate_move(Move, GameState),
 	execute_move(Move, GameState, NewBoard).
 
-moveAndUpdate(Move, GameState, NewGameState) :-
+move_and_update(Move, GameState, NewGameState) :-
 	validate_move(Move, GameState),
 	execute_move(Move, GameState, NewBoard),
 	update_gamestate(GameState, NewBoard, NewGameState).
@@ -181,6 +181,23 @@ force_stack_action(GameState, AllActions, Len, NewBoard) :-
 		replace_cell_at(B1, ColN, RowN, [w,w], NewBoard);
 		replace_cell_at(B1, ColN, RowN, [b,b], NewBoard)
 	).
+
+execute_stack_action(GameState, Action, NewGameState) :-
+	get_board(GameState,Board),
+	get_player(GameState,Player),
+
+	get_action_data(Action, Row, Col, Dir),
+
+	replace_cell_at(Board, Col, Row, [t], B1),
+
+	get_adjacent_cell(Col, Row, Dir, ColN, RowN),
+
+	(playerWhite(Player) ->
+		replace_cell_at(B1, ColN, RowN, [w,w], NewBoard);
+		replace_cell_at(B1, ColN, RowN, [b,b], NewBoard)
+	),
+
+	update_gamestate(GameState, NewBoard, NewGameState).
 
 
 validate_add_action(PieceDst, TileDst, GameState) :-
