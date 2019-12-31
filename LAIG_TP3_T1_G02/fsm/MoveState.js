@@ -7,7 +7,7 @@ class MoveState extends AbstractState {
     enter(Args) {
         super.enter();
 
-        PrologInterpreter.send_action(Args[0], Args[1], Args[2], this.scene.game_state, this.action_success.bind(this));
+        PrologInterpreter.send_action(Args[0], Args[1], Args[2], this.scene.board.game_state, this.action_success.bind(this));
 
     }
 

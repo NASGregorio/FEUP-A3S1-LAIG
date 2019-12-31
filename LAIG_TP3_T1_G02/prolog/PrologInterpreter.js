@@ -42,4 +42,13 @@ class PrologInterpreter {
         //console.log(cmd);
         PrologInterpreter.send_request(cmd, onSuccess); 
     }
+
+    static request_stack_status(gamestate, onSuccess) {
+
+        gamestate = JSON.stringify(gamestate).replace(/"| /g, '');
+
+        let cmd = `get_stack_options(${gamestate},AllActions,Len)`;
+        //console.log(cmd);
+        PrologInterpreter.send_request(cmd, onSuccess); 
+    }
 }

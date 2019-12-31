@@ -36,8 +36,6 @@ class JaleoScene extends CGFscene{
 
 		this.axis = new CGFaxis(this);
 
-		this.game_state = null;
-
 		this.board = new MyBoard(this);
 
 		this.fsm = new StateMachine(this);
@@ -88,25 +86,29 @@ class JaleoScene extends CGFscene{
     }
 
     game_logic(coords) {
-        if(this.board.new_board[coords[0]][coords[1]] == "t") {
+
+		let board = this.board.get_board();
+		let player = this.board.get_player();
+
+        if(board[coords[0]][coords[1]] == "t") {
             this.addMove = true;
             this.addCoords = coords;
             this.info = "Started add action, choose an empty tile";
         }
-        else if((this.board.new_board[coords[0]][coords[1]] == "0") && this.addMove) {
+        else if((board[coords[0]][coords[1]] == "0") && this.addMove) {
             this.fsm.switch_state(this.states["MOVE"], ['add', [this.addCoords[0],this.addCoords[1]], [coords[0],coords[1]]]);
             this.addMove = false;
         }
-        else if(((this.board.new_board[coords[0]][coords[1]][0] == "w" && this.board.player == "white") || (this.board.new_board[coords[0]][coords[1]][0] == "b" && this.board.player == "black")) && !this.moveMove) {
+        else if(((board[coords[0]][coords[1]][0] == "w" && player == "white") || (board[coords[0]][coords[1]][0] == "b" && player == "black")) && !this.moveMove) {
             this.moveMove = true;
             this.moveCoords = coords;
             this.info = "Started move action";
         }
-        else if((this.board.new_board[coords[0]][coords[1]][0] != "0") && this.moveMove) {
+        else if((board[coords[0]][coords[1]][0] != "0") && this.moveMove) {
             this.fsm.switch_state(this.states["MOVE"], ['move', [this.moveCoords[0],this.moveCoords[1]], [coords[0],coords[1]]]);
             this.moveMove = false;
         }
-        else if((this.board.new_board[coords[0]][coords[1]][0] == "w" && this.board.player == "black") || (this.board.new_board[coords[0]][coords[1]][0] == "b" && this.board.player == "white")) {
+        else if((board[coords[0]][coords[1]][0] == "w" && player == "black") || (board[coords[0]][coords[1]][0] == "b" && player == "white")) {
             this.inf = "Invalid move, please choose one of your pieces";
             this.addMove = false;
             this.moveMove = false;
@@ -115,15 +117,14 @@ class JaleoScene extends CGFscene{
             this.info = "Cleared parameters";
             this.addMove = false;
             this.moveMove = false;
-        }
+		}
+        this.interface.update_info_panel(player,"",this.info,"");
     }
 
 	display() {
 
 		this.logPicking();
         this.clearPickRegistration();
-
-        this.interface.update_info_panel(this.board.player,"0",this.info,"");
         
 		// Clear image and depth buffer every time we update the scene
 		this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);

@@ -22,14 +22,12 @@ class UpdateBoardState extends AbstractState {
         this.scene.board.update_board(data);
 
         PrologInterpreter.request_empty_adj(data[0], this.scene.board.get_all_occupied_tiles(), this.do_stuff.bind(this));
-
     }
     
-    do_stuff(data) {
+    do_stuff(adj_tiles) {
         
-        this.scene.board.update_adj(data);
+        this.scene.board.update_adj(adj_tiles);
 
-        PrologInterpreter.request_stack_status(data);
-        
+        PrologInterpreter.request_stack_status(this.scene.board.game_state);
     }
 }

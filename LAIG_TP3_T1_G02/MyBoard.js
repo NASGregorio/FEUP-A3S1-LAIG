@@ -4,9 +4,11 @@
  */
 class MyBoard extends CGFobject {
     
-	constructor(scene, rows, cols) {
+	constructor(scene) {
 
-		super(scene);
+        super(scene);
+        
+        this.game_state = null;
 
         this.OuterRadius = 0.5;
         this.InnerRadius = this.OuterRadius * 0.866025404;
@@ -46,17 +48,22 @@ class MyBoard extends CGFobject {
 		this.blackMat.setShininess(120);
     }
 
-    update_board(data) {
-        this.scene.game_state = data;
-        this.new_board = data[0];
-        this.player = this.scene.game_state[3];
-
+    update_board(game_state) {
+        this.game_state = game_state;
 
         //this.print_board(data[0]);
     }
 
-    update_adj(data) {
-        this.adj_tiles = data;
+    update_adj(adj_tiles) {
+        this.adj_tiles = adj_tiles;
+    }
+
+    get_board() {
+        return this.game_state[0];
+    }
+
+    get_player() {
+        return this.game_state[3];
     }
 
     print_board(board) {
@@ -74,9 +81,9 @@ class MyBoard extends CGFobject {
     }
 
     get_all_occupied_tiles() {
-        let all_tiles = this.scene.game_state[4];
-        all_tiles = all_tiles.concat(this.scene.game_state[5]);
-        all_tiles = all_tiles.concat(this.scene.game_state[6]);
+        let all_tiles = this.game_state[4];
+        all_tiles = all_tiles.concat(this.game_state[5]);
+        all_tiles = all_tiles.concat(this.game_state[6]);
         return all_tiles;
     }
 
@@ -120,14 +127,14 @@ class MyBoard extends CGFobject {
     
     display() {
 
-        if(this.new_board == null)
+        if(this.game_state == null)
             return;
 
         this.scene.pushMatrix();
-        this.scene.translate(- (this.scene.game_state[1]-1) * this.InnerRadius, 0, -(this.scene.game_state[2]/2*this.InnerRadius*this.sqrt3));
+        this.scene.translate(- (this.game_state[1]-1) * this.InnerRadius, 0, -(this.game_state[2]/2*this.InnerRadius*this.sqrt3));
 
-        for (let i = 0; i < this.new_board.length; i++) {
-            const row = this.new_board[i];
+        for (let i = 0; i < this.game_state[0].length; i++) {
+            const row = this.game_state[0][i];
 
             this.scene.pushMatrix();
             for (let j = 0; j < row.length; j++) {

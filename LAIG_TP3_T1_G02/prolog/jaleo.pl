@@ -443,8 +443,9 @@ validate_move_action(Src,Dst,GameState) :-
 
 is_not_empty_or_zero(Cell) :-
     dif(Cell, []), !,
-    dif(Cell, [0]).
-
+	dif(Cell, [0]), !,
+	dif(Cell, [t]), !,
+	length(Cell, 1).
 
 get_left_diagonals(Board, Coords,StartPoints) :-
 	travel_until_dif(Board, [Coords, 3], StartPointA),
