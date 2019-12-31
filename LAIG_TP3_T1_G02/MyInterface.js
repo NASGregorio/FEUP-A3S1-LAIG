@@ -68,12 +68,19 @@ class MyInterface extends CGFinterface {
         this.curr_folder = group;
     }
 
-    update_info_panel(player, time, info , error) {
-        if( player != "" ) document.getElementById("player").innerText = "Player: " + player;
-        if( time != "" ) document.getElementById("time").innerText = "\nTime: " + time;
-        if( info != "" ) document.getElementById("information").innerText = "\nInformation: " + info;
-        if( error != "" ) document.getElementById("error").innerText = "\nError: " + error;
+    update_panel_player(player) {
+        document.getElementById("player").innerText = player ? "Player: " + player : "";
     }
+
+    update_panel_time(time) {
+        document.getElementById("time").innerText = time ? "\nTime: " + time : ""; 
+    }
+
+    update_panel_info(info) {
+        document.getElementById("information").innerText = info ? "\nInformation: " + info : "";
+    }
+
+
 
     addViews() {
         this.gui.add(this.scene, 'selectedView', this.scene.viewNamesToIndex).onChange(this.scene.onViewChanged.bind(this.scene)).name('Views');

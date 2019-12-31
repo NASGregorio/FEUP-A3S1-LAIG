@@ -1,7 +1,7 @@
 class UpdateBoardState extends AbstractState {
 
-    constructor(scene, name) {
-        super(scene, name);
+    constructor(fsm, name) {
+        super(fsm, name);
 
     };
 
@@ -33,14 +33,16 @@ class UpdateBoardState extends AbstractState {
 
     do_stuff2(stack_actions) {
         
-        let actions = stack_actions[0];
-        let action_count = stack_actions[1];
+        this.fsm.switch_state("INPUT", stack_actions);
 
-        if(action_count > 0)
-            PrologInterpreter.send_stack_action(actions[0], this.scene.board.game_state, this.do_stuff3.bind(this));
+        // let actions = stack_actions[0];
+        // let action_count = stack_actions[1];
+
+        // if(action_count > 0)
+        //     PrologInterpreter.send_stack_action(actions[0], this.scene.board.game_state, this.do_stuff3.bind(this));
     }
 
-    do_stuff3(game_state) {
-        this.update_board(game_state);
-    }
+    // do_stuff3(game_state) {
+    //     this.update_board(game_state);
+    // }
 }

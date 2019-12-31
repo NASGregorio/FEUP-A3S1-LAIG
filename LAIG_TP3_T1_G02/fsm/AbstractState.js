@@ -1,13 +1,13 @@
 class AbstractState {
 
-    constructor(scene, name) {
+    constructor(fsm, name) {
 
         if (new.target === AbstractState) {
             throw new TypeError("Cannot construct AbstractStates directly");
         }
 
-        this.scene = scene; 
-        this.fsm = scene.fsm;
+        this.fsm = fsm;
+        this.scene = fsm.scene;
         this.name = name;
     };
 

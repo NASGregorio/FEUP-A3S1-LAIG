@@ -66,6 +66,16 @@ class MyBoard extends CGFobject {
         return this.game_state[3];
     }
 
+    get_cell_at(coords) {
+
+        if(coords == null)
+            return null;
+
+        let row = coords[0];
+        let col = coords[1];
+        return this.game_state[0][row][col];
+    }
+
     print_board(board) {
 
         let str = '';

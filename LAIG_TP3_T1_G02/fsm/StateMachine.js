@@ -1,17 +1,30 @@
 class StateMachine {
 
     constructor(scene) {
+
+        this.scene = scene;
+
         this.curr_state = null;
+        this.curr_state_key = null;
+
+        this.states = {
+			"SETUP": new SetupState(this, "Setup"),
+			"UPDATE": new UpdateBoardState(this, "Update"),
+			"INPUT": new InputState(this, "Input"),
+			"MOVE": new MoveState(this, "Move")
+		};
     };
 
-    init(state) {
-        this.curr_state = state;
+    init(initial_state) {
+        this.curr_state_key = initial_state;
+        this.curr_state = this.states[initial_state];
         this.curr_state.enter();
     }
 
     switch_state(new_state, Args) {
+        this.curr_state_key = new_state;
         this.curr_state.exit();
-        this.curr_state = new_state;
+        this.curr_state = this.states[new_state];
         this.curr_state.enter(Args);
     }
 }

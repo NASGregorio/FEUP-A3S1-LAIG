@@ -1,7 +1,7 @@
 class SetupState extends AbstractState {
 
-    constructor(scene, name) {
-        super(scene, name);
+    constructor(fsm, name) {
+        super(fsm, name);
     };
 
     enter() {
@@ -16,6 +16,6 @@ class SetupState extends AbstractState {
     }
 
     setup_success(data) {
-        this.fsm.switch_state(this.scene.states["UPDATE"], data);
+        this.fsm.switch_state("UPDATE", data);
     }
 }
