@@ -1,4 +1,4 @@
-class LightingScene extends CGFscene{
+class JaleoScene extends CGFscene{
 
 	/**
      * @constructor
@@ -16,13 +16,15 @@ class LightingScene extends CGFscene{
         this.moveMove = false;
         this.moveCoords = [];
 
+        this.info = "";
+
 		this.pickIDs = new Map();
 	}
 
 	init(application) {
 
 		super.init(application);
-		
+
 		this.initCameras();
 		this.initLights();
 
@@ -55,7 +57,7 @@ class LightingScene extends CGFscene{
 		this.lights[0].setSpecular(0, 0, 0, 1);
 		this.lights[0].enable();
 		this.lights[0].update();
-		
+
 		this.lights[1].setPosition(3,3,3,1);
 		this.lights[1].setAmbient(0.1, 0.1, 0.1, 1);
 		this.lights[1].setDiffuse(0.9, 0.9, 0.9, 1);
@@ -78,95 +80,51 @@ class LightingScene extends CGFscene{
 						let coords = this.pickIDs.get(customId);
                         console.log("Picked object: " + obj + ", in row: " + coords[0] + ", in column: " + coords[1]);
                         this.game_logic(coords);
-                    }                            
+                    }
                 }
             }
             this.pickResults.splice(0, this.pickResults.length);
         }
     }
-    
+
     game_logic(coords) {
-        this.force_stack();
         if(this.board.new_board[coords[0]][coords[1]] == "t") {
             this.addMove = true;
             this.addCoords = coords;
+            this.info = "Started add action, choose an empty tile";
         }
         else if((this.board.new_board[coords[0]][coords[1]] == "0") && this.addMove) {
             this.fsm.switch_state(this.states["MOVE"], ['add', [this.addCoords[0],this.addCoords[1]], [coords[0],coords[1]]]);
             this.addMove = false;
         }
-        else if(((this.board.new_board[coords[0]][coords[1]] == "w" && this.board.player == "white") || (this.board.new_board[coords[0]][coords[1]] == "b" && this.board.player == "black")) && !this.moveMove) {
+        else if(((this.board.new_board[coords[0]][coords[1]][0] == "w" && this.board.player == "white") || (this.board.new_board[coords[0]][coords[1]][0] == "b" && this.board.player == "black")) && !this.moveMove) {
             this.moveMove = true;
             this.moveCoords = coords;
+            this.info = "Started move action";
         }
-        else if((this.board.new_board[coords[0]][coords[1]] != "0") && this.moveMove) {
+        else if((this.board.new_board[coords[0]][coords[1]][0] != "0") && this.moveMove) {
             this.fsm.switch_state(this.states["MOVE"], ['move', [this.moveCoords[0],this.moveCoords[1]], [coords[0],coords[1]]]);
             this.moveMove = false;
         }
-        else if((this.board.new_board[coords[0]][coords[1]] == "w" && this.board.player == "black") || (this.board.new_board[coords[0]][coords[1]] == "b" && this.board.player == "white")) {
-            console.log("Invalid move, please choose one of your pieces");
+        else if((this.board.new_board[coords[0]][coords[1]][0] == "w" && this.board.player == "black") || (this.board.new_board[coords[0]][coords[1]][0] == "b" && this.board.player == "white")) {
+            this.inf = "Invalid move, please choose one of your pieces";
             this.addMove = false;
             this.moveMove = false;
         }
         else {
-            console.log("Cleared parameters");
+            this.info = "Cleared parameters";
             this.addMove = false;
             this.moveMove = false;
         }
     }
 
-    force_stack() {
-        //console.log(this.board.new_board);
-        //console.log(this.game_state);
-        for (let i = 0; i < this.board.new_board.length; i++) {
-            for (let j = 0; j < this.board.new_board[i].length; j++) {
-                if(this.board.new_board[i][j].length == 1 && (this.board.new_board[i][j] == "b" || this.board.new_board[i][j] == "w")) {
-                    if(this.check_force_stack(i,j,this.board.new_board[i][j])) {
-                        // DO FORCE STACK
-                    }
-                }
-            }
-        }
-    }
-
-    check_force_stack(y,x,piece) {
-
-        // COORDENADAS DA VISINHANCA ERRADAS
-        console.log("Coords: ",x,y," Piece:    ",piece);
-        console.log("Coords: ",x,y-1," Neighbour:",this.board.new_board[y-1][x]);
-        console.log("Coords: ",x+1,y-1," Neighbour:",this.board.new_board[y-1][x+1]);
-        console.log("Coords: ",x-1,y," Neighbour:",this.board.new_board[y][x-1]);
-        console.log("Coords: ",x+1,y," Neighbour:",this.board.new_board[y][x+1]);
-        console.log("Coords: ",x,y+1," Neighbour:",this.board.new_board[y+1][x]);
-        console.log("Coords: ",x+1,y+1," Neighbour:",this.board.new_board[y+1][x+1]);
-
-        if(this.board.new_board[y-1][x] == piece) {
-            return true;
-        }
-        else if(this.board.new_board[y-1][x+1] == piece) {
-            return true;
-        }
-        else if(this.board.new_board[y][x-1] == piece) {
-            return true;
-        }
-        else if(this.board.new_board[y][x+1] == piece) {
-            return true;
-        }
-        else if(this.board.new_board[y+1][x] == piece) {
-            return true;
-        }
-        else if(this.board.new_board[y+1][x+1] == piece) {
-            return true;
-        }
-        else return false;
-    }
-
-
 	display() {
 
 		this.logPicking();
-		this.clearPickRegistration();
-		
+        this.clearPickRegistration();
+
+        this.interface.update_info_panel(this.board.player,"0",this.info,"");
+        
 		// Clear image and depth buffer every time we update the scene
 		this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
@@ -178,7 +136,7 @@ class LightingScene extends CGFscene{
 
 		// Apply transformations corresponding to the camera position relative to the origin
 		this.applyViewMatrix();
-		
+
 		// Update all lights used
 		this.lights[0].update();
 
@@ -224,5 +182,3 @@ Coisas do enunciado que ainda nao li (que podem ou nao existir)
 
 */
 
-
-// TODO: adicionar error handeling para moves que tenham sido efetuadas, mas sejam invalidas

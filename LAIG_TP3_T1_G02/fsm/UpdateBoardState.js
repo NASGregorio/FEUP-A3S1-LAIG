@@ -3,7 +3,6 @@ class UpdateBoardState extends AbstractState {
     constructor(scene, name) {
         super(scene, name);
 
-        this.do_once = false;
     };
 
     enter(data) {
@@ -30,9 +29,7 @@ class UpdateBoardState extends AbstractState {
         
         this.scene.board.update_adj(data);
 
-        if(!this.do_once) {
-            this.fsm.switch_state(this.scene.states["MOVE"], ['add', [11,11], [11,10]]);
-            this.do_once = true;
-        }
+        PrologInterpreter.request_stack_status(data);
+        
     }
 }

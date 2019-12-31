@@ -68,25 +68,12 @@ class MyInterface extends CGFinterface {
         this.curr_folder = group;
     }
 
-    addSecurityCamera() {
-        var settings = this.gui.addFolder('Camera Settings');
-
-        var linescan = settings.addFolder('Scanlines');
-        linescan.add(this.scene, 'line_thickness', 0, 1);
-        linescan.add(this.scene, 'line_count', 0, 20);
-        linescan.add(this.scene, 'line_speed', 0, 1);
-
-        var noise = settings.addFolder('Noise/Darkening');
-        noise.add(this.scene, 'noise_strength', 0, 1);
-        noise.add(this.scene, 'darkness_factor', 0, 1);
-
-        var vignette = settings.addFolder('Vignette');
-        vignette.add(this.scene, 'outer_radius', 0, 1);
-        vignette.add(this.scene, 'inner_radius', 0, 1);
-        vignette.add(this.scene, 'strength_factor', 0, 1);
-
+    update_info_panel(player, time, info , error) {
+        if( player != "" ) document.getElementById("player").innerText = "Player: " + player;
+        if( time != "" ) document.getElementById("time").innerText = "\nTime: " + time;
+        if( info != "" ) document.getElementById("information").innerText = "\nInformation: " + info;
+        if( error != "" ) document.getElementById("error").innerText = "\nError: " + error;
     }
-    
 
     addViews() {
         this.gui.add(this.scene, 'selectedView', this.scene.viewNamesToIndex).onChange(this.scene.onViewChanged.bind(this.scene)).name('Views');
