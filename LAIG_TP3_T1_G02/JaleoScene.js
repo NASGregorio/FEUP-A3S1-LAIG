@@ -123,19 +123,11 @@ class JaleoScene extends CGFscene{
 
 (Não está por ordem de prioridade)
 
-limpar nome das funçoes das tiles adjacentes no UpdateBoardState. (usei o do_stuff porque ja lá estava)
-
-Ver situação manhosa da ordem das coordenadas x,y / y,x
-
 Preparar cenas(xml) para a board
 
-Estado de recolha de inputs do jogador:
-	Decidir add ou move mediante o tile.
-	Nao permitir se peça é do outro jogador (ou deixar fazer o pedido e ao falhar a request, indicar ao player)
+Ajustar camara de acordo com o tamanho e usar funçao orbit com toggle na interface
 
-Estado antes do input para ver situações de stack (o que o player vê é o mesmo, tem de clicar no pc onde quer fazer stack por exemplo)
-
-Ajustar camera de acordo com o tamanho e usar funçao orbit com toggle na interface
+adicionar gameover check
 
 Coisas do enunciado que ainda nao li (que podem ou nao existir)
 

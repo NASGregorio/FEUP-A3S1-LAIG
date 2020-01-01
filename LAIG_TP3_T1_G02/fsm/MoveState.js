@@ -7,11 +7,14 @@ class MoveState extends AbstractState {
     enter(Args) {
         super.enter();
 
-        //console.log(Args);
+        this.fsm.scene.interface.update_panel_info("");
 
-        this.fsm.scene.interface.update_panel_info(this.fsm.scene.info);
+        if(Args[0] == "stack")
+            PrologInterpreter.send_stack_action(Args[1], this.scene.board.game_state, this.action_success.bind(this));
+        else
+            PrologInterpreter.send_action(Args[0], Args[1], Args[2], this.scene.board.game_state, this.action_success.bind(this));
 
-        PrologInterpreter.send_action(Args[0], Args[1], Args[2], this.scene.board.game_state, this.action_success.bind(this));
+
 
     }
 

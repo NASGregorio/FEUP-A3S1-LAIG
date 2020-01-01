@@ -199,6 +199,11 @@ execute_stack_action(GameState, Action, NewGameState) :-
 
 	update_gamestate(GameState, NewBoard, NewGameState).
 
+get_stack_action_data(Action, Arg1, Arg2) :-
+	get_action_data(Action, Row, Col, Dir),
+	get_adjacent_cell(Col, Row, Dir, ColN, RowN),
+	Arg1 = [Row, Col],
+	Arg2 = [RowN, ColN].
 
 validate_add_action(PieceDst, TileDst, GameState) :-
 	get_tiles(GameState, Tiles), !,
@@ -294,6 +299,16 @@ pick_add_location(Row, Col, ColSize, RowSize):-
 	).
 
 
+get_stack_moves(GameState, StackActions) :-
+	get_stack_options(GameState, AllActions, Len),
+	convert_stack_actions(AllActions, StackActions).
+
+convert_stack_actions([], []).
+convert_stack_actions([Action|Actions], StackMoves) :-
+	convert_stack_actions(Actions, Moves),
+	get_stack_action_data(Action, Arg1, Arg2),
+	append(Moves, [[Arg1, Arg2, Action]], StackMoves).
+
 
 get_stack_options([], AllActions, Len) :- length(AllActions, Len).
 get_stack_options(GameState, AllActions, Len) :-
@@ -310,7 +325,6 @@ get_stack_options(GameState, AllActions, Len) :-
 	),
 	calc_symmetric_actions(Actions, [], AllActions),
 	get_stack_options([], AllActions, Len).
-
 
 calc_symmetric_actions([], AllActions, AllActions).
 calc_symmetric_actions([H|T], A, AllActions) :-

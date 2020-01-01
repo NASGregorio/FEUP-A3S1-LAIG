@@ -23,13 +23,16 @@ class PrologInterpreter {
 
     static send_quit() { PrologInterpreter.send_request("quit"); }
 
+    static send_setup_pvp(onSuccess) {
+        PrologInterpreter.send_request("setup_pvp(GameState)", onSuccess);
+    }
+
     static send_action(action, arg1, arg2, gamestate, onSuccess) {
         arg1 = JSON.stringify(arg1.reverse());
         arg2 = JSON.stringify(arg2.reverse());
         gamestate = JSON.stringify(gamestate).replace(/"| /g, '');
 
         let cmd = `move_and_update([${action},${arg1},${arg2}],${gamestate},NewBoard)`;
-        //console.log(cmd);
         PrologInterpreter.send_request(cmd, onSuccess); 
     }
 
@@ -39,7 +42,6 @@ class PrologInterpreter {
         all_tiles = JSON.stringify(all_tiles).replace(/"| /g, '');
 
         let cmd = `get_empty_adjacent_spaces(${board},${all_tiles},EmptyAdjSpaces)`;
-        //console.log(cmd);
         PrologInterpreter.send_request(cmd, onSuccess); 
     }
 
@@ -47,8 +49,7 @@ class PrologInterpreter {
 
         gamestate = JSON.stringify(gamestate).replace(/"| /g, '');
 
-        let cmd = `get_stack_options(${gamestate},AllActions,Len)`;
-        //console.log(cmd);
+        let cmd = `get_stack_moves(${gamestate},StackMoves)`;
         PrologInterpreter.send_request(cmd, onSuccess); 
     }
 
@@ -57,7 +58,6 @@ class PrologInterpreter {
         gamestate = JSON.stringify(gamestate).replace(/"| /g, '');
 
         let cmd = `execute_stack_action(${gamestate},${action},NewGameState)`;
-        //console.log(cmd);
         PrologInterpreter.send_request(cmd, onSuccess); 
     }
 }

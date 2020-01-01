@@ -21,28 +21,22 @@ class UpdateBoardState extends AbstractState {
 
         this.scene.board.update_board(data);
 
-        PrologInterpreter.request_empty_adj(data[0], this.scene.board.get_all_occupied_tiles(), this.do_stuff.bind(this));
+        PrologInterpreter.request_empty_adj(data[0], this.scene.board.get_all_occupied_tiles(), this.empty_adj_success.bind(this));
     }
     
-    do_stuff(adj_tiles) {
+    empty_adj_success(adj_tiles) {
         
         this.scene.board.update_adj(adj_tiles);
 
-        PrologInterpreter.request_stack_status(this.scene.board.game_state, this.do_stuff2.bind(this));
+        PrologInterpreter.request_stack_status(this.scene.board.game_state, this.stack_status_success.bind(this));
     }
 
-    do_stuff2(stack_actions) {
+    stack_status_success(stack_actions) {
         
         this.fsm.switch_state("INPUT", stack_actions);
-
-        // let actions = stack_actions[0];
-        // let action_count = stack_actions[1];
-
-        // if(action_count > 0)
-        //     PrologInterpreter.send_stack_action(actions[0], this.scene.board.game_state, this.do_stuff3.bind(this));
     }
 
-    // do_stuff3(game_state) {
-    //     this.update_board(game_state);
-    // }
+    do_stuff() {
+        console.log("Do Stuff!");
+    }
 }
