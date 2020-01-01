@@ -39,18 +39,44 @@ try_player_action(GameState, NewGameState) :-
 		try_player_action(NewGameState, NextTurnState)
 	).
 
+count_all_pieces([],_, 0).
+count_all_pieces([H|T], Type, Count) :-
+	count_all_pieces(T, Type, C),
+	count_type_pieces(H, Type, CL),
+	Count is C+CL.
+
+count_type_pieces([],_, 0).
+count_type_pieces([H|T], Type, Count) :-
+	count_type_pieces(T, Type, C),
+	(H \== Type -> 
+		Count is C;
+		Count is C + 1
+	).
+
+get_pieces_at(Board, [],[]).
+get_pieces_at(Board, [Coord|Rest], Pieces) :-
+	get_pieces_at(Board, Rest, P1),
+	get_cell_at(Coord, Board, Cell),
+	append([Cell], P1, Pieces).
+
 game_over([GameState|[LastMove|_]], Winner) :-
 	get_player(GameState,Player),
+	get_board(GameState,Board),
 
 	(playerWhite(Player) ->
-		get_blacks(GameState, Discs);
-		get_whites(GameState, Discs)
+		get_whites(GameState, Discs);
+		get_blacks(GameState, Discs)
 	),
 	
-	length(Discs, NDiscs),
-	((NDiscs > 17) ->
+	%length(Discs, NDiscs),
 
-		Winner = Player;
+	get_pieces_at(Board, Discs, Pieces),
+	count_all_pieces(Pieces, w, Count),
+
+	write(Count),
+	((Count > 15) ->
+
+		(playerWhite(Player) -> Winner = black; Winner = white);
 
 		dif(LastMove, []), !,
 		extract_move(LastMove, Action, Arg1, Arg2),
