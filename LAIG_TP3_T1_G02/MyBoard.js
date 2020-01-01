@@ -16,6 +16,7 @@ class MyBoard extends CGFobject {
         this.sqrt3 = Math.sqrt(3);
         this.player = "";
 
+        this.available_tiles = 24;
 
         this.init_materials(scene);
 
@@ -51,6 +52,10 @@ class MyBoard extends CGFobject {
 
     update_board(game_state) {
         this.game_state = game_state;
+
+        this.available_blacks = 16 - this.game_state[5].length;
+        this.available_whites = 16 - this.game_state[6].length;
+        this.available_tiles = 28 - this.game_state[4].length + this.available_blacks + this.available_whites;
 
         //this.print_board(data[0]);
     }
@@ -139,11 +144,48 @@ class MyBoard extends CGFobject {
                 return true;
         return false;
     }
+
+    display_extra_tiles() {
+
+        this.redMat.apply();
+
+        let radius = 4;
+        let step = Math.PI / 12;
+        for (let index = 0; index < this.available_tiles; index++) {
+            let x = radius * Math.cos(index*step);
+            let z = radius * Math.sin(index*step);
+            this.scene.pushMatrix();
+            this.scene.translate(x, 0, z);
+            this.hex.display();
+            this.scene.popMatrix();
+        }
+    }
+
+    display_extra_pieces() {
+        this.blackMat.apply();
+        for (let index = 0; index < this.available_blacks; index++) {
+            this.scene.pushMatrix();
+            this.scene.translate(0, 0.1, index);
+            this.piece.display();
+            this.scene.popMatrix();
+        }
+
+        this.whiteMat.apply();
+        for (let index = 0; index < this.available_whites; index++) {
+            this.scene.pushMatrix();
+            this.scene.translate(index, 0.1, 0);
+            this.piece.display();
+            this.scene.popMatrix();
+        }
+    }
     
     display() {
 
         if(this.game_state == null)
             return;
+
+        this.display_extra_tiles();
+        this.display_extra_pieces();
 
         this.scene.pushMatrix();
         this.scene.translate(- (this.game_state[1]-1) * this.InnerRadius, 0, -(this.game_state[2]/2*this.InnerRadius*this.sqrt3));
