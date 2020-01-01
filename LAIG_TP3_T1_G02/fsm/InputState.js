@@ -18,7 +18,7 @@ class InputState extends AbstractState {
 
         this.stack_actions = stack_actions;
 
-        if(stack_actions.length > 0) {
+        if(stack_actions != null && stack_actions.length > 0) {
             this.fsm.scene.interface.update_panel_info("STACK situation detected | Pick piece to move.");
             this.stack_action = true;
         }

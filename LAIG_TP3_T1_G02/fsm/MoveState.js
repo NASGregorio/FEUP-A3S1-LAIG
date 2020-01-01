@@ -14,8 +14,6 @@ class MoveState extends AbstractState {
         else
             PrologInterpreter.send_action(Args[0], Args[1], Args[2], this.scene.board.game_state, this.action_success.bind(this));
 
-
-
     }
 
     exit() {
@@ -26,5 +24,7 @@ class MoveState extends AbstractState {
 
         if(data !== 'Bad Request')
             this.fsm.switch_state("UPDATE", data);
+        else
+            this.fsm.switch_state("INPUT", []);
     }
 }
