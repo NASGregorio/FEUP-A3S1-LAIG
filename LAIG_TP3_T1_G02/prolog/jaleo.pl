@@ -180,7 +180,19 @@ execute_move(Move, GameState, NewBoard) :-
 	(Action == move ->
 		execute_move_action(Arg1, Arg2, GameState, NewBoard);
 		
-		execute_add_action(Arg1, Arg2, GameState, NewBoard)
+		get_tiles(GameState, Tiles),
+		get_whites(GameState, Blacks),
+		get_blacks(GameState, Whites),
+		
+		length(Tiles, NumberActiveTiles),
+		length(Blacks, NumberBlacks),
+		length(Whites, NumberWhites),
+	
+		NumberTiles is (NumberActiveTiles + NumberBlacks + NumberWhites),
+
+		((NumberTiles > 27) -> 
+			execute_add_action(Arg1, [], GameState, NewBoard);
+			execute_add_action(Arg1, Arg2, GameState, NewBoard))
 	).
 
 
