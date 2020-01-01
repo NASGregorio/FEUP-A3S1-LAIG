@@ -62,7 +62,7 @@ class MyInterface extends CGFinterface {
         let group = this.gui.addFolder("Turn Information");
         group.open();
       
-        group.add(ctx, "do_stuff").name("Do Stuff!");
+        group.add(ctx, "reset_turn").name("Reset Input!");
         this.add_quit_button(group);
 
         this.curr_folder = group;

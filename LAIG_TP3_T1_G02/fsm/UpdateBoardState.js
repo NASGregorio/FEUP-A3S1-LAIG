@@ -7,8 +7,6 @@ class UpdateBoardState extends AbstractState {
 
     enter(data) {
         super.enter();
-        
-        this.scene.interface.show_turn_information(this);
 
         this.update_board(data);
     }
@@ -18,6 +16,8 @@ class UpdateBoardState extends AbstractState {
     }
 
     update_board(data) {
+
+        this.scene.interface.update_panel_player(data[3]);
 
         this.scene.board.update_board(data);
 
@@ -34,9 +34,5 @@ class UpdateBoardState extends AbstractState {
     stack_status_success(stack_actions) {
         
         this.fsm.switch_state("INPUT", stack_actions);
-    }
-
-    do_stuff() {
-        console.log("Do Stuff!");
     }
 }

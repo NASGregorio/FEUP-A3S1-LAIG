@@ -16,11 +16,16 @@ class InputState extends AbstractState {
 
         console.log(stack_actions);
 
+        this.scene.interface.show_turn_information(this);
+
         this.stack_actions = stack_actions;
 
         if(stack_actions != null && stack_actions.length > 0) {
             this.fsm.scene.interface.update_panel_info("STACK situation detected | Pick piece to move.");
             this.stack_action = true;
+        }
+        else {
+            this.fsm.scene.interface.update_panel_info("ADD or MOVE available | Pick an hexagon or piece.");
         }
     }
 
@@ -134,9 +139,20 @@ class InputState extends AbstractState {
         super.exit();
     }
 
-    action_success(data) {
+    reset_turn() {
+        this.previous_selection = null;
+        this.current_selection = null;
+        this.matching_stack = null;
+        this.stack_action = false;
+        this.add_action = false;
+        this.move_action = false;
 
-        if(data !== 'Bad Request')
-            this.fsm.switch_state("UPDATE", data);
+        if(this.stack_actions != null && this.stack_actions.length > 0) {
+            this.fsm.scene.interface.update_panel_info("STACK situation detected | Pick piece to move.");
+            this.stack_action = true;
+        }
+        else {
+            this.fsm.scene.interface.update_panel_info("ADD or MOVE available | Pick an hexagon or piece.");
+        }
     }
 }
