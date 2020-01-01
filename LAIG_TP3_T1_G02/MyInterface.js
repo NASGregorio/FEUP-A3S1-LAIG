@@ -38,7 +38,7 @@ class MyInterface extends CGFinterface {
     }
 
     add_quit_button(group) {
-        group.add(this, 'quit').name("Quit Game.");
+        group.add(this, 'quit').name("Quit Server.");
     }
 
     show_start_options(ctx) {
@@ -62,7 +62,24 @@ class MyInterface extends CGFinterface {
         let group = this.gui.addFolder("Turn Information");
         group.open();
       
-        group.add(ctx, "reset_turn").name("Reset Input!");
+        group.add(ctx, "clear_turn").name("Clear Input?");
+        group.add(ctx, "undo_turn").name("Undo turn?");
+        group.add(ctx, "reset_game").name("Restart game?");
+        group.add(ctx, "go_to_start").name("To start menu?");
+        this.add_quit_button(group);
+
+        this.curr_folder = group;
+    }
+
+    show_game_over_menu(ctx) {
+
+        this.clean_folder();
+
+        let group = this.gui.addFolder("Game Over!");
+        group.open();
+      
+        group.add(ctx, "reset_game").name("New game?");
+        group.add(ctx, "go_to_start").name("To start menu?");
         this.add_quit_button(group);
 
         this.curr_folder = group;

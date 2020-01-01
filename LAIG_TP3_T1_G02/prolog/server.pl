@@ -126,5 +126,7 @@ parse_input(get_stack_moves(GameState,StackActions), StackActions) :-
 parse_input(execute_stack_action(GameState, Action, NewGameState), NewGameState) :-
 	execute_stack_action(GameState, Action, NewGameState).
 
+parse_input(game_over(GameState,LastMove,Winner), Winner) :-
+	game_over([GameState, LastMove], Winner).
 
 %rlwrap sicstus -l LAIG_TP3_T1_G02/prolog/server.pl

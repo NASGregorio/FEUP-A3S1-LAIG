@@ -14,8 +14,6 @@ class InputState extends AbstractState {
     enter(stack_actions) {
         super.enter();
 
-        console.log(stack_actions);
-
         this.scene.interface.show_turn_information(this);
 
         this.stack_actions = stack_actions;
@@ -150,7 +148,7 @@ class InputState extends AbstractState {
         super.exit();
     }
 
-    reset_turn() {
+    clear_turn() {
         this.previous_selection = null;
         this.current_selection = null;
         this.matching_stack = null;
@@ -165,5 +163,17 @@ class InputState extends AbstractState {
         else {
             this.fsm.scene.interface.update_panel_info("ADD or MOVE available | Pick an hexagon or piece.");
         }
+    }
+
+    undo_turn() {
+        console.log("undo?");
+    }
+
+    reset_game() {
+        this.fsm.init("SETUP");
+    }
+
+    go_to_start() {
+        //this.fsm.switch_state("")
     }
 }

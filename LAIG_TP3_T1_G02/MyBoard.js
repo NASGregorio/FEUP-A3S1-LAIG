@@ -9,6 +9,7 @@ class MyBoard extends CGFobject {
         super(scene);
         
         this.game_state = null;
+        this.last_move = [];
 
         this.OuterRadius = 0.5;
         this.InnerRadius = this.OuterRadius * 0.866025404;
@@ -56,6 +57,10 @@ class MyBoard extends CGFobject {
 
     update_adj(adj_tiles) {
         this.adj_tiles = adj_tiles;
+    }
+
+    update_last_move(last_move) {
+        this.last_move = last_move;
     }
 
     get_board() {

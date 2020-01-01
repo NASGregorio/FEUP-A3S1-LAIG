@@ -23,6 +23,7 @@ class PrologInterpreter {
 
     static send_quit() { PrologInterpreter.send_request("quit"); }
 
+
     static send_setup_pvp(onSuccess) {
         PrologInterpreter.send_request("setup_pvp(GameState)", onSuccess);
     }
@@ -59,5 +60,13 @@ class PrologInterpreter {
 
         let cmd = `execute_stack_action(${gamestate},${action},NewGameState)`;
         PrologInterpreter.send_request(cmd, onSuccess); 
+    }
+
+    static request_gameover_status(gamestate, last_move, onSuccess) {
+        last_move = JSON.stringify(last_move).replace(/"| /g, '');
+        gamestate = JSON.stringify(gamestate).replace(/"| /g, '');
+
+        let cmd = `game_over(${gamestate},${last_move},Winner)`;
+        PrologInterpreter.send_request(cmd, onSuccess);
     }
 }

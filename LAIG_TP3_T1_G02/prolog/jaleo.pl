@@ -73,8 +73,6 @@ check_game_over([GameState|[Coords|_]], Winner) :-
 	%format('Coords: ~p~n',[Coords]),
 	get_cell_at(Coords, Board, [Top|_]),
 
-
-
 	((Top == w; Top == b) ->
 		get_left_diagonals(Board, Coords,[A|[B|[C|_]]]),
 
@@ -97,7 +95,6 @@ check_game_over([GameState|[Coords|_]], Winner) :-
 
 		false
 	).
-
 
 input_move(GameState, Move) :-
 	format('Type an action: (add. | move.)~n', []),

@@ -127,7 +127,7 @@ Preparar cenas(xml) para a board
 
 Ajustar camara de acordo com o tamanho e usar funçao orbit com toggle na interface
 
-adicionar gameover check
+Arranjar menus/interface
 
 Coisas do enunciado que ainda nao li (que podem ou nao existir)
 
