@@ -46,93 +46,104 @@ class InputState extends AbstractState {
     game_logic() {
 
         let board = this.fsm.scene.board;
-        let current_symbol = board.get_cell_at(this.current_selection);
+        let current_symbol = board.get_cell_at(this.current_selection)[0];
         let player = board.get_player();
         let player_symbol = (player == "white") ? "w" : "b";
 
         if(this.stack_action) {
-
-            let coords_str = JSON.stringify(this.current_selection);
-
-            if(current_symbol != player_symbol) {
-                this.matching_stack = null;
-                this.fsm.scene.interface.update_panel_info("STACK situation detected | Pick piece to move.");
-                return;
-            }
-
-            if(this.matching_stack != null) {
-                let destination = JSON.stringify( this.matching_stack[1] );
-                if(coords_str == destination) {
-                    this.fsm.switch_state("MOVE", ['stack', this.matching_stack[2]]);
-                    this.previous_selection = null;
-                    this.current_selection = null;
-                    this.matching_stack = null;
-                    this.stack_action = false;
-                }
-            }
-            else {
-                for (let i = 0; i < this.stack_actions.length; i++) {
-                    let action = this.stack_actions[i];
-                    let origin = JSON.stringify( action[0] );
-                    console.log(origin);
-                    console.log(coords_str);
-                    if(coords_str == origin) {
-                        this.matching_stack = action;
-                        this.fsm.scene.interface.update_panel_info("STACK action | Pick piece to stack.");
-                    }
-                }
-            }
-            return;
+            return this.handle_stack_logic(current_symbol, player_symbol);
         }
 
         if(this.previous_selection == null) {
-            if(current_symbol == "t") {
-                this.add_action = true;
-                this.fsm.scene.interface.update_panel_info("ADD action | Pick white hexagon.");
-            }
-            else if(current_symbol != "0") {
-                if(current_symbol == player_symbol) {
-                    this.move_action = true;
-                    this.fsm.scene.interface.update_panel_info("MOVE action | Pick adjacent piece");
-                }
-                else {
-                    this.fsm.scene.interface.update_panel_info("Can't move opponent's piece.");
-                    this.current_selection = null;
-                }
-            }
-            else {
-                this.fsm.scene.interface.update_panel_info("");
-                this.current_selection = null;
-            }
-            return;
+            return this.detect_type_of_action(current_symbol, player_symbol);
         }
 
         if(this.add_action) {
-            if(current_symbol == "0") {
-                this.fsm.scene.interface.update_panel_info("");
-                this.fsm.switch_state("MOVE", ['add', this.previous_selection, this.current_selection]);            
-            }
-            else {
-                this.fsm.scene.interface.update_panel_info("Invalid add action.");
-            }
-            this.add_action = false;
-            this.previous_selection = null;
-            this.current_selection = null;
-            return;
+            return this.handle_add_logic(current_symbol);
         }
 
         if(this.move_action) {
-            if(current_symbol != "0" && current_symbol != "t") {
-                this.fsm.scene.interface.update_panel_info("");
-                this.fsm.switch_state("MOVE", ['move', this.previous_selection, this.current_selection]);
+            return this.handle_move_logic(current_symbol);
+        }
+    }
+
+    handle_stack_logic(current_symbol, player_symbol) {
+        let coords_str = JSON.stringify(this.current_selection);
+
+        if(current_symbol != player_symbol) {
+            this.matching_stack = null;
+            this.fsm.scene.interface.update_panel_info("STACK situation detected | Pick piece to move.");
+            return;
+        }
+
+        if(this.matching_stack != null) {
+            let destination = JSON.stringify( this.matching_stack[1] );
+            if(coords_str == destination) {
+                this.fsm.switch_state("MOVE", ['stack', this.matching_stack[2]]);
+                this.previous_selection = null;
+                this.current_selection = null;
+                this.matching_stack = null;
+                this.stack_action = false;
+            }
+        }
+        else {
+            for (let i = 0; i < this.stack_actions.length; i++) {
+                let action = this.stack_actions[i];
+                let origin = JSON.stringify( action[0] );
+                if(coords_str == origin) {
+                    this.matching_stack = action;
+                    this.fsm.scene.interface.update_panel_info("STACK action | Pick adjacent piece.");
+                }
+            }
+        }
+        return;
+    }
+
+    detect_type_of_action(current_symbol, player_symbol) {
+        if(current_symbol == "t") {
+            this.add_action = true;
+            this.fsm.scene.interface.update_panel_info("ADD action | Pick white hexagon.");
+        }
+        else if(current_symbol != "0") {
+            if(current_symbol == player_symbol) {
+                this.move_action = true;
+                this.fsm.scene.interface.update_panel_info("MOVE action | Pick single adjacent piece");
             }
             else {
-                this.fsm.scene.interface.update_panel_info("Invalid move action.");
+                this.fsm.scene.interface.update_panel_info("Can't move opponent's piece.");
+                this.current_selection = null;
             }
-            this.move_action = false;
-            this.previous_selection = null;
+        }
+        else {
+            this.fsm.scene.interface.update_panel_info("");
             this.current_selection = null;
         }
+    }
+
+    handle_add_logic(current_symbol) {
+        if(current_symbol == "0") {
+            this.fsm.scene.interface.update_panel_info("");
+            this.fsm.switch_state("MOVE", ['add', this.previous_selection, this.current_selection]);            
+        }
+        else {
+            this.fsm.scene.interface.update_panel_info("Invalid add action.");
+        }
+        this.add_action = false;
+        this.previous_selection = null;
+        this.current_selection = null;
+    }
+
+    handle_move_logic(current_symbol) {
+        if(current_symbol != "0" && current_symbol != "t") {
+            this.fsm.scene.interface.update_panel_info("");
+            this.fsm.switch_state("MOVE", ['move', this.previous_selection, this.current_selection]);
+        }
+        else {
+            this.fsm.scene.interface.update_panel_info("Invalid move action.");
+        }
+        this.move_action = false;
+        this.previous_selection = null;
+        this.current_selection = null;
     }
 
     exit() {
