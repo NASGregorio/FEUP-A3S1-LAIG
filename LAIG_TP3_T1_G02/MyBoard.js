@@ -52,12 +52,10 @@ class MyBoard extends CGFobject {
 
     update_board(game_state) {
         this.game_state = game_state;
-        console.log(game_state);
 
         this.available_blacks = 16 - this.game_state[8];
         this.available_whites = 16 - this.game_state[9];
         this.available_tiles = 28 - (this.game_state[4].length + this.game_state[5].length + this.game_state[6].length);
-        console.log(this.available_tiles);
         //this.print_board(data[0]);
     }
 
@@ -67,6 +65,15 @@ class MyBoard extends CGFobject {
 
     update_last_move(last_move) {
         this.last_move = last_move;
+        let move = this.last_move[0];
+        let origin = this.last_move[1];
+        let destination = this.last_move[2];
+        if(move == "add")
+            this.add_animation(origin,destination);
+        else if(move == "move")
+            this.move_animation(origin,destination);
+        else
+            this.stack_animation(origin,destination);
     }
 
     get_board() {
@@ -150,20 +157,20 @@ class MyBoard extends CGFobject {
 
         this.redMat.apply();
 
-        let radius = 8.25;
+        let radius = 8.5*2;
         let step = Math.PI / 12;
         for (let index = 0; index < this.available_tiles; index++) {
             let x = radius * Math.cos(index*step);
             let z = radius * Math.sin(index*step);
             this.scene.pushMatrix();
-            this.scene.translate(x, -0.6, z);
+            this.scene.translate(x, -1.2, z);
             this.hex.display();
             this.scene.popMatrix();
         }
     }
 
     display_extra_pieces() {
-        let radius = 8.25;
+        let radius = 8.5*2;
         let step = Math.PI / 12;
 
         this.blackMat.apply();
@@ -171,7 +178,7 @@ class MyBoard extends CGFobject {
             let x = radius * Math.cos(step/2.75 + index*step);
             let z = radius * Math.sin(step/2.75 + index*step);
             this.scene.pushMatrix();
-            this.scene.translate(x, -0.6, z);
+            this.scene.translate(x, -1.2, z);
             this.piece.display();
             this.scene.popMatrix();
         }
@@ -181,12 +188,22 @@ class MyBoard extends CGFobject {
             let x = radius * Math.cos(-step/2.75 + index*step);
             let z = radius * Math.sin(-step/2.75 + index*step);
             this.scene.pushMatrix();
-            this.scene.translate(x, -0.6, z);
+            this.scene.translate(x, -1.2, z);
             this.piece.display();
             this.scene.popMatrix();
         }
     }
-    
+
+    add_animation(origin,destination) {
+        console.log("Add animation: ",JSON.stringify(origin),", ",JSON.stringify(destination));
+    }
+    move_animation(origin,destination) {
+        console.log("Move animation: ",JSON.stringify(origin),", ",JSON.stringify(destination));
+    }
+    stack_animation(origin,destination) {
+        console.log("Stack animation: ",JSON.stringify(origin),", ",JSON.stringify(destination));
+    }
+
     display() {
 
         if(this.game_state == null)

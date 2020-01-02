@@ -56,7 +56,28 @@ class JaleoScene extends CGFscene{
 	}
 
 	initCameras() {
-		this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 14, 13), vec3.fromValues(0, 0, 0));
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(0, 15, 75), vec3.fromValues(0, 0, 0));
+
+        // let player = this.board.get_player()
+        
+        // this.selectedView = 0;
+        // this.viewNamesToIndex = {};
+        // this.viewIndexToNames = {};
+
+        // var i = 0;
+        // this.graph.views.forEach((value, key) => {
+        //     this.viewNamesToIndex[key] = i;
+        //     this.viewIndexToNames[i] = key;
+        //     i++;
+        // });
+        
+        // // Set camera to XML's default
+        // this.selectedView = this.viewNamesToIndex[this.graph.defaultView];
+        // this.onViewChanged();
+
+
+        // // Create camera UI
+        // this.interface.addViews();
 	}
 
 	logPicking() {
@@ -72,7 +93,8 @@ class JaleoScene extends CGFscene{
 						var customId = this.pickResults[i][1];
 						let coords = this.pickIDs.get(customId);
                         console.log("Picked object: " + obj + ", in row: " + coords[0] + ", in column: " + coords[1]);
-						this.fsm.curr_state.update_coord_selection(coords);
+                        this.fsm.curr_state.update_coord_selection(coords);
+                        if(this.player_changed)this.camera.orbit("x",Math.PI/2);
                     }
                 }
             }
@@ -134,7 +156,7 @@ class JaleoScene extends CGFscene{
 		this.lights[0].update();
 
 		// Draw axis
-		this.axis.display();
+		// this.axis.display();
 
         this.pushMatrix();
         this.graph.displayScene();
@@ -142,6 +164,7 @@ class JaleoScene extends CGFscene{
         
 		if(this.board != null) {
             this.pushMatrix();
+            this.scale(0.5,0.5,0.5);
 			this.board.display();
 			this.popMatrix();
 		}

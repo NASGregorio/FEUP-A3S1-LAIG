@@ -152,23 +152,6 @@
         <primitive id="demoTorus">
             <torus inner="0.2" outer="2" slices="64" loops="64" />
         </primitive>
-        
-        <!-- <primitive id="demoPatch">
-            <patch npointsU="3" npointsV="4" npartsU="20" npartsV="20" >
-                <controlpoint xx="-1.5" yy="-1.5" zz="0" />
-                <controlpoint xx="-2" yy="-2" zz="2" />
-                <controlpoint xx="-2" yy="2" zz="2" />
-                <controlpoint xx="-1.5" yy="1.5" zz="0" />
-                <controlpoint xx="0" yy="0" zz="3" />
-                <controlpoint xx="0" yy="-2" zz="3" />
-                <controlpoint xx="0" yy="2" zz="3" />
-                <controlpoint xx="0" yy="0" zz="3" />
-                <controlpoint xx="1.5" yy="-1.5" zz="0" />
-                <controlpoint xx="2" yy="-2" zz="2" />
-                <controlpoint xx="2" yy="2" zz="2" />
-                <controlpoint xx="1.5" yy="1.5" zz="0" />
-            </patch>
-        </primitive> -->
     </primitives>
 
     <components>
@@ -180,7 +163,6 @@
             </materials>
             <texture id="none"/>
             <children>
-                <!-- <componentref id="table" /> -->
                 <componentref id="alternative_table" />
                 <!-- <componentref id="sky_box" /> -->
             </children>
@@ -261,167 +243,6 @@
                 <primitiveref id="demoRectangle" />
             </children>
         </component> -->
-
-        <component id="table">
-            <transformation>
-                <!-- <scale x="2" y="2" z="2"/> -->
-                <!-- <translate x="0" y="2" z="0"/> -->
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <componentref id="table_top" />
-                <componentref id="table_top_bottom" />
-                <componentref id="table_legs" />
-            </children>
-        </component>
-
-        <component id="table_top">
-            <transformation>
-                <translate x="0" y="-0.001" z="0" />
-                <scale x="8" y="0.1" z="8"/>
-                <rotate angle="90" axis="x"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial2" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="table_tops" />
-                <primitiveref id="demoCylinder" />
-            </children>
-        </component>
-        
-        <component id="table_top_bottom">
-            <transformation>
-                <translate x="0" y="-0.601" z="0" />
-                <scale x="9" y="0.1" z="9"/>
-                <rotate angle="90" axis="x"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial3" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="table_tops" />
-                <primitiveref id="demoCylinder" />
-            </children>
-        </component>
-
-        <component id="table_tops">
-            <transformation>
-                <rotate angle="-90" axis="x"/>
-                <scale x="1" y="0.001" z="1"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-                <material id="demoMaterial3" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="table_tops_t" />
-                <componentref id="table_tops_b" />
-            </children>
-        </component>
-
-        <component id="table_tops_t">
-            <transformation>
-                <translate x="0" y="0.101" z="0"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-                <material id="demoMaterial3" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="demoSphere" />
-            </children>
-        </component>
-
-        <component id="table_tops_b">
-            <transformation>
-                <translate x="0" y="-3000.1" z="0"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="demoSphere" />
-            </children>
-        </component>
-
-        <component id="table_legs">
-            <transformation>
-                <translate x="0" y="-0.1" z="0" />
-                <scale x="0.75" y="1.2" z="0.75" />
-                <rotate angle="90" axis="x" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="woodTexture" length_s="1" length_t="1"/>
-            <children>
-                <componentref id="table_leg_lb" />
-                <componentref id="table_leg_rb" />
-                <componentref id="table_leg_lf" />
-                <componentref id="table_leg_rf" />
-            </children>
-        </component>
-
-        <component id="table_leg_lb">
-            <transformation>
-                <translate x="-4" y="-4" z="0" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="demoCylinder" />
-            </children>
-        </component>
-
-        <component id="table_leg_rb">
-            <transformation>
-                <translate x="4" y="-4" z="0" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="demoCylinder" />
-            </children>
-        </component>
-
-         <component id="table_leg_lf">
-            <transformation>
-                <translate x="-4" y="4" z="0" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="demoCylinder" />
-            </children>
-        </component>
-
-         <component id="table_leg_rf">
-            <transformation>
-                <translate x="4" y="4" z="0" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="demoCylinder" />
-            </children>
-        </component>
 
         <component id="alternative_table">
             <transformation>
@@ -534,10 +355,62 @@
             </materials>
             <texture id="woodTexture" length_s="1" length_t="1"/>
             <children>
-                <componentref id="table_leg_lb" />
-                <componentref id="table_leg_rb" />
-                <componentref id="table_leg_lf" />
-                <componentref id="table_leg_rf" />
+                <componentref id="alternative_table_leg_lb" />
+                <componentref id="alternative_table_leg_rb" />
+                <componentref id="alternative_table_leg_lf" />
+                <componentref id="alternative_table_leg_rf" />
+            </children>
+        </component>
+
+        <component id="alternative_table_leg_lb">
+            <transformation>
+                <translate x="-4" y="-4" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+        <component id="alternative_table_leg_rb">
+            <transformation>
+                <translate x="4" y="-4" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+         <component id="alternative_table_leg_lf">
+            <transformation>
+                <translate x="-4" y="4" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+         <component id="alternative_table_leg_rf">
+            <transformation>
+                <translate x="4" y="4" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoCylinder" />
             </children>
         </component>
        

@@ -38,9 +38,14 @@ main=function()
 
     myInterface.setActiveCamera(myScene.camera);
 
-
     var filename=getUrlVars()['file'] || "demo.xml";
+    //var filename=getUrlVars()['file'] || "alternative_scene.xml";
 	var myGraph = new MySceneGraph(filename, myScene);
+
+    // var filename1=getUrlVars()['file'] || "demo.xml";
+    // var filename2=getUrlVars()['file'] || "alternative_scene.xml";
+    // var filenames= [filename1, filename2];
+	// var myGraph = new MySceneGraph(filenames[myInterface.filenameIndex], myScene);
 
 
 	app.run();

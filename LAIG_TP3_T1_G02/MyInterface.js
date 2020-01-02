@@ -24,6 +24,8 @@ class MyInterface extends CGFinterface {
         this.curr_folder = null;
         
         this.quit = PrologInterpreter.send_quit;
+
+        // this.filenameIndex = 0;
         
         this.show_start_options(this.scene);
 
@@ -115,6 +117,11 @@ class MyInterface extends CGFinterface {
 
     processKeyDown(event) {
         this.activeKeys[event.code]=true;
+        // if(event.key === 'm') {
+        //     if(this.filenameIndex == 0) this.filenameIndex++
+        //     else if(this.filenameIndex == 1) this.filenameIndex--;
+        //     console.log(this.filenameIndex);
+        // }
     };
 
     processKeyUp(event) {
