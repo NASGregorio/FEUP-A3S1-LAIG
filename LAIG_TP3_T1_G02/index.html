@@ -21,8 +21,35 @@
             padding: 1em 4em;
             margin: 1em;
             color: white;
-            background-color: #bbbbbbbb;
+            background-color: #bbbbbbdd;
             border-radius: 5px;
+        }
+        #rules {
+            position: absolute;
+            display: none;
+            top: 25%;
+            left: 20%;
+            width: 60%;
+            height: 40%;
+            padding: 1em 4em;
+            margin: 1em;
+            color: white;
+            background-color: #bbbbbbdd;
+            border-radius: 5px;
+        }
+        #game_over {
+            position: absolute;
+            display: none;
+            top: 25%;
+            left: 20%;
+            width: 60%;
+            height: 40%;
+            padding: 1em 4em;
+            margin: 1em;
+            color: white;
+            background-color: #bbbbbbdd;
+            border-radius: 5px;
+            font-size: 2em;
         }
 	</style>
 </head>
@@ -35,5 +62,40 @@
         <span id="information"></span>
         <span id="error"></span>
     </div>
+
+    <div id="rules">
+        <h1>How to play</h1>
+        <span id="jaleo_rules">JALEO RULES<br><br>             
+                                                 
+            <br>Add: A player adds a disc to an empty tile  
+        folowed by adding a tile adjacent to the board<br><br>
+                                                        
+                                                        
+        <br>Move: A player moves his disc on top of a   
+       stack to an adjacent tile<br><br>                  
+                                                        
+                                                        
+       <br>Stack: A player must stack if two or more of
+       his discs dont belong to a stack and are         
+       adjacent. This action is mandatory.<br><br>        
+        </span>
+        <br>
+        <button id="close_rules"  onclick="close_rules()">Close Rules</button>
+    </div>
+
+    <div id="game_over">
+        <h1>GAME OVER</h1>
+        <span id="game_over_message"><br>
+            Congratulations, player X you have won!
+        </span>
+        <br>
+    </div>
 </body>
 </html>
+
+<script>
+    function close_rules() {
+        document.getElementById("rules").style.display = "none";
+        document.getElementById("panel").style.display = "block";
+    }
+</script>

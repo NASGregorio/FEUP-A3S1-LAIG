@@ -15,6 +15,7 @@ class MyBoard extends CGFobject {
         this.InnerRadius = this.OuterRadius * 0.866025404;
         this.sqrt3 = Math.sqrt(3);
         this.player = "";
+        this.saved_game_states = [];
 
         this.available_tiles = 24;
 
@@ -74,6 +75,14 @@ class MyBoard extends CGFobject {
             this.move_animation(origin,destination);
         else
             this.stack_animation(origin,destination);
+    }
+
+    save_state(data) {
+        this.saved_game_states.push(data);
+    }
+
+    undo() {
+        return this.saved_game_states.pop();
     }
 
     get_board() {
@@ -194,7 +203,8 @@ class MyBoard extends CGFobject {
         }
     }
 
-    add_animation(origin,destination) {
+    add_animation(origin,destination, t) {
+
         console.log("Add animation: ",JSON.stringify(origin),", ",JSON.stringify(destination));
     }
     move_animation(origin,destination) {

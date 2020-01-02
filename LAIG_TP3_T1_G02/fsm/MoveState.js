@@ -23,8 +23,10 @@ class MoveState extends AbstractState {
 
     action_success(data) {
 
-        if(data !== 'Bad Request')
+        if(data !== 'Bad Request') {
+            this.fsm.scene.board.save_state(data);
             this.fsm.switch_state("UPDATE", data);
+        }
         else
             this.fsm.switch_state("INPUT", []);
     }

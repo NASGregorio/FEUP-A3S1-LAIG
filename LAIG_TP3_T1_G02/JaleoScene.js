@@ -13,7 +13,8 @@ class JaleoScene extends CGFscene{
 
         this.info = "";
 
-		this.pickIDs = new Map();
+        this.pickIDs = new Map();
+
 	}
 
 	init(application) {
@@ -37,6 +38,16 @@ class JaleoScene extends CGFscene{
         this.setPickEnabled(true);
         
         this.timeFactor = 1;
+
+        this.slotMachine = new CGFOBJModel(this, 'models/slot_machine.obj');
+        this.tv = new CGFOBJModel(this, 'models/tv.obj');
+
+        this.greyMat = new CGFappearance(this);
+		this.greyMat.setAmbient(0.2, 0.2, 0.2, 1);
+		this.greyMat.setDiffuse(0.2, 0.2, 0.2, 1);
+		this.greyMat.setSpecular(0.0, 0.0, 0.0, 1);
+        this.greyMat.setShininess(120);
+
 	}
 
 	initLights() {
@@ -56,7 +67,7 @@ class JaleoScene extends CGFscene{
 	}
 
 	initCameras() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(0, 15, 75), vec3.fromValues(0, 0, 0));
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(0, 25, 90), vec3.fromValues(0, 0, 0));
 
         // let player = this.board.get_player()
         
@@ -94,7 +105,6 @@ class JaleoScene extends CGFscene{
 						let coords = this.pickIDs.get(customId);
                         console.log("Picked object: " + obj + ", in row: " + coords[0] + ", in column: " + coords[1]);
                         this.fsm.curr_state.update_coord_selection(coords);
-                        if(this.player_changed)this.camera.orbit("x",Math.PI/2);
                     }
                 }
             }
@@ -131,6 +141,7 @@ class JaleoScene extends CGFscene{
         var dt = tNow - this.lastUpdate;
         this.graph.update(dt);
         this.time = tNow;
+        //this.camera.orbit("x",Math.PI/200);
     }
 
 	display() {
@@ -164,10 +175,39 @@ class JaleoScene extends CGFscene{
         
 		if(this.board != null) {
             this.pushMatrix();
-            this.scale(0.5,0.5,0.5);
+            this.translate(0,4,0);
 			this.board.display();
 			this.popMatrix();
-		}
+        }
+        
+        this.pushMatrix();
+            this.greyMat.apply();
+            this.translate(0,-3,-35);
+            this.scale(0.2,0.2,0.2);
+            this.rotate(-Math.PI/2,1,0,0);
+            this.slotMachine.display();
+            this.translate(150,0,0);
+            this.slotMachine.display();
+            this.translate(-300,0,0);
+            this.slotMachine.display();
+        this.popMatrix();
+
+        this.pushMatrix();
+            this.greyMat.apply();
+            this.translate(-57,1,0);
+            this.rotate(Math.PI/2,0,1,0);
+            this.scale(10,10,5);
+            this.tv.display();
+        this.popMatrix();
+
+        this.pushMatrix();
+            this.greyMat.apply();
+            this.translate(57,1,0);
+            this.rotate(-Math.PI/2,0,1,0);
+            this.scale(10,10,5);
+            this.tv.display();
+        this.popMatrix();
+
 	}
 
 	start_game() {
@@ -175,7 +215,8 @@ class JaleoScene extends CGFscene{
 	}
 
 	how_to_play() {
-		console.log("How to play?");
+		document.getElementById("rules").style.display = "block";
+		document.getElementById("panel").style.display = "none";
 	}
 }
 

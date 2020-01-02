@@ -44,12 +44,7 @@
 
     <textures>
         <texture id="woodTexture" file="scenes/images/wood.jpg" />
-        <texture id="sandTexture" file="scenes/images/sand.jpg" />
-        <texture id="skyTexture" file="scenes/images/sky.jpg" />
-        <texture id="bwTexture" file="scenes/images/bw.jpg" />
-        <texture id="fwTexture" file="scenes/images/fw.jpg" />
-        <texture id="lwTexture" file="scenes/images/lw.jpg" />
-        <texture id="rwTexture" file="scenes/images/rw.jpg" />
+        <texture id="wallTexture" file="scenes/images/wall_wood.jpg" />
     </textures>
 
     <materials>
@@ -72,6 +67,13 @@
             <ambient r="0.4" g="0.4" b="0.4" a="1.0" />
             <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
             <specular r="0.4" g="0.4" b="0.4" a="1.0" />
+        </material>
+
+        <material id="floorMaterial" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.4" g="0.2" b="0.15" a="1.0" />
+            <diffuse r="0.4" g="0.2" b="0.15" a="1.0" />
+            <specular r="0.4" g="0.2" b="0.15" a="1.0" />
         </material>
     </materials>
 
@@ -180,92 +182,94 @@
             </materials>
             <texture id="none"/>
             <children>
-                <!-- <componentref id="table" /> -->
-                <componentref id="alternative_table" />
-                <!-- <componentref id="sky_box" /> -->
+                <componentref id="table" />
+                <componentref id="house_interior" />
             </children>
         </component>
 
-        <component id="sky_box">
+        <component id="house_interior">
             <transformation>
-                <scale x="2" y="2" z="2"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="sky_box_ground" />
-                <componentref id="sky_box_top" />
-                <componentref id="sky_box_bw" />
-                <!-- <componentref id="sky_box_lw" /> -->
-                <!-- <componentref id="sky_box_rw" /> -->
+                <componentref id="house_floor" />
+                <componentref id="house_wall" />
+                <componentref id="house_lw" />
+                <componentref id="house_rw" />
                 <!-- <componentref id="sky_box_fw" /> -->
             </children>
         </component>
 
-        <component id="sky_box_ground">
+        <component id="house_floor">
             <transformation>
+                <scale x="1.5" y="1" z="1"/>
                 <translate x="0" y="-3" z="0"/>
                 <rotate angle="180" axis="y"/>
                 <rotate angle="-90" axis="x"/>
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="floorMaterial" />
             </materials>
-            <texture id="sandTexture" length_s="80" length_t="80"/>
+            <texture id="none"/>
             <children>
                 <primitiveref id="demoRectangle" />
             </children>
         </component>
 
-        <component id="sky_box_top">
+        <component id="house_wall">
             <transformation>
-                <translate x="0" y="77" z="0"/>
-                <rotate angle="180" axis="y"/>
-                <rotate angle="90" axis="x"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="skyTexture" length_s="80" length_t="80"/>
-            <children>
-                <primitiveref id="demoRectangle" />
-            </children>
-        </component>
-
-        <component id="sky_box_bw">
-            <transformation>
-                <translate x="0" y="37" z="-40"/>
+                <scale x="1.5" y="0.4" z="1"/>
+                <translate x="0" y="30" z="-40"/>
                 <rotate angle="180" axis="z"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="bwTexture" length_s="80" length_t="80"/>
+            <texture id="wallTexture" length_s="10" length_t="80"/>
             <children>
                 <primitiveref id="demoRectangle" />
             </children>
         </component>
-
-        <!-- <component id="sky_box_lw">
+        
+        <component id="house_lw">
             <transformation>
-                <translate x="0" y="37" z="-40"/>
+                <scale x="1.5" y="0.4" z="1"/>
+                <translate x="-40" y="30" z="0"/>
+                <rotate angle="90" axis="y"/>
                 <rotate angle="180" axis="z"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="bwTexture" length_s="80" length_t="80"/>
+            <texture id="wallTexture" length_s="10" length_t="80"/>
             <children>
                 <primitiveref id="demoRectangle" />
             </children>
-        </component> -->
+        </component>
+
+        <component id="house_rw">
+            <transformation>
+                <scale x="1.5" y="0.4" z="1"/>
+                <translate x="40" y="30" z="0"/>
+                <rotate angle="-90" axis="y"/>
+                <rotate angle="180" axis="z"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="wallTexture" length_s="10" length_t="80"/>
+            <children>
+                <primitiveref id="demoRectangle" />
+            </children>
+        </component>
 
         <component id="table">
             <transformation>
-                <!-- <scale x="2" y="2" z="2"/> -->
-                <!-- <translate x="0" y="2" z="0"/> -->
+                <scale x="2" y="2" z="2"/>
+                <translate x="0" y="2" z="0"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -422,124 +426,5 @@
                 <primitiveref id="demoCylinder" />
             </children>
         </component>
-
-        <component id="alternative_table">
-            <transformation>
-                <!-- <scale x="2" y="2" z="2"/> -->
-                <translate x="0" y="-0.8" z="0"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <componentref id="alternative_table_top" />
-                <componentref id="alternative_table_top_bottom" />
-                <componentref id="alternative_table_legs" />
-            </children>
-        </component>
-
-        <component id="alternative_table_top">
-            <transformation>
-                <translate x="0" y="0.201" z="0" />
-                <scale x="4" y="0.1" z="4"/>
-                <rotate angle="90" axis="x"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial2" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="alternative_table_laterals" />
-                <componentref id="alternative_table_top_underside" />
-                <primitiveref id="demoTorus" />
-            </children>
-        </component>
-
-        <component id="alternative_table_top_underside">
-            <transformation>
-                <translate x="0" y="0" z="6" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial2" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="demoTorus" />
-            </children>
-        </component>
-
-        <component id="alternative_table_laterals">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="demoMaterial2" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="alternative_table_lateral_outside" />
-                <componentref id="alternative_table_lateral_inside" />
-            </children>
-        </component>
-
-        <component id="alternative_table_lateral_outside">
-            <transformation>
-                <scale x="2.2" y="2.2" z="2"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial2" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="demoCylinder" />
-            </children>
-        </component>
-
-        <component id="alternative_table_lateral_inside">
-            <transformation>
-                <scale x="-1.8" y="1.8" z="2"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial2" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="demoCylinder" />
-            </children>
-        </component>
-
-        <component id="alternative_table_top_bottom">
-            <transformation>
-                <translate x="0" y="-0.201" z="0" />
-                <scale x="8" y="0.1" z="8"/>
-                <rotate angle="90" axis="x"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial3" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <primitiveref id="demoSphere" />
-            </children>
-        </component>
-
-        <component id="alternative_table_legs">
-            <transformation>
-                <translate x="0" y="-0.2" z="0" />
-                <scale x="0.75" y="1.2" z="0.75" />
-                <rotate angle="90" axis="x" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="woodTexture" length_s="1" length_t="1"/>
-            <children>
-                <componentref id="table_leg_lb" />
-                <componentref id="table_leg_rb" />
-                <componentref id="table_leg_lf" />
-                <componentref id="table_leg_rf" />
-            </children>
-        </component>
-       
     </components>
 </lxs>

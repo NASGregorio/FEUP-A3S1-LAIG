@@ -146,6 +146,7 @@ class InputState extends AbstractState {
 
     exit() {
         super.exit();
+        this.fsm.scene.interface.clean_folder();
     }
 
     clear_turn() {
@@ -166,7 +167,10 @@ class InputState extends AbstractState {
     }
 
     undo_turn() {
-        console.log("undo?");
+        let board = this.fsm.scene.board.undo();
+        this.fsm.switch_state("UPDATE", board);
+        console.log("UNDO TURN: ",board);
+        // NOT UPDATING CORRECTLY
     }
 
     reset_game() {

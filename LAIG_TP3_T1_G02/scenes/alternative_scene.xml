@@ -44,12 +44,7 @@
 
     <textures>
         <texture id="woodTexture" file="scenes/images/wood.jpg" />
-        <texture id="sandTexture" file="scenes/images/sand.jpg" />
-        <texture id="skyTexture" file="scenes/images/sky.jpg" />
-        <texture id="bwTexture" file="scenes/images/bw.jpg" />
-        <texture id="fwTexture" file="scenes/images/fw.jpg" />
-        <texture id="lwTexture" file="scenes/images/lw.jpg" />
-        <texture id="rwTexture" file="scenes/images/rw.jpg" />
+        <texture id="wallTexture" file="scenes/images/alternative_wall_wood.jpg" />
     </textures>
 
     <materials>
@@ -72,6 +67,13 @@
             <ambient r="0.4" g="0.4" b="0.4" a="1.0" />
             <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
             <specular r="0.4" g="0.4" b="0.4" a="1.0" />
+        </material>
+
+        <material id="floorMaterial" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.15" g="0.3" b="0.2" a="1.0" />
+            <diffuse r="0.15" g="0.3" b="0.2" a="1.0" />
+            <specular r="0.15" g="0.3" b="0.2" a="1.0" />
         </material>
     </materials>
 
@@ -164,90 +166,92 @@
             <texture id="none"/>
             <children>
                 <componentref id="alternative_table" />
-                <!-- <componentref id="sky_box" /> -->
+                <componentref id="house_interior" />
             </children>
         </component>
 
-        <component id="sky_box">
+        <component id="house_interior">
             <transformation>
-                <scale x="2" y="2" z="2"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="sky_box_ground" />
-                <componentref id="sky_box_top" />
-                <componentref id="sky_box_bw" />
-                <!-- <componentref id="sky_box_lw" /> -->
-                <!-- <componentref id="sky_box_rw" /> -->
-                <!-- <componentref id="sky_box_fw" /> -->
+                <componentref id="house_floor" />
+                <componentref id="house_wall" />
+                <componentref id="house_lw" />
+                <componentref id="house_rw" />
             </children>
         </component>
 
-        <component id="sky_box_ground">
+        <component id="house_floor">
             <transformation>
+                <scale x="1.5" y="1" z="1"/>
                 <translate x="0" y="-3" z="0"/>
                 <rotate angle="180" axis="y"/>
                 <rotate angle="-90" axis="x"/>
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="floorMaterial" />
             </materials>
-            <texture id="sandTexture" length_s="80" length_t="80"/>
+            <texture id="none"/>
             <children>
                 <primitiveref id="demoRectangle" />
             </children>
         </component>
 
-        <component id="sky_box_top">
+        <component id="house_wall">
             <transformation>
-                <translate x="0" y="77" z="0"/>
-                <rotate angle="180" axis="y"/>
-                <rotate angle="90" axis="x"/>
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="skyTexture" length_s="80" length_t="80"/>
-            <children>
-                <primitiveref id="demoRectangle" />
-            </children>
-        </component>
-
-        <component id="sky_box_bw">
-            <transformation>
-                <translate x="0" y="37" z="-40"/>
+                <scale x="1.5" y="0.4" z="1"/>
+                <translate x="0" y="30" z="-40"/>
                 <rotate angle="180" axis="z"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="bwTexture" length_s="80" length_t="80"/>
+            <texture id="wallTexture" length_s="10" length_t="80"/>
             <children>
                 <primitiveref id="demoRectangle" />
             </children>
         </component>
-
-        <!-- <component id="sky_box_lw">
+        
+        <component id="house_lw">
             <transformation>
-                <translate x="0" y="37" z="-40"/>
+                <scale x="1.5" y="0.4" z="1"/>
+                <translate x="-40" y="30" z="0"/>
+                <rotate angle="90" axis="y"/>
                 <rotate angle="180" axis="z"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="bwTexture" length_s="80" length_t="80"/>
+            <texture id="wallTexture" length_s="10" length_t="80"/>
             <children>
                 <primitiveref id="demoRectangle" />
             </children>
-        </component> -->
+        </component>
+
+        <component id="house_rw">
+            <transformation>
+                <scale x="1.5" y="0.4" z="1"/>
+                <translate x="40" y="30" z="0"/>
+                <rotate angle="-90" axis="y"/>
+                <rotate angle="180" axis="z"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="wallTexture" length_s="10" length_t="80"/>
+            <children>
+                <primitiveref id="demoRectangle" />
+            </children>
+        </component>
 
         <component id="alternative_table">
             <transformation>
-                <!-- <scale x="2" y="2" z="2"/> -->
-                <translate x="0" y="-0.8" z="0"/>
+                <scale x="2" y="2" z="2"/>
+                <translate x="0" y="2" z="0"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />

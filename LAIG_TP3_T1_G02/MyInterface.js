@@ -35,8 +35,10 @@ class MyInterface extends CGFinterface {
     }
 
     clean_folder() {
-        if(this.curr_folder != null)
+        if(this.curr_folder != null){
             this.gui.removeFolder(this.curr_folder);
+            this.curr_folder = null;
+        }
     }
 
     add_quit_button(group) {
@@ -64,10 +66,10 @@ class MyInterface extends CGFinterface {
         let group = this.gui.addFolder("Turn Information");
         group.open();
       
-        group.add(ctx, "clear_turn").name("Clear Input?");
-        group.add(ctx, "undo_turn").name("Undo turn?");
-        group.add(ctx, "reset_game").name("Restart game?");
-        group.add(ctx, "go_to_start").name("To start menu?");
+        group.add(ctx, "clear_turn").name("Clear Input");
+        group.add(ctx, "undo_turn").name("Undo turn");
+        group.add(ctx, "reset_game").name("Restart game");
+        group.add(ctx, "go_to_start").name("To start menu");
         this.add_quit_button(group);
 
         this.curr_folder = group;
