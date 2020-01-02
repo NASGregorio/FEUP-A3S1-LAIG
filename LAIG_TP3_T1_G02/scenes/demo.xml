@@ -44,7 +44,7 @@
 
     <textures>
         <texture id="woodTexture" file="scenes/images/wood.jpg" />
-        <texture id="wallTexture" file="scenes/images/wall_wood.jpg" />
+        <texture id="wallTexture" file="scenes/images/alternative_wall_wood.jpg" />
     </textures>
 
     <materials>
