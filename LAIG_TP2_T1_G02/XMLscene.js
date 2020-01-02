@@ -192,15 +192,15 @@ class XMLscene extends CGFscene {
         if (!this.sceneInited)
             return;
 
-        this.rtt.attachToFrameBuffer();
-        this.render(this.graph.views.get("securityCamera"));
-        this.rtt.detachFromFrameBuffer();
+        // this.rtt.attachToFrameBuffer();
+        // this.render(this.graph.views.get("securityCamera"));
+        // this.rtt.detachFromFrameBuffer();
 
         this.render(this.graph.views.get(this.viewIndexToNames[this.selectedView]));
 
-        this.gl.disable(this.gl.DEPTH_TEST);
-        this.securityCamera.display();
-        this.gl.enable(this.gl.DEPTH_TEST);
+        // this.gl.disable(this.gl.DEPTH_TEST);
+        // this.securityCamera.display();
+        // this.gl.enable(this.gl.DEPTH_TEST);
     }
 
     /**

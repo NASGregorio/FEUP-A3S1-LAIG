@@ -52,11 +52,12 @@ class MyBoard extends CGFobject {
 
     update_board(game_state) {
         this.game_state = game_state;
+        console.log(game_state);
 
-        this.available_blacks = 16 - this.game_state[5].length;
-        this.available_whites = 16 - this.game_state[6].length;
-        this.available_tiles = 28 - this.game_state[4].length + this.available_blacks + this.available_whites;
-
+        this.available_blacks = 16 - this.game_state[8];
+        this.available_whites = 16 - this.game_state[9];
+        this.available_tiles = 28 - (this.game_state[4].length + this.game_state[5].length + this.game_state[6].length);
+        console.log(this.available_tiles);
         //this.print_board(data[0]);
     }
 
@@ -149,31 +150,38 @@ class MyBoard extends CGFobject {
 
         this.redMat.apply();
 
-        let radius = 4;
+        let radius = 8.25;
         let step = Math.PI / 12;
         for (let index = 0; index < this.available_tiles; index++) {
             let x = radius * Math.cos(index*step);
             let z = radius * Math.sin(index*step);
             this.scene.pushMatrix();
-            this.scene.translate(x, 0, z);
+            this.scene.translate(x, -0.6, z);
             this.hex.display();
             this.scene.popMatrix();
         }
     }
 
     display_extra_pieces() {
+        let radius = 8.25;
+        let step = Math.PI / 12;
+
         this.blackMat.apply();
         for (let index = 0; index < this.available_blacks; index++) {
+            let x = radius * Math.cos(step/2.75 + index*step);
+            let z = radius * Math.sin(step/2.75 + index*step);
             this.scene.pushMatrix();
-            this.scene.translate(0, 0.1, index);
+            this.scene.translate(x, -0.6, z);
             this.piece.display();
             this.scene.popMatrix();
         }
 
         this.whiteMat.apply();
         for (let index = 0; index < this.available_whites; index++) {
+            let x = radius * Math.cos(-step/2.75 + index*step);
+            let z = radius * Math.sin(-step/2.75 + index*step);
             this.scene.pushMatrix();
-            this.scene.translate(index, 0.1, 0);
+            this.scene.translate(x, -0.6, z);
             this.piece.display();
             this.scene.popMatrix();
         }

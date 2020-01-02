@@ -281,7 +281,17 @@ update_gamestate(GameState, NewBoard, NewGameState) :-
     get_pieces_of_type_in_board(NewBoard, b, BlacksN),
     get_pieces_of_type_in_board(NewBoard, w, WhitesN),
     (playerWhite(Player) -> NextPlayer = black; NextPlayer = white),
-    NewGameState = [NewBoard, RowSize, ColSize, NextPlayer, TilesN, BlacksN, WhitesN].
+
+    get_pieces_at(NewBoard, TilesN, TP),
+	count_all_pieces(TP, t, CT),
+
+    get_pieces_at(NewBoard, BlacksN, BP),
+	count_all_pieces(BP, b, CB),
+
+    get_pieces_at(NewBoard, WhitesN, WP),
+	count_all_pieces(WP, w, CW),
+
+    NewGameState = [NewBoard, RowSize, ColSize, NextPlayer, TilesN, BlacksN, WhitesN, CT, CB, CW].
 
 get_empty_adjacent_spaces(Board, [], AdjTiles, ValidEmpty) :- sort(AdjTiles, ValidEmpty).
 get_empty_adjacent_spaces(Board, [H|T], A, AdjTiles) :-
@@ -628,8 +638,17 @@ setup_pvp(GameState):-
 	get_pieces_of_type_in_board(Board, t, Tiles),
     get_pieces_of_type_in_board(Board, b, Blacks),
     get_pieces_of_type_in_board(Board, w, Whites),
+    
+    get_pieces_at(Board, Tiles, TP),
+	count_all_pieces(TP, t, CT),
 
-	GameState = [Board, RowSize, ColSize, black, Tiles, Blacks, Whites].
+    get_pieces_at(Board, Blacks, BP),
+	count_all_pieces(BP, b, CB),
+
+    get_pieces_at(Board, Whites, WP),
+	count_all_pieces(WP, w, CW),
+
+	GameState = [Board, RowSize, ColSize, black, Tiles, Blacks, Whites, CT, CB, CW].
 
 
 pvp:-

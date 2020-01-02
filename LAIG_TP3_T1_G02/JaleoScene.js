@@ -29,13 +29,14 @@ class JaleoScene extends CGFscene{
 		this.gl.enable(this.gl.CULL_FACE);
 		this.gl.depthFunc(this.gl.LEQUAL);
 
-		this.axis = new CGFaxis(this);
 
 		this.board = new MyBoard(this);
 
 		this.fsm = new StateMachine(this);
 
-		this.setPickEnabled(true);
+        this.setPickEnabled(true);
+        
+        this.timeFactor = 1;
 	}
 
 	initLights() {
@@ -79,7 +80,40 @@ class JaleoScene extends CGFscene{
         }
     }
 
+    onGraphLoaded() {
+		
+		this.enableTextures(true);
+		
+        this.gl.clearDepth(100.0);
+        this.gl.enable(this.gl.DEPTH_TEST);
+        this.gl.enable(this.gl.CULL_FACE);
+        this.gl.depthFunc(this.gl.LEQUAL);
+		
+        this.setUpdatePeriod(1000/120);
+		
+        this.lastUpdate = Date.now();
+		
+        this.axis = new CGFaxis(this, this.graph.referenceLength);
+		
+        this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
+		
+        this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
+		
+        this.sceneInited = true;
+        
+        // Start animations
+        this.graph.startAnimations();
+    }
+
+    update(tNow) {
+        var dt = tNow - this.lastUpdate;
+        this.graph.update(dt);
+        this.time = tNow;
+    }
+
 	display() {
+        if (!this.sceneInited)
+            return;
 
 		this.logPicking();
         this.clearPickRegistration();
@@ -102,8 +136,12 @@ class JaleoScene extends CGFscene{
 		// Draw axis
 		this.axis.display();
 
+        this.pushMatrix();
+        this.graph.displayScene();
+        this.popMatrix();
+        
 		if(this.board != null) {
-			this.pushMatrix();
+            this.pushMatrix();
 			this.board.display();
 			this.popMatrix();
 		}
