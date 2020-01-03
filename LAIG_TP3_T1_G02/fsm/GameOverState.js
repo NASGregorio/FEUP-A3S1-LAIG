@@ -12,6 +12,7 @@ class GameOverState extends AbstractState {
 
         this.fsm.scene.interface.update_panel_info(`Player ´${winner}' wins! Congratulations.`);
         this.fsm.scene.interface.update_panel_player("");
+        this.fsm.scene.board.end_time = this.fsm.scene.time;
     }
 
     exit() {

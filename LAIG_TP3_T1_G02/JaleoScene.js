@@ -45,7 +45,7 @@ class JaleoScene extends CGFscene{
         this.tv = new CGFOBJModel(this, 'models/tv.obj');
 
         this.greyMat = new CGFappearance(this);
-		this.greyMat.setAmbient(0.2, 0.2, 0.2, 1);
+		this.greyMat.setAmbient(0.0, 0.0, 0.0, 1);
 		this.greyMat.setDiffuse(0.2, 0.2, 0.2, 1);
 		this.greyMat.setSpecular(0.0, 0.0, 0.0, 1);
         this.greyMat.setShininess(120);
@@ -188,6 +188,7 @@ class JaleoScene extends CGFscene{
         var dt = tNow - this.lastUpdate;
         this.graph.update(dt);
         this.time = tNow;
+        this.interface.update_panel_time(Math.round((this.time - this.board.start_time)/1000));
         //this.camera.orbit("x",Math.PI/200);
     }
 

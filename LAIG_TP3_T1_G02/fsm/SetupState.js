@@ -16,6 +16,8 @@ class SetupState extends AbstractState {
     }
 
     setup_success(data) {
+        this.fsm.scene.board.start_time = this.fsm.scene.time;
+        this.fsm.scene.interface.update_panel_time(this.fsm.scene.board.start_time);
         this.fsm.scene.board.save_state(data);
         this.fsm.switch_state("UPDATE", data);
     }
