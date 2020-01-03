@@ -78,7 +78,7 @@ class JaleoScene extends CGFscene{
                 this.lights[i].setSpotDirection(light[12][0], light[12][1], light[12][2]);
             }
 
-            this.lights[i].setVisible(true);
+            this.lights[i].setVisible(false);
             if (light[1]) {
                 this.lights[i].enable();
                 this.lightSwitches.push(true);                
@@ -272,11 +272,7 @@ class JaleoScene extends CGFscene{
 
 (Não está por ordem de prioridade)
 
-Preparar cenas(xml) para a board
-
-Ajustar camara de acordo com o tamanho e usar funçao orbit com toggle na interface
-
-Arranjar menus/interface
+Ajustar camara de acordo com o tamanho e usar funçao orbit com toggle na interface (Afonso will do)
 
 Coisas do enunciado que ainda nao li (que podem ou nao existir)
 
