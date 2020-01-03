@@ -272,13 +272,32 @@ class JaleoScene extends CGFscene{
 
 (Não está por ordem de prioridade)
 
-Preparar cenas(xml) para a board
-
-Ajustar camara de acordo com o tamanho e usar funçao orbit com toggle na interface
-
-Arranjar menus/interface
-
-Coisas do enunciado que ainda nao li (que podem ou nao existir)
+Ajustar camara de acordo com o tamanho e usar funçao orbit com toggle na interface (Afonso will do)
 
 */
 
+
+/*
+Criação da cena de jogo (4.5 valores)
+    Tabuleiro                                                       wip
+    Aspeto geral                                                    wip
+    Jogabilidade, interação, criatividade                           wip
+Peças (4.5 valores)
+    Modelação                                                       complete
+    Movimento e animação por imagens chave.                         todo
+Visualização (3 valores)
+    Iluminação                                                      wip
+    Ambientes de jogo                                               wip
+Funcionalidades genéricas do jogo (2.5 valores)
+    Nível de dificuldade                                            problem?
+    Tipo de jogo                                                    problem?
+    Undo                                                            complete
+    Rotação da câmara entre pontos de vista pré-definidos           todo
+Outras Funcionalidades (1.5 valores)
+    Marcador                                                        todo
+    Filme do jogo                                                   todo
+    Medição do tempo de jogo                                        todo
+Software (4 valores)
+    Estrutura e parametrização                                      doing ok
+    Interligação com Programação em Lógica                          complete
+*/
