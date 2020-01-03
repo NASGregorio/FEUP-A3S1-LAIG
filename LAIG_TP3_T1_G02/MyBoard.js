@@ -16,6 +16,7 @@ class MyBoard extends CGFobject {
         this.sqrt3 = Math.sqrt(3);
         this.player = "";
         this.saved_game_states = [];
+        this.redo_stack = [];
 
         this.available_tiles = 24;
 
@@ -57,7 +58,7 @@ class MyBoard extends CGFobject {
         this.available_blacks = 16 - this.game_state[8];
         this.available_whites = 16 - this.game_state[9];
         this.available_tiles = 28 - (this.game_state[4].length + this.game_state[5].length + this.game_state[6].length);
-        //this.print_board(data[0]);
+        // this.print_board(game_state[0]);
     }
 
     update_adj(adj_tiles) {
@@ -79,10 +80,19 @@ class MyBoard extends CGFobject {
 
     save_state(data) {
         this.saved_game_states.push(data);
+        this.redo_stack = [];
     }
 
     undo() {
-        return this.saved_game_states.pop();
+        let undo_board = this.saved_game_states.pop();
+        this.redo_stack.push(undo_board);
+        return this.saved_game_states[this.saved_game_states.length-1];
+    }
+
+    redo() {
+        let redo_board = this.redo_stack.pop();
+        this.saved_game_states.push(redo_board);
+        return redo_board;
     }
 
     get_board() {

@@ -14,30 +14,13 @@ class BotState extends AbstractState {
     enter(stack_actions) {
         super.enter();
 
-        this.scene.interface.show_turn_information(this);
-
         this.stack_actions = stack_actions;
 
         if(stack_actions != null && stack_actions.length > 0) {
-            this.fsm.scene.interface.update_panel_info("STACK situation detected | Pick piece to move.");
-            this.stack_action = true;
+            this.fsm.scene.bot.stack(stack_actions);
         }
         else {
-            this.fsm.scene.interface.update_panel_info("ADD or MOVE available | Pick an hexagon or piece.");
-        }
-    }
-
-    update_coord_selection(coords) {
-
-        if(!this.current_selection) {
-            this.previous_selection = null;
-            this.current_selection = coords;
-            this.game_logic();
-        }
-        else if (JSON.stringify(this.current_selection) != JSON.stringify(coords)){
-            this.previous_selection = this.current_selection;
-            this.current_selection = coords;
-            this.game_logic();
+            this.fsm.scene.bot.add_or_move(this.fsm.scene.board);
         }
     }
 
