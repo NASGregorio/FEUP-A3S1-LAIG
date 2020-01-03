@@ -34,6 +34,10 @@ class MyInterface extends CGFinterface {
         return true;
     }
 
+    addViews() {
+        this.gui.add(this.scene, 'selectedView', this.scene.viewNamesToIndex).onChange(this.scene.onViewChanged.bind(this.scene)).name('Views');
+    }
+
     clean_folder() {
         if(this.curr_folder != null){
             this.gui.removeFolder(this.curr_folder);

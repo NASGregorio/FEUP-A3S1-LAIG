@@ -21,7 +21,7 @@ class JaleoScene extends CGFscene{
 
 		super.init(application);
 
-		this.initCameras();
+		//this.initCameras();
 		this.initLights();
 
 		this.gl.clearColor(0, 0, 0, 1.0);
@@ -66,30 +66,32 @@ class JaleoScene extends CGFscene{
 		this.lights[1].update();
 	}
 
+    onViewChanged() {
+        this.camera = this.graph.views.get(this.viewIndexToNames[this.selectedView]);
+        this.interface.setActiveCamera(this.camera);
+    }
+
 	initCameras() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(0, 25, 90), vec3.fromValues(0, 0, 0));
-
-        // let player = this.board.get_player()
+        this.selectedView = 0;
+        this.viewNamesToIndex = {};
+        this.viewIndexToNames = {};
         
-        // this.selectedView = 0;
-        // this.viewNamesToIndex = {};
-        // this.viewIndexToNames = {};
-
-        // var i = 0;
-        // this.graph.views.forEach((value, key) => {
-        //     this.viewNamesToIndex[key] = i;
-        //     this.viewIndexToNames[i] = key;
-        //     i++;
-        // });
+        var i = 0;
+        this.graph.views.forEach((value, key) => {
+            this.viewNamesToIndex[key] = i;
+            this.viewIndexToNames[i] = key;
+            i++;
+        });
         
-        // // Set camera to XML's default
-        // this.selectedView = this.viewNamesToIndex[this.graph.defaultView];
-        // this.onViewChanged();
+        // Set camera to XML's default
+        this.selectedView = this.viewNamesToIndex[this.graph.defaultView];
+        this.onViewChanged();
 
 
-        // // Create camera UI
-        // this.interface.addViews();
-	}
+        // Create camera UI
+        this.interface.addViews();
+    }
+
 
 	logPicking() {
 
@@ -135,6 +137,8 @@ class JaleoScene extends CGFscene{
         
         // Start animations
         this.graph.startAnimations();
+		this.initCameras();
+
     }
 
     update(tNow) {

@@ -3,20 +3,24 @@
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
-            <from x="5" y="10" z="30" />
+            <from x="0" y="15" z="50" />
             <to x="0" y="0" z="0" />
         </perspective>
 
-        <perspective id="defaultCamera2" near="0.1" far="500" angle="45">
-            <from x="5" y="10" z="-30" />
+        <perspective id="Player1" near="0.1" far="500" angle="45">
+            <from x="-40" y="15" z="0" />
             <to x="0" y="0" z="0" />
         </perspective>
 
-        <ortho id="orthoCamera"  near="0.1" far="100" left="-5" right="5" top="5" bottom="-5" >
-            <from x="0" y="0" z="10" />
+        <perspective id="Player2" near="0.1" far="500" angle="45">
+            <from x="40" y="15" z="0" />
             <to x="0" y="0" z="0" />
-            <up x="0" y="1" z="0" /> <!-- opcional, default 0,1,0 -->
-        </ortho>
+        </perspective>
+
+        <perspective id="TopCamera" near="0.1" far="500" angle="45">
+            <from x="0" y="20" z="20" />
+            <to x="0" y="0" z="0" />
+        </perspective>
     </views>
 
     <globals>
