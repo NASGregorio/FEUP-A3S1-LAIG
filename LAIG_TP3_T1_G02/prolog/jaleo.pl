@@ -587,20 +587,20 @@ travel(Board, [Coords|[Dir|_]], N) :-
 	).
 
 valid_moves(GameState, ListOfMoves) :-
-    get_all_val_moves(GameState, add, [9,9], [], ListOfAdd),
-    get_all_val_moves(GameState, move, [9,9], [], ListOfMove),
+    val_all_moves(GameState, add, [9,9], [], ListOfAdd),
+    val_all_moves(GameState, move, [9,9], [], ListOfMove),
     append(ListOfAdd, ListOfMove, ListOfMoves).
 
 val_all_moves(_, Action, [], TotalMoves, TotalMoves).
 val_all_moves(GameState, Action, Coords, T, TotalMoves) :-
     get_split_coords(Coords, X, Y),
-    get_val_moves(GameState, Action, [X, Y], [], L1),
+    validate_moves(GameState, Action, [X, Y], [], L1),
     append(T, L1, L2),
     YN is Y-1,
     (YN == -1 ->
         val_all_moves(GameState, Action, [], L2, TotalMoves);
 
-		val_all_moves(GameState, Action, [X, YN], L2, TotalMoves)
+        val_all_moves(GameState, Action, [X, YN], L2, TotalMoves)
     ).
 
 validate_moves(_, Action, [], TotalMoves, TotalMoves).
@@ -612,7 +612,7 @@ validate_moves(GameState, Action, Coords, T, TotalMoves) :-
     (XN == -1 ->
         validate_moves(GameState, Action, [], L1, TotalMoves);
 
-		validate_moves(GameState, Action, [XN, Y], L1, TotalMoves)
+        validate_moves(GameState, Action, [XN, Y], L1, TotalMoves)
     ).
 
 
