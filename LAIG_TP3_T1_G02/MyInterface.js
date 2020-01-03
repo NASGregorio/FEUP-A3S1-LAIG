@@ -26,6 +26,8 @@ class MyInterface extends CGFinterface {
         this.quit = PrologInterpreter.send_quit;
 
         // this.filenameIndex = 0;
+
+        this.lights = this.gui.addFolder('Lights');
         
         this.show_start_options(this.scene);
 
@@ -36,6 +38,10 @@ class MyInterface extends CGFinterface {
 
     addViews() {
         this.gui.add(this.scene, 'selectedView', this.scene.viewNamesToIndex).onChange(this.scene.onViewChanged.bind(this.scene)).name('Views');
+    }
+
+    addLight(lightSwitches, idx, id) {
+        this.lights.add(lightSwitches, idx, lightSwitches[idx]).onChange(this.scene.onLightSwitched.bind(this.scene, idx)).name(id);          
     }
 
     clean_folder() {

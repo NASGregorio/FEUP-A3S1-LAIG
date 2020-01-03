@@ -22,7 +22,7 @@ class JaleoScene extends CGFscene{
 		super.init(application);
 
 		//this.initCameras();
-		this.initLights();
+		//this.initLights();
 
 		this.gl.clearColor(0, 0, 0, 1.0);
 		this.gl.clearDepth(10000.0);
@@ -50,21 +50,59 @@ class JaleoScene extends CGFscene{
 
 	}
 
-	initLights() {
-		this.lights[0].setPosition(4, 3, 4, 1);
-		this.lights[0].setAmbient(0.1, 0.1, 0.1, 1);
-		this.lights[0].setDiffuse(0.8, 0.8, 0.8, 1);
-		this.lights[0].setSpecular(0, 0, 0, 1);
-		this.lights[0].enable();
-		this.lights[0].update();
+    /**
+     * Initializes the scene lights with the values read from the XML file.
+     */
+    initLights() {
 
-		this.lights[1].setPosition(3,3,3,1);
-		this.lights[1].setAmbient(0.1, 0.1, 0.1, 1);
-		this.lights[1].setDiffuse(0.9, 0.9, 0.9, 1);
-		this.lights[1].setSpecular(0, 0, 0, 1);
-		this.lights[1].enable();
-		this.lights[1].update();
-	}
+        // Array for lights' UI
+        this.lightSwitches = [];
+
+        // Setup lights with XML values
+        this.graph.lights.forEach((value, key) => {
+            var light = value;
+            var i = light[0];
+
+            this.lights[i].setPosition(light[3][0], light[3][1], light[3][2], light[3][3]);
+            this.lights[i].setAmbient(light[4][0], light[4][1], light[4][2], light[4][3]);
+            this.lights[i].setDiffuse(light[5][0], light[5][1], light[5][2], light[5][3]);
+            this.lights[i].setSpecular(light[6][0], light[6][1], light[6][2], light[6][3]);
+
+            this.lights[i].setConstantAttenuation(light[7]);
+            this.lights[i].setLinearAttenuation(light[8]);
+            this.lights[i].setQuadraticAttenuation(light[9]);
+
+            if (light[2] == "spot") {
+                this.lights[i].setSpotCutOff(light[10]);
+                this.lights[i].setSpotExponent(light[11]);
+                this.lights[i].setSpotDirection(light[12][0], light[12][1], light[12][2]);
+            }
+
+            this.lights[i].setVisible(true);
+            if (light[1]) {
+                this.lights[i].enable();
+                this.lightSwitches.push(true);                
+            }
+            else {
+                this.lights[i].disable();
+                this.lightSwitches.push(false);
+            }
+            
+            // Create light UI
+            this.interface.addLight(this.lightSwitches, i, key);
+
+            // Update light to reflect changes
+            this.lights[i].update();
+        });
+    }
+
+    onLightSwitched(i) {
+        if(this.lightSwitches[i])
+            this.lights[i].enable();
+        else
+            this.lights[i].disable();
+        this.lights[i].update();
+    }
 
     onViewChanged() {
         this.camera = this.graph.views.get(this.viewIndexToNames[this.selectedView]);
@@ -75,7 +113,7 @@ class JaleoScene extends CGFscene{
         this.selectedView = 0;
         this.viewNamesToIndex = {};
         this.viewIndexToNames = {};
-        
+
         var i = 0;
         this.graph.views.forEach((value, key) => {
             this.viewNamesToIndex[key] = i;
@@ -135,9 +173,12 @@ class JaleoScene extends CGFscene{
 		
         this.sceneInited = true;
         
+        this.initCameras();
+        this.initLights();
+
         // Start animations
         this.graph.startAnimations();
-		this.initCameras();
+        
 
     }
 
