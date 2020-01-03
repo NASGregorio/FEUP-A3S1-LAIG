@@ -634,7 +634,7 @@ setup_pvp(GameState):-
 	%end_game2(Board),
 	% ---------------------------------
 	
-    %test_board(Board),
+    % test_board(Board),
 	
 	length(Board, RowSize),
 	

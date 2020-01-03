@@ -167,12 +167,18 @@ class InputState extends AbstractState {
     }
 
     undo_turn() {
-        let board = this.fsm.scene.board.undo();
-        if(this.fsm.scene.board.saved_game_states.length == 1) {
-            this.fsm.init("SETUP");
+        if(this.fsm.scene.board.saved_game_states.length < 2) {
+            return;
         }
-        else
+        let board = this.fsm.scene.board.undo();
+        this.fsm.switch_state("UPDATE", board);
+    }
+
+    redo_turn() {
+        if(this.fsm.scene.board.redo_stack.length > 0) {
+            let board = this.fsm.scene.board.redo();
             this.fsm.switch_state("UPDATE", board);
+        }
     }
 
     reset_game() {

@@ -11,6 +11,7 @@ class StateMachine {
 			"SETUP": new SetupState(this, "Setup"),
 			"UPDATE": new UpdateBoardState(this, "Update"),
 			"INPUT": new InputState(this, "Input"),
+			"BOT": new InputState(this, "Bot"),
             "MOVE": new MoveState(this, "Move"),
             "GAMEOVER": new GameOverState(this, "Game Over"),
 		};

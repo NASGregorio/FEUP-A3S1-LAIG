@@ -16,6 +16,7 @@ class SetupState extends AbstractState {
     }
 
     setup_success(data) {
+        this.fsm.scene.board.save_state(data);
         this.fsm.switch_state("UPDATE", data);
     }
 }

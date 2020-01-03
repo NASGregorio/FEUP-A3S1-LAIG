@@ -78,6 +78,7 @@ class MyInterface extends CGFinterface {
       
         group.add(ctx, "clear_turn").name("Clear Input");
         group.add(ctx, "undo_turn").name("Undo turn");
+        group.add(ctx, "redo_turn").name("Redo turn");
         group.add(ctx, "reset_game").name("Restart game");
         group.add(ctx, "go_to_start").name("To start menu");
         this.add_quit_button(group);
