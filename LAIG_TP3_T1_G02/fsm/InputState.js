@@ -168,9 +168,10 @@ class InputState extends AbstractState {
 
     undo_turn() {
         let board = this.fsm.scene.board.undo();
+        if(this.fsm.scene.board.saved_game_states.length == 1) {
+            this.fsm.init("SETUP");
+        }
         this.fsm.switch_state("UPDATE", board);
-        console.log("UNDO TURN: ",board);
-        // NOT UPDATING CORRECTLY
     }
 
     reset_game() {
