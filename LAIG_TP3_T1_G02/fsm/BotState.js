@@ -1,4 +1,4 @@
-class InputState extends AbstractState {
+class BotState extends AbstractState {
 
     constructor(fsm, name) {
         super(fsm, name);
@@ -43,26 +43,28 @@ class InputState extends AbstractState {
 
     game_logic() {
 
-        let board = this.fsm.scene.board;
-        let current_symbol = board.get_cell_at(this.current_selection)[0];
-        let player = board.get_player();
-        let player_symbol = (player == "white") ? "w" : "b";
+        // IT GONNA CHANGE
 
-        if(this.stack_action) {
-            return this.handle_stack_logic(current_symbol, player_symbol);
-        }
+        // let board = this.fsm.scene.board;
+        // let current_symbol = board.get_cell_at(this.current_selection)[0];
+        // let player = board.get_player();
+        // let player_symbol = (player == "white") ? "w" : "b";
 
-        if(this.previous_selection == null) {
-            return this.detect_type_of_action(current_symbol, player_symbol);
-        }
+        // if(this.stack_action) {
+        //     return this.handle_stack_logic(current_symbol, player_symbol);
+        // }
 
-        if(this.add_action) {
-            return this.handle_add_logic(current_symbol);
-        }
+        // if(this.previous_selection == null) {
+        //     return this.detect_type_of_action(current_symbol, player_symbol);
+        // }
 
-        if(this.move_action) {
-            return this.handle_move_logic(current_symbol);
-        }
+        // if(this.add_action) {
+        //     return this.handle_add_logic(current_symbol);
+        // }
+
+        // if(this.move_action) {
+        //     return this.handle_move_logic(current_symbol);
+        // }
     }
 
     handle_stack_logic(current_symbol, player_symbol) {
@@ -171,7 +173,7 @@ class InputState extends AbstractState {
         if(this.fsm.scene.board.saved_game_states.length == 1) {
             this.fsm.init("SETUP");
         }
-        else
+        else 
             this.fsm.switch_state("UPDATE", board);
     }
 
