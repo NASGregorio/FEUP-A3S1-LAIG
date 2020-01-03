@@ -13,6 +13,8 @@ class JaleoScene extends CGFscene{
 
         this.info = "";
 
+        this.player = "";
+
         this.pickIDs = new Map();
 
 	}
@@ -257,8 +259,8 @@ class JaleoScene extends CGFscene{
 
 	start_game() {
         this.fsm.init("SETUP");
-        this.camera = this.graph.views.get(this.viewIndexToNames[1]);
-        this.interface.setActiveCamera(this.camera);
+        // this.camera = this.graph.views.get(this.viewIndexToNames[1]);
+        // this.interface.setActiveCamera(this.camera);
 	}
 
 	how_to_play() {
@@ -273,8 +275,6 @@ class JaleoScene extends CGFscene{
 (Não está por ordem de prioridade)
 
 Ajustar camara de acordo com o tamanho e usar funçao orbit com toggle na interface (Afonso will do)
-
-Coisas do enunciado que ainda nao li (que podem ou nao existir)
 
 */
 
