@@ -168,10 +168,10 @@ validate_move(Move, GameState) :-
 
 
 	(Action == move ->
-		validate_move_action(Arg1, Arg2, GameState),
+		validate_move_action(Arg1, Arg2, GameState);
 		%format('~p: ~p to ~p~n', [Action, Arg1, Arg2]);
 
-		validate_add_action(Arg1, Arg2, GameState),
+		validate_add_action(Arg1, Arg2, GameState)
 		%format('~p: Piece to ~p and Tile to ~p~n', [Action, Arg1, Arg2])
 	).
 

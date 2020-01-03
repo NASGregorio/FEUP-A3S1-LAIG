@@ -273,11 +273,8 @@ class JaleoScene extends CGFscene{
 (Não está por ordem de prioridade)
 
 Ajustar camara de acordo com o tamanho e usar funçao orbit com toggle na interface (Afonso will do)
-<<<<<<< HEAD
 
 Coisas do enunciado que ainda nao li (que podem ou nao existir)
-=======
->>>>>>> fa01a7e921eae40c8ab4c666b32e94049440c303
 
 */
 
