@@ -256,7 +256,9 @@ class JaleoScene extends CGFscene{
 	}
 
 	start_game() {
-		this.fsm.init("SETUP");
+        this.fsm.init("SETUP");
+        this.camera = this.graph.views.get(this.viewIndexToNames[1]);
+        this.interface.setActiveCamera(this.camera);
 	}
 
 	how_to_play() {

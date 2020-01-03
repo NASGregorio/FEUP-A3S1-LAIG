@@ -8,18 +8,23 @@
         </perspective>
 
         <perspective id="Player1" near="0.1" far="500" angle="45">
-            <from x="-40" y="15" z="0" />
+            <from x="-30" y="20" z="0" />
             <to x="0" y="0" z="0" />
         </perspective>
 
         <perspective id="Player2" near="0.1" far="500" angle="45">
-            <from x="40" y="15" z="0" />
+            <from x="30" y="20" z="0" />
             <to x="0" y="0" z="0" />
         </perspective>
 
         <perspective id="TopCamera" near="0.1" far="500" angle="45">
             <from x="0" y="20" z="20" />
             <to x="0" y="0" z="0" />
+        </perspective>
+
+        <perspective id="FocusCamera" near="0.1" far="500" angle="45">
+            <from x="0" y="30" z="0.1" />
+            <to x="0" y="5" z="0" />
         </perspective>
     </views>
 
@@ -50,14 +55,6 @@
             <specular r="0.4" g="0.3" b="0.3" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />  
         </omni>
-        <!-- <spot id="demoLight2" enabled="1" angle="90" exponent="0">
-            <location x="0" y="10" z="0" w="1.0" />
-            <target x="0" y="0" z="0" />
-            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="1.0" g="0.8" b="0.6" a="1.0" />
-            <specular r="1.0" g="0.8" b="0.6" a="1.0" />
-            <attenuation constant="1" linear="0" quadratic="0" />  
-        </spot> -->
     </lights>
 
     <textures>
