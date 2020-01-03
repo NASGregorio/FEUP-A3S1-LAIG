@@ -25,7 +25,7 @@ try_player_action(GameState, NewGameState) :-
 
 	get_stack_options(GameState, AllActions, Len),
 	(Len > 0 ->
-		format('~nForced to stack: ~n', []),
+		%format('~nForced to stack: ~n', []),
 		force_stack_action(GameState, AllActions, Len, NewBoard),
 		LastMove = [];
 		
@@ -35,7 +35,7 @@ try_player_action(GameState, NewGameState) :-
 	update_gamestate(GameState, NewBoard, NewGameState),
 	
 	(game_over([NewGameState,LastMove],Winner) ->
-		format('~nPlayer ~p is the winner!~n~n',[Winner]);
+		%format('~nPlayer ~p is the winner!~n~n',[Winner]);
 		try_player_action(NewGameState, NextTurnState)
 	).
 
@@ -73,7 +73,7 @@ game_over([GameState|[LastMove|_]], Winner) :-
 	get_pieces_at(Board, Discs, Pieces),
 	count_all_pieces(Pieces, w, Count),
 
-	write(Count),
+	%write(Count),
 	((Count > 15) ->
 
 		(playerWhite(Player) -> Winner = black; Winner = white);
@@ -169,10 +169,10 @@ validate_move(Move, GameState) :-
 
 	(Action == move ->
 		validate_move_action(Arg1, Arg2, GameState),
-		format('~p: ~p to ~p~n', [Action, Arg1, Arg2]);
+		%format('~p: ~p to ~p~n', [Action, Arg1, Arg2]);
 
 		validate_add_action(Arg1, Arg2, GameState),
-		format('~p: Piece to ~p and Tile to ~p~n', [Action, Arg1, Arg2])
+		%format('~p: Piece to ~p and Tile to ~p~n', [Action, Arg1, Arg2])
 	).
 
 execute_move(Move, GameState, NewBoard) :-
@@ -203,7 +203,7 @@ force_stack_action(GameState, AllActions, Len, NewBoard) :-
 	
 	print_stack_actions(AllActions, 0),
 	pick_stack_action(Len, N),
-	format('~d~n', [N]),
+	%format('~d~n', [N]),
 
 	get_element_at(AllActions, N, Action),
 	get_action_data(Action, Row, Col, Dir),
@@ -586,9 +586,15 @@ travel(Board, [Coords|[Dir|_]], N) :-
 		false
 	).
 
+test_moves(L) :-
+	setup_pvp(GameState),
+	move_and_update([add,[21,23],[20,23]], GameState, G1),
+	move_and_update([add,[21,23],[20,23]], G1, G2),
+	valid_moves(G2, L).
+
 valid_moves(GameState, ListOfMoves) :-
-    val_all_moves(GameState, add, [9,9], [], ListOfAdd),
-    val_all_moves(GameState, move, [9,9], [], ListOfMove),
+    val_all_moves(GameState, add, [44,44], [], ListOfAdd),
+    val_all_moves(GameState, move, [44,44], [], ListOfMove),
     append(ListOfAdd, ListOfMove, ListOfMoves).
 
 val_all_moves(_, Action, [], TotalMoves, TotalMoves).
