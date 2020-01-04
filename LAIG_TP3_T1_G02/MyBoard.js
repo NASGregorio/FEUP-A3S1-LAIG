@@ -76,12 +76,12 @@ class MyBoard extends CGFobject {
         this.available_whites = 16 - this.game_state[9];
         this.available_tiles = 28 - (this.game_state[4].length + this.game_state[5].length + this.game_state[6].length);
         // this.print_board(game_state[0]);
-        this.scene.player = this.game_state[3]; 
-        if(this.scene.player == "black") {
+        
+        if(this.game_state[3] == "black") {
             this.scene.camera = this.scene.graph.views.get(this.scene.viewIndexToNames[1]);
             this.scene.interface.setActiveCamera(this.scene.camera);
         }
-        if(this.scene.player == "white") {
+        if(this.game_state[3] == "white") {
             this.scene.camera = this.scene.graph.views.get(this.scene.viewIndexToNames[2]);
             this.scene.interface.setActiveCamera(this.scene.camera);
         }

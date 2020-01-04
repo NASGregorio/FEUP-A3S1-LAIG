@@ -8,15 +8,6 @@ class JaleoScene extends CGFscene{
 		super();
 
         this.interface = myinterface;
-
-
-        this.board = null;
-        this.player = "";
-
-        this.xml_load_requests = 0;
-        this.graph = null;
-        this.graphs = new Map();
-        this.graphNames = [];
 	}
     
 	init(application) {
@@ -29,26 +20,50 @@ class JaleoScene extends CGFscene{
         this.pickIDs = new Map();
         this.setPickEnabled(true);
 
-        this.slotMachine = new CGFOBJModel(this, 'models/slot_machine.obj');
+        this.enableTextures(true);
+        this.gl.clearDepth(100.0);
+        this.gl.enable(this.gl.DEPTH_TEST);
+        this.gl.enable(this.gl.CULL_FACE);
+        this.gl.depthFunc(this.gl.LEQUAL);
 
+        this.initModels();
         this.initMaterials();
 
-        this.parseXMLScenes();
+
+        this.initScenes();
     }
 
-    parseXMLScenes() {
+    initScenes() {
 
-        this.parseXML("demo.xml", "demo");
-        this.parseXML("alternative_scene.xml", "casino");
+        this.xml_load_requests = 0;
+        this.graph = null;
+        this.graphs = new Map();
+        this.graphNames = [];
+
+        this.initScene("demo.xml", "demo");
+        this.initScene("alternative_scene.xml", "casino");
 
         this.selectedScene = "casino";
     }
 
-    parseXML(filename, sceneName) {
+    initScene(filename, sceneName) {
         let scene = new MySceneGraph(filename, this);
         this.xml_load_requests++;
         this.graphs.set(sceneName, scene);
         this.graphNames.push(sceneName);
+    }
+
+    initMaterials() {
+        this.greyMat = new CGFappearance(this);
+		this.greyMat.setAmbient(0.0, 0.0, 0.0, 1);
+		this.greyMat.setDiffuse(0.2, 0.2, 0.2, 1);
+		this.greyMat.setSpecular(0.0, 0.0, 0.0, 1);
+        this.greyMat.setShininess(120);
+    }
+
+    initModels() {
+        this.axis = new CGFaxis(this, 1);
+        this.slotMachine = new CGFOBJModel(this, 'models/slot_machine.obj');
     }
 
     onGraphLoaded() {
@@ -58,104 +73,17 @@ class JaleoScene extends CGFscene{
         if(this.xml_load_requests != 0)
             return;
 
-        this.onSceneChanged();
         this.interface.addScenes();
-
-		this.enableTextures(true);
-		
-        this.gl.clearDepth(100.0);
-        this.gl.enable(this.gl.DEPTH_TEST);
-        this.gl.enable(this.gl.CULL_FACE);
-        this.gl.depthFunc(this.gl.LEQUAL);
-        this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
-        this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
-		
-        this.initCameras();
-        this.initLights();
-
+        
         this.setUpdatePeriod(1000/120);
         this.lastUpdate = Date.now();
-		
-        this.axis = new CGFaxis(this, this.graph.referenceLength);
-		
-        this.sceneInited = true;
-        
+            
+        this.onSceneChanged();
+
         // Start animations
         this.graph.startAnimations();
-    
-    }
-    
-    initMaterials() {
-        this.greyMat = new CGFappearance(this);
-		this.greyMat.setAmbient(0.0, 0.0, 0.0, 1);
-		this.greyMat.setDiffuse(0.2, 0.2, 0.2, 1);
-		this.greyMat.setSpecular(0.0, 0.0, 0.0, 1);
-        this.greyMat.setShininess(120);
     }
 
-    initLights() {
-
-        // Array for lights' UI
-        this.lightSwitches = [];
-
-        // Setup lights with XML values
-        this.graph.lights.forEach((value, key) => {
-            var light = value;
-            var i = light[0];
-
-            this.lights[i].setPosition(light[3][0], light[3][1], light[3][2], light[3][3]);
-            this.lights[i].setAmbient(light[4][0], light[4][1], light[4][2], light[4][3]);
-            this.lights[i].setDiffuse(light[5][0], light[5][1], light[5][2], light[5][3]);
-            this.lights[i].setSpecular(light[6][0], light[6][1], light[6][2], light[6][3]);
-
-            this.lights[i].setConstantAttenuation(light[7]);
-            this.lights[i].setLinearAttenuation(light[8]);
-            this.lights[i].setQuadraticAttenuation(light[9]);
-
-            if (light[2] == "spot") {
-                this.lights[i].setSpotCutOff(light[10]);
-                this.lights[i].setSpotExponent(light[11]);
-                this.lights[i].setSpotDirection(light[12][0], light[12][1], light[12][2]);
-            }
-
-            this.lights[i].setVisible(false);
-            if (light[1]) {
-                this.lights[i].enable();
-                this.lightSwitches.push(true);                
-            }
-            else {
-                this.lights[i].disable();
-                this.lightSwitches.push(false);
-            }
-            
-            // Create light UI
-            this.interface.addLight(this.lightSwitches, i, key);
-
-            // Update light to reflect changes
-            this.lights[i].update();
-        });
-    }
-
-	initCameras() {
-        this.selectedView = 0;
-        this.viewNamesToIndex = {};
-        this.viewIndexToNames = {};
-
-        var i = 0;
-        this.graph.views.forEach((value, key) => {
-            this.viewNamesToIndex[key] = i;
-            this.viewIndexToNames[i] = key;
-            i++;
-        });
-        
-        // Set camera to XML's default
-        this.selectedView = this.viewNamesToIndex[this.graph.defaultView];
-        this.onViewChanged();
-
-
-        // Create camera UI
-        this.interface.addViews();
-    }
 
 
     // Interface callbacks
@@ -173,7 +101,13 @@ class JaleoScene extends CGFscene{
     }
 
     onSceneChanged() {
+
+        this.sceneInited = false;
+
         this.graph = this.graphs.get(this.selectedScene);
+        this.graph.load();
+
+        this.sceneInited = true;
     }
     //////////////////////
 
