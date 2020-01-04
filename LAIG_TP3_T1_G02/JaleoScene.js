@@ -207,8 +207,8 @@ class JaleoScene extends CGFscene{
             this.board.counter = Math.round((this.time - this.board.start_time)/1000);
             this.interface.update_panel_time(Math.round(this.board.counter));
         }
-        //this.camera.orbit("x",Math.PI/200);
     }
+
 
 	display() {
         if (!this.sceneInited)
@@ -288,6 +288,8 @@ Coisas do enunciado que ainda nao li (que podem ou nao existir)
 
 Usar exit da InputState ( e das outras)
 
+TODO Afonso: Game Film
+            Interface "To start menu"
 */
 
 

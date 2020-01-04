@@ -14,8 +14,8 @@ class MyBoard extends CGFobject {
         this.OuterRadius = 0.5;
         this.InnerRadius = this.OuterRadius * 0.866025404;
         this.sqrt3 = Math.sqrt(3);
-        this.player = "";
-        this.firstTime = 0;
+
+        this.film_game_states = [];
         this.saved_game_states = [];
         this.redo_stack = [];
         this.start_time = 0;
@@ -106,7 +106,18 @@ class MyBoard extends CGFobject {
 
     save_state(data) {
         this.saved_game_states.push(data);
+        this.film_game_states.push(data);
+        console.log("Film GameStates: ", this.film_game_states);
         this.redo_stack = [];
+    }
+
+    invert_film_game() {
+        return this.film_game_states.reverse();
+    }
+
+    replay(game_state) {
+        //this.animate_move(game_state);
+        this.update_board(game_state);
     }
 
     undo() {
