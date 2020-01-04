@@ -19,7 +19,7 @@ class JaleoScene extends CGFscene{
         
         super.init(application);
         
-		this.board = new MyBoard(this);
+		
 		this.fsm = new StateMachine(this);
         
         this.pickIDs = new Map();
@@ -84,6 +84,8 @@ class JaleoScene extends CGFscene{
         this.lastUpdate = Date.now();
             
         this.onSceneChanged();
+
+        this.fsm.init("START");
 
         // Start animations
         this.graph.startAnimations();
@@ -243,15 +245,6 @@ class JaleoScene extends CGFscene{
             this.slotMachine.display();
         this.popMatrix();
 	}
-
-	start_game() {
-        this.fsm.init("SETUP");
-	}
-
-	how_to_play() {
-		document.getElementById("rules").style.display = "block";
-		document.getElementById("panel").style.display = "none";
-    }
     
     game_over() {
 		document.getElementById("game_over").style.display = "block";

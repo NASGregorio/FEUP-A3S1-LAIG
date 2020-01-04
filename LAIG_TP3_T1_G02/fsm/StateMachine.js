@@ -8,6 +8,7 @@ class StateMachine {
         this.curr_state_key = null;
 
         this.states = {
+			"START": new StartState(this, "Start"),
 			"SETUP": new SetupState(this, "Setup"),
 			"UPDATE": new UpdateBoardState(this, "Update"),
 			"INPUT": new InputState(this, "Input"),

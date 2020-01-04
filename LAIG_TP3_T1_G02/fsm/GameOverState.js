@@ -28,8 +28,4 @@ class GameOverState extends AbstractState {
     reset_game() {
         this.fsm.init("SETUP");
     }
-
-    go_to_start() {
-        
-    }
 }

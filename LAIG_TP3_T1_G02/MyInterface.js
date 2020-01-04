@@ -29,7 +29,6 @@ class MyInterface extends CGFinterface {
 
         
         this.curr_folder = null;
-        this.show_start_options(this.scene); //TODO move to start scene
         
         this.initKeys();
         
