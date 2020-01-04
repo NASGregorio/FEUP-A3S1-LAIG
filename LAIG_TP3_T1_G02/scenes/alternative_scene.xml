@@ -190,7 +190,7 @@
         </primitive>
 
         <primitive id="sack">
-            <patch npointsU="5" npointsV="5" npartsU="20" npartsV="20" >
+            <patch npointsU="5" npointsV="5" npartsU="40" npartsV="40" >
                 <controlpoint xx="0.4" yy="0" zz="0.5" />
                 <controlpoint xx="0.4*0.7" yy="0.4*0.7" zz="0.5" />
                 <controlpoint xx="0" yy="0.4*1" zz="0.5" />
