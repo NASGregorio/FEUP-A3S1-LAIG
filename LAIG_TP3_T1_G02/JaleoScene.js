@@ -8,6 +8,11 @@ class JaleoScene extends CGFscene{
 		super();
 
         this.interface = myinterface;
+
+        this.moving_camera = false;
+        this.cam_rotation_step = Math.PI/100;
+        this.cam_rotation_target = 0;
+        this.cam_rotation_current = 0;
 	}
     
 	init(application) {
@@ -112,24 +117,43 @@ class JaleoScene extends CGFscene{
     //////////////////////
 
 
-    change_camera() {
+    move_camera() {
 
         let player = this.board.get_player();
 
         if(player == "black") {
-            this.camera = this.graph.views.get(this.viewIndexToNames[1]);
-            this.interface.setActiveCamera(this.camera);
-            this.camera.orbit("x",Math.PI);
+
+            this.cam_rotation_target = Math.PI;
+            this.moving_camera = true;
         }
         else if(player == "white") {
-            this.camera = this.graph.views.get(this.viewIndexToNames[2]);
-            this.interface.setActiveCamera(this.camera);
-            this.camera.orbit("x",Math.PI);
+
+            this.cam_rotation_target = Math.PI;
+            this.moving_camera = true;
         }
     }
 
     array_compare(arr1, arr2) {
         return (arr1.x === arr2.x && arr1.y === arr2.y && arr1.z === arr2.z)
+    }
+
+    lerp_camera() {
+
+        this.cam_rotation_current += this.cam_rotation_step;
+
+        let pos = vec3.fromValues(30 * Math.cos(this.cam_rotation_current), 15, 30 * Math.sin(this.cam_rotation_current));
+        let tar = vec3.fromValues(0,0,0);
+
+        this.camera.setPosition(pos);
+        this.camera.setTarget(tar);
+
+        if(Math.abs(this.cam_rotation_current - this.cam_rotation_target) < 0.001) {
+            this.moving_camera = false;
+            console.log("END");
+
+            this.cam_rotation_current = 0;
+            this.cam_rotation_target = 0;
+        }
     }
 
 
@@ -157,7 +181,11 @@ class JaleoScene extends CGFscene{
     update(tNow) {
         this.time = tNow;
         var dt = tNow - this.lastUpdate;
-        this.graph.update(dt);                
+        this.graph.update(dt);    
+        
+        // if(this.moving_camera) {
+        //     this.lerp_camera();
+        // }
 
         if(this.board.count == true) {
             this.board.counter = Math.round((this.time - this.board.start_time)/1000);
