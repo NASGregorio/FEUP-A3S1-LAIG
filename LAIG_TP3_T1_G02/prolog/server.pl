@@ -42,8 +42,8 @@ server_loop(Socket) :-
 		
 		% Generate Response
 		handle_request(Request, MyReply, Status),
-		format('Request: ~q~n',[Request]),
-		format('Reply: ~q~n', [MyReply]),
+		%format('Request: ~q~n',[Request]),
+		%format('Reply: ~q~n', [MyReply]),
 		
 		% Output Response
 		format(Stream, 'HTTP/1.0 ~p~n', [Status]),

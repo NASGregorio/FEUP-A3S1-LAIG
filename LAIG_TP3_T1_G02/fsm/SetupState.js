@@ -6,7 +6,6 @@ class SetupState extends AbstractState {
 
     enter() {
         super.enter();
-
         PrologInterpreter.send_setup_pvp(this.setup_success.bind(this));
 
     }

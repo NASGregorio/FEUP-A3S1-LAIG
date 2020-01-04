@@ -184,15 +184,12 @@ class JaleoScene extends CGFscene{
         this.time = tNow;
         var dt = tNow - this.lastUpdate;
         this.graph.update(dt);    
+        this.board.update(this.time);
         
         // if(this.moving_camera) {
         //     this.lerp_camera();
         // }
 
-        if(this.board.count == true) {
-            this.board.counter = Math.round((this.time - this.board.start_time)/1000);
-            this.interface.update_panel_time(Math.round(this.board.counter));
-        }
     }
 
 
@@ -263,8 +260,7 @@ Coisas do enunciado que ainda nao li (que podem ou nao existir)
 
 Usar exit da InputState ( e das outras)
 
-TODO Afonso: Game Film
-            Interface "To start menu"
+TODO Afonso: Game Film - animation
 */
 
 

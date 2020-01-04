@@ -69,6 +69,13 @@ class MyBoard extends CGFobject {
         // this.print_board(game_state[0]);
     }
 
+    update(tNow) {
+        if(this.count == true) {
+            this.counter = Math.round((tNow - this.start_time)/1000);
+            this.scene.interface.update_panel_time(this.counter);
+        }
+    }
+
     update_adj(adj_tiles) {
         this.adj_tiles = adj_tiles;
     }

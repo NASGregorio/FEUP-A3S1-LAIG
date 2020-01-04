@@ -123,6 +123,14 @@ class MyInterface extends CGFinterface {
 
 
     // HTML UI
+    clean_panel() {
+        this.update_panel_player("");
+        this.update_panel_time("");
+        this.update_panel_info("");
+        this.update_panel_game_over("");
+
+    }
+
     update_panel_player(player) {
         document.getElementById("player").innerText = player ? "Player: " + player : "";
     }

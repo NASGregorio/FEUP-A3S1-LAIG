@@ -14,9 +14,9 @@ class GameOverState extends AbstractState {
             this.fsm.scene.board.replay(this.game_film[i]);
         }
 
+        this.fsm.scene.board.count = false;
         this.fsm.scene.interface.update_panel_game_over(`Player ${winner} wins in ${this.fsm.scene.board.counter} seconds! Congratulations.`);
 
-        this.fsm.scene.board.count = false;
 
         this.fsm.scene.interface.show_game_over_menu();
     }

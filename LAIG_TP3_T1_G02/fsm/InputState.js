@@ -27,6 +27,12 @@ class InputState extends AbstractState {
         }
     }
 
+    exit() {
+        super.exit();
+        this.clear_parameters();
+        this.fsm.scene.interface.clean_folder();
+    }
+
     update_coord_selection(coords) {
 
         if(!this.current_selection) {
@@ -78,10 +84,6 @@ class InputState extends AbstractState {
             let destination = JSON.stringify( this.matching_stack[1] );
             if(coords_str == destination) {
                 this.fsm.switch_state("MOVE", ['stack', this.matching_stack[2]]);
-                this.previous_selection = null;
-                this.current_selection = null;
-                this.matching_stack = null;
-                this.stack_action = false;
             }
         }
         else {
@@ -120,7 +122,6 @@ class InputState extends AbstractState {
 
     handle_add_logic(current_symbol) {
         if(current_symbol == "0") {
-            this.fsm.scene.interface.update_panel_info("");
             this.fsm.switch_state("MOVE", ['add', this.previous_selection, this.current_selection]);            
         }
         else {
@@ -133,7 +134,6 @@ class InputState extends AbstractState {
 
     handle_move_logic(current_symbol) {
         if(current_symbol != "0" && current_symbol != "t") {
-            this.fsm.scene.interface.update_panel_info("");
             this.fsm.switch_state("MOVE", ['move', this.previous_selection, this.current_selection]);
         }
         else {
@@ -144,12 +144,17 @@ class InputState extends AbstractState {
         this.current_selection = null;
     }
 
-    exit() {
-        this.stack_actions == null
+    clear_parameters() {
+        this.current_selection = null;
+        this.previous_selection = null;
+
+        this.add_action = false;
+        this.move_action = false;
         this.stack_action = false;
+
+        this.stack_actions = null;
         this.matching_stack = null;
-        super.exit();
-        this.fsm.scene.interface.clean_folder();
+        this.fsm.scene.interface.update_panel_info("");
     }
 
     clear_turn() {
