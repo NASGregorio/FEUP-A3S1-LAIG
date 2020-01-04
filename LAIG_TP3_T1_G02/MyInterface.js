@@ -21,44 +21,47 @@ class MyInterface extends CGFinterface {
 
         this.gui = new dat.GUI();
 
+        this.debug = this.gui.addFolder('Debug');
+        this.debug.add(PrologInterpreter, 'send_quit').name("Quit Server.");
+        this.resetLights();
+
+        this.views = null;
+
+        
         this.curr_folder = null;
+        this.show_start_options(this.scene); //TODO move to start scene
         
-        this.quit = PrologInterpreter.send_quit;
-
-        // this.filenameIndex = 0;
-
-        this.lights = this.gui.addFolder('Lights');
-        
-        this.show_start_options(this.scene);
-
         this.initKeys();
         
         return true;
     }
 
-    addViews() {
-        this.gui.add(this.scene, 'selectedView', this.scene.viewNamesToIndex).onChange(this.scene.onViewChanged.bind(this.scene)).name('Views');
+    addLight(lightSwitches, idx, id) {
+        if(this.lights == null)
+            this.resetLights();
+
+        this.lights.add(lightSwitches, idx, lightSwitches[idx]).onChange(this.scene.onLightSwitched.bind(this.scene, idx)).name(id);          
     }
 
-    addLight(lightSwitches, idx, id) {
-        this.lights.add(lightSwitches, idx, lightSwitches[idx]).onChange(this.scene.onLightSwitched.bind(this.scene, idx)).name(id);          
+    resetLights() {
+        if(this.lights != null) {
+            this.gui.removeFolder(this.lights);
+        }
+        this.lights = this.gui.addFolder('Lights');
+    }
+
+    addViews() {
+        if(this.views != null)
+            this.gui.remove(this.views);
+        this.views = this.gui.add(this.scene, 'selectedView', this.scene.viewNamesToIndex).onChange(this.scene.onViewChanged.bind(this.scene)).name('Views');
     }
 
     addScenes() {
         this.gui.add(this.scene, 'selectedScene', this.scene.graphNames).onChange(this.scene.onSceneChanged.bind(this.scene)).name('Scenes');
     }
 
-    clean_folder() {
-        if(this.curr_folder != null){
-            this.gui.removeFolder(this.curr_folder);
-            this.curr_folder = null;
-        }
-    }
 
-    add_quit_button(group) {
-        group.add(this, 'quit').name("Quit Server.");
-    }
-
+    // State UI Menus
     show_start_options(ctx) {
 
         this.clean_folder();
@@ -104,6 +107,23 @@ class MyInterface extends CGFinterface {
         this.curr_folder = group;
     }
 
+
+    
+    // Helpers
+    clean_folder() {
+        if(this.curr_folder != null){
+            this.gui.removeFolder(this.curr_folder);
+            this.curr_folder = null;
+        }
+    }
+
+    add_quit_button(group) {
+        group.add(PrologInterpreter, 'send_quit').name("Quit Server.");
+    }
+
+
+
+    // HTML UI
     update_panel_player(player) {
         document.getElementById("player").innerText = player ? "Player: " + player : "";
     }
@@ -121,15 +141,7 @@ class MyInterface extends CGFinterface {
     }
 
 
-
-    addViews() {
-        this.gui.add(this.scene, 'selectedView', this.scene.viewNamesToIndex).onChange(this.scene.onViewChanged.bind(this.scene)).name('Views');
-    }
-
-    addLight(lightSwitches, idx, id) {
-        this.lights.add(lightSwitches, idx, lightSwitches[idx]).onChange(this.scene.onLightSwitched.bind(this.scene, idx)).name(id);          
-    }
-
+    // Keyboard
     initKeys() {
         this.scene.gui=this;
         this.processKeyboard=function(){};
@@ -138,11 +150,6 @@ class MyInterface extends CGFinterface {
 
     processKeyDown(event) {
         this.activeKeys[event.code]=true;
-        // if(event.key === 'm') {
-        //     if(this.filenameIndex == 0) this.filenameIndex++
-        //     else if(this.filenameIndex == 1) this.filenameIndex--;
-        //     console.log(this.filenameIndex);
-        // }
     };
 
     processKeyUp(event) {

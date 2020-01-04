@@ -17,6 +17,84 @@ class MySceneGraph {
 
         this.materialIndex = 0;
     }
+    
+    load() {
+
+        this.scene.gl.clearColor(this.background[0], this.background[1], this.background[2], this.background[3]);
+        this.scene.setGlobalAmbientLight(this.ambient[0], this.ambient[1], this.ambient[2], this.ambient[3]);
+		
+        this.initCameras();
+        this.initLights();
+
+        this.scene.axis.length = this.referenceLength;
+    }
+
+    initLights() {
+
+        // Array for lights' UI
+        this.scene.lightSwitches = [];
+
+        this.scene.interface.resetLights();
+
+        // Setup lights with XML values
+        this.lights.forEach((value, key) => {
+            var light = value;
+            var i = light[0];
+
+            this.scene.lights[i].setPosition(light[3][0], light[3][1], light[3][2], light[3][3]);
+            this.scene.lights[i].setAmbient(light[4][0], light[4][1], light[4][2], light[4][3]);
+            this.scene.lights[i].setDiffuse(light[5][0], light[5][1], light[5][2], light[5][3]);
+            this.scene.lights[i].setSpecular(light[6][0], light[6][1], light[6][2], light[6][3]);
+
+            this.scene.lights[i].setConstantAttenuation(light[7]);
+            this.scene.lights[i].setLinearAttenuation(light[8]);
+            this.scene.lights[i].setQuadraticAttenuation(light[9]);
+
+            if (light[2] == "spot") {
+                this.scene.lights[i].setSpotCutOff(light[10]);
+                this.scene.lights[i].setSpotExponent(light[11]);
+                this.scene.lights[i].setSpotDirection(light[12][0], light[12][1], light[12][2]);
+            }
+
+            this.scene.lights[i].setVisible(false);
+            if (light[1]) {
+                this.scene.lights[i].enable();
+                this.scene.lightSwitches.push(true);                
+            }
+            else {
+                this.scene.lights[i].disable();
+                this.scene.lightSwitches.push(false);
+            }
+            
+            // Create light UI
+            this.scene.interface.addLight(this.scene.lightSwitches, i, key);
+
+            // Update light to reflect changes
+            this.scene.lights[i].update();
+        });
+    }
+
+    initCameras() {
+        
+        this.scene.selectedView = 0;
+        this.scene.viewNamesToIndex = {};
+        this.scene.viewIndexToNames = {};
+
+        var i = 0;
+        this.views.forEach((value, key) => {
+            this.scene.viewNamesToIndex[key] = i;
+            this.scene.viewIndexToNames[i] = key;
+            i++;
+        });
+        
+        // Set camera to XML's default
+        this.scene.selectedView = this.scene.viewNamesToIndex[this.defaultView];
+        this.scene.onViewChanged();
+
+
+        // Create camera UI
+        this.scene.interface.addViews();
+    }
 
     startAnimations() {
 

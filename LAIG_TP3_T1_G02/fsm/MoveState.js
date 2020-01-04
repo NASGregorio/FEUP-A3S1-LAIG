@@ -19,13 +19,13 @@ class MoveState extends AbstractState {
 
     exit() {
         super.exit();
+        this.fsm.scene.move_camera();
     }
 
     action_success(data) {
 
         if(data !== 'Bad Request') {
             this.fsm.scene.board.save_state(data);
-            //this.fsm.scene.board.change_camera(data[3]);
             this.fsm.switch_state("UPDATE", data);
         }
         else

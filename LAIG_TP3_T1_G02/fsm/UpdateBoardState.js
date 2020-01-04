@@ -28,7 +28,7 @@ class UpdateBoardState extends AbstractState {
             PrologInterpreter.request_empty_adj(this.scene.board.get_board(), this.scene.board.get_all_occupied_tiles(), this.empty_adj_success.bind(this));
         }
         else {
-            this.fsm.switch_state("GAMEOVER", winner, this.fsm.scene.board.counter);
+            this.fsm.switch_state("GAMEOVER", winner);
         }
     }
     
