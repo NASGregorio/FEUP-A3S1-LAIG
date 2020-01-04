@@ -40,9 +40,9 @@ class JaleoScene extends CGFscene{
     parseXMLScenes() {
 
         this.parseXML("demo.xml", "demo");
-        this.parseXML("alternative_scene.xml", "alt");
+        this.parseXML("alternative_scene.xml", "casino");
 
-        this.selectedScene = "demo";
+        this.selectedScene = "casino";
     }
 
     parseXML(filename, sceneName) {
@@ -247,6 +247,7 @@ class JaleoScene extends CGFscene{
 			this.popMatrix();
         }
         
+        // Slot Machines display
         this.pushMatrix();
             this.greyMat.apply();
             this.translate(0,-3,-35);
@@ -257,22 +258,6 @@ class JaleoScene extends CGFscene{
             this.slotMachine.display();
             this.translate(-300,0,0);
             this.slotMachine.display();
-        this.popMatrix();
-
-        this.pushMatrix();
-            this.greyMat.apply();
-            this.translate(-57,1,0);
-            this.rotate(Math.PI/2,0,1,0);
-            this.scale(10,10,5);
-            this.tv.display();
-        this.popMatrix();
-
-        this.pushMatrix();
-            this.greyMat.apply();
-            this.translate(57,1,0);
-            this.rotate(-Math.PI/2,0,1,0);
-            this.scale(10,10,5);
-            this.tv.display();
         this.popMatrix();
 	}
 

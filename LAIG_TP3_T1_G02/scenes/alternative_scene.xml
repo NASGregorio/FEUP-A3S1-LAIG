@@ -8,13 +8,13 @@
         </perspective>
 
         <perspective id="Player1" near="0.1" far="500" angle="45">
-            <from x="-30" y="20" z="0" />
-            <to x="0" y="0" z="0" />
+            <from x="-30" y="15" z="0" />
+            <to x="0" y="2" z="0" />
         </perspective>
 
         <perspective id="Player2" near="0.1" far="500" angle="45">
-            <from x="30" y="20" z="0" />
-            <to x="0" y="0" z="0" />
+            <from x="30" y="15" z="0" />
+            <to x="0" y="2" z="0" />
         </perspective>
 
         <perspective id="TopCamera" near="0.1" far="500" angle="45">
@@ -83,6 +83,13 @@
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
             <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
             <specular r="0.3" g="0.3" b="0.3" a="1.0" />
+        </material>
+
+        <material id="televisionMaterial" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.1" g="0.1" b="0.1" a="1.0" />
+            <specular r="0.1" g="0.1" b="0.1" a="1.0" />
         </material>
 
         <material id="feltMaterial" shininess="10">
@@ -174,6 +181,10 @@
             <rectangle x1="-40" y1="-40" x2="40" y2="40" />
         </primitive>
 
+         <primitive id="television">
+            <rectangle x1="-12" y1="-6" x2="12" y2="6" />
+        </primitive>
+
         <primitive id="demoTorus">
             <torus inner="0.2" outer="2" slices="64" loops="64" />
         </primitive>
@@ -190,6 +201,48 @@
             <children>
                 <componentref id="alternative_table" />
                 <componentref id="house_interior" />
+                <componentref id="televisions" />
+            </children>
+        </component>
+
+        <component id="televisions">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="televisionMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="television_right" />
+                <componentref id="television_left" />
+            </children>
+        </component>
+
+        <component id="television_right">
+            <transformation>
+                <translate x="-59.9" y="7" z="0" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="television" />
+            </children>
+        </component>
+
+        <component id="television_left">
+            <transformation>
+                <translate x="59.9" y="7" z="0" />
+                <rotate axis="y" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="television" />
             </children>
         </component>
 
