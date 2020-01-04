@@ -19,7 +19,8 @@ class MyBoard extends CGFobject {
         this.saved_game_states = [];
         this.redo_stack = [];
         this.start_time = 0;
-        this.end_time = 0;
+        this.count = false;
+        this.counter = 0;
 
         this.available_tiles = 24;
 

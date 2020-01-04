@@ -188,7 +188,10 @@ class JaleoScene extends CGFscene{
         var dt = tNow - this.lastUpdate;
         this.graph.update(dt);
         this.time = tNow;
-        this.interface.update_panel_time(Math.round((this.time - this.board.start_time)/1000));
+        if(this.board.count == true) {
+            this.board.counter = Math.round((this.time - this.board.start_time)/1000);
+            this.interface.update_panel_time(Math.round(this.board.counter));
+        }
         //this.camera.orbit("x",Math.PI/200);
     }
 
@@ -255,7 +258,6 @@ class JaleoScene extends CGFscene{
             this.scale(10,10,5);
             this.tv.display();
         this.popMatrix();
-
 	}
 
 	start_game() {
@@ -267,7 +269,12 @@ class JaleoScene extends CGFscene{
 	how_to_play() {
 		document.getElementById("rules").style.display = "block";
 		document.getElementById("panel").style.display = "none";
-	}
+    }
+    
+    game_over() {
+		document.getElementById("game_over").style.display = "block";
+		document.getElementById("panel").style.display = "none";
+    }
 }
 
 
@@ -299,7 +306,7 @@ Funcionalidades genéricas do jogo (2.5 valores)
 Outras Funcionalidades (1.5 valores)
     Marcador                                                        todo
     Filme do jogo                                                   todo
-    Medição do tempo de jogo                                        todo
+    Medição do tempo de jogo                                        done
 Software (4 valores)
     Estrutura e parametrização                                      doing ok
     Interligação com Programação em Lógica                          complete
