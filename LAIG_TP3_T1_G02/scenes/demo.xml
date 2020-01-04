@@ -196,22 +196,39 @@
             <torus inner="0.2" outer="2" slices="64" loops="64" />
         </primitive>
         
-        <!-- <primitive id="demoPatch">
-            <patch npointsU="3" npointsV="4" npartsU="20" npartsV="20" >
-                <controlpoint xx="-1.5" yy="-1.5" zz="0" />
-                <controlpoint xx="-2" yy="-2" zz="2" />
-                <controlpoint xx="-2" yy="2" zz="2" />
-                <controlpoint xx="-1.5" yy="1.5" zz="0" />
-                <controlpoint xx="0" yy="0" zz="3" />
-                <controlpoint xx="0" yy="-2" zz="3" />
-                <controlpoint xx="0" yy="2" zz="3" />
-                <controlpoint xx="0" yy="0" zz="3" />
-                <controlpoint xx="1.5" yy="-1.5" zz="0" />
-                <controlpoint xx="2" yy="-2" zz="2" />
-                <controlpoint xx="2" yy="2" zz="2" />
-                <controlpoint xx="1.5" yy="1.5" zz="0" />
+        <primitive id="sack">
+            <patch npointsU="5" npointsV="5" npartsU="40" npartsV="40" >
+                <controlpoint xx="0.4" yy="0" zz="0.5" />
+                <controlpoint xx="0.4*0.7" yy="0.4*0.7" zz="0.5" />
+                <controlpoint xx="0" yy="0.4*1" zz="0.5" />
+                <controlpoint xx="-0.4*0.7" yy="0.4*0.7" zz="0.5" />
+                <controlpoint xx="-0.4" yy="0" zz="0.5" />
+
+                <controlpoint xx="0.5" yy="0" zz="0" />
+                <controlpoint xx="0.5*0.7" yy="0.5*0.7" zz="0" />
+                <controlpoint xx="0" yy="0.5*1" zz="0" />
+                <controlpoint xx="-0.5*0.7" yy="0.5*0.7" zz="0" />
+                <controlpoint xx="-0.5" yy="0" zz="0" />
+
+                <controlpoint xx="1" yy="0" zz="-0.5" />
+                <controlpoint xx="0.7" yy="0.7" zz="-0.5" />
+                <controlpoint xx="0" yy="1" zz="-0.5" />
+                <controlpoint xx="-0.7" yy="0.7" zz="-0.5" />
+                <controlpoint xx="-1" yy="0" zz="-0.5" />
+
+                <controlpoint xx="1" yy="0" zz="-1.499" />
+                <controlpoint xx="0.7" yy="0.7" zz="-1.499" />
+                <controlpoint xx="0" yy="1" zz="-1.499" />
+                <controlpoint xx="-0.7" yy="0.7" zz="-1.499" />
+                <controlpoint xx="-1" yy="0" zz="-1.499" />
+
+                <controlpoint xx="0" yy="0" zz="-1.5" />
+                <controlpoint xx="0" yy="0" zz="-1.5" />
+                <controlpoint xx="0" yy="0" zz="-1.5" />
+                <controlpoint xx="0" yy="0" zz="-1.5" />
+                <controlpoint xx="0" yy="0" zz="-1.5" />
             </patch>
-        </primitive> -->
+        </primitive>
     </primitives>
 
     <components>
@@ -362,6 +379,75 @@
                 <componentref id="table_top" />
                 <componentref id="table_top_bottom" />
                 <componentref id="table_legs" />
+                <componentref id="pieces_sack" />
+            </children>
+        </component>
+
+        <component id="pieces_sack">
+            <transformation>
+                <translate x="0" y="0.9" z="-8.7"/>
+                <scale x="1" y="1" z="1"/>
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="pieces_sack_n" />
+                <componentref id="pieces_sack_i" />
+            </children>
+        </component>
+
+         <component id="pieces_sack_n">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="half_sack" />
+                <componentref id="other_half_sack" />
+            </children>
+        </component>
+
+         <component id="pieces_sack_i">
+            <transformation>
+                <scale x="-1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="half_sack" />
+                <componentref id="other_half_sack" />
+            </children>
+        </component>
+        
+         <component id="half_sack">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="sack" />
+            </children>
+        </component>
+
+        <component id="other_half_sack">
+            <transformation>
+                <rotate axis="z" angle="180" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="sack" />
             </children>
         </component>
 
@@ -392,7 +478,7 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="table_tops" />
+                <componentref id="table_tops_bottom" />
                 <primitiveref id="demoCylinder" />
             </children>
         </component>
@@ -404,11 +490,25 @@
             </transformation>
             <materials>
                 <material id="inherit" />
-                <material id="tableMaterial" />
             </materials>
             <texture id="inherit"/>
             <children>
                 <componentref id="table_tops_t" />
+                <componentref id="table_tops_b" />
+            </children>
+        </component>
+
+         <component id="table_tops_bottom">
+            <transformation>
+                <rotate angle="-90" axis="x"/>
+                <scale x="1" y="0.001" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="table_tops_t_bottom" />
                 <componentref id="table_tops_b" />
             </children>
         </component>
@@ -418,10 +518,22 @@
                 <translate x="0" y="0.101" z="0"/>
             </transformation>
             <materials>
-                <material id="inherit" />
                 <material id="feltMaterial" />
             </materials>
             <texture id="feltTexture" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="demoSphere" />
+            </children>
+        </component>
+
+        <component id="table_tops_t_bottom">
+            <transformation>
+                <translate x="0" y="0.101" z="0"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial2" />
+            </materials>
+            <texture id="none"/>
             <children>
                 <primitiveref id="demoSphere" />
             </children>

@@ -189,40 +189,6 @@
             <torus inner="0.2" outer="2" slices="64" loops="64" />
         </primitive>
 
-        <primitive id="sack">
-            <patch npointsU="5" npointsV="5" npartsU="40" npartsV="40" >
-                <controlpoint xx="0.4" yy="0" zz="0.5" />
-                <controlpoint xx="0.4*0.7" yy="0.4*0.7" zz="0.5" />
-                <controlpoint xx="0" yy="0.4*1" zz="0.5" />
-                <controlpoint xx="-0.4*0.7" yy="0.4*0.7" zz="0.5" />
-                <controlpoint xx="-0.4" yy="0" zz="0.5" />
-
-                <controlpoint xx="0.5" yy="0" zz="0" />
-                <controlpoint xx="0.5*0.7" yy="0.5*0.7" zz="0" />
-                <controlpoint xx="0" yy="0.5*1" zz="0" />
-                <controlpoint xx="-0.5*0.7" yy="0.5*0.7" zz="0" />
-                <controlpoint xx="-0.5" yy="0" zz="0" />
-
-                <controlpoint xx="1" yy="0" zz="-0.5" />
-                <controlpoint xx="0.7" yy="0.7" zz="-0.5" />
-                <controlpoint xx="0" yy="1" zz="-0.5" />
-                <controlpoint xx="-0.7" yy="0.7" zz="-0.5" />
-                <controlpoint xx="-1" yy="0" zz="-0.5" />
-
-                <controlpoint xx="1" yy="0" zz="-1.499" />
-                <controlpoint xx="0.7" yy="0.7" zz="-1.499" />
-                <controlpoint xx="0" yy="1" zz="-1.499" />
-                <controlpoint xx="-0.7" yy="0.7" zz="-1.499" />
-                <controlpoint xx="-1" yy="0" zz="-1.499" />
-
-                <controlpoint xx="0" yy="0" zz="-1.5" />
-                <controlpoint xx="0" yy="0" zz="-1.5" />
-                <controlpoint xx="0" yy="0" zz="-1.5" />
-                <controlpoint xx="0" yy="0" zz="-1.5" />
-                <controlpoint xx="0" yy="0" zz="-1.5" />
-            </patch>
-        </primitive>
-
     </primitives>
 
     <components>
@@ -372,75 +338,6 @@
                 <componentref id="alternative_table_top" />
                 <componentref id="alternative_table_top_bottom" />
                 <componentref id="alternative_table_legs" />
-                <componentref id="pieces_sack" />
-            </children>
-        </component>
-
-        <component id="pieces_sack">
-            <transformation>
-                <translate x="0" y="2.04" z="-8"/>
-                <scale x="1.2" y="1.2" z="1.2"/>
-                <rotate axis="x" angle="-90" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <componentref id="pieces_sack_n" />
-                <componentref id="pieces_sack_i" />
-            </children>
-        </component>
-
-         <component id="pieces_sack_n">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <componentref id="half_sack" />
-                <componentref id="other_half_sack" />
-            </children>
-        </component>
-
-         <component id="pieces_sack_i">
-            <transformation>
-                <scale x="-1" y="1" z="1" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <componentref id="half_sack" />
-                <componentref id="other_half_sack" />
-            </children>
-        </component>
-        
-         <component id="half_sack">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="sack" />
-            </children>
-        </component>
-
-        <component id="other_half_sack">
-            <transformation>
-                <rotate axis="z" angle="180" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="sack" />
             </children>
         </component>
 
