@@ -7,7 +7,11 @@ class JaleoScene extends CGFscene{
 	constructor(myinterface) {
 		super();
 
-		this.interface = myinterface;
+        this.interface = myinterface;
+
+
+        this.board = null;
+        this.player = "";
 
         this.xml_load_requests = 0;
         this.graph = null;
@@ -84,7 +88,7 @@ class JaleoScene extends CGFscene{
     
     initMaterials() {
         this.greyMat = new CGFappearance(this);
-		this.greyMat.setAmbient(0.2, 0.2, 0.2, 1);
+		this.greyMat.setAmbient(0.0, 0.0, 0.0, 1);
 		this.greyMat.setDiffuse(0.2, 0.2, 0.2, 1);
 		this.greyMat.setSpecular(0.0, 0.0, 0.0, 1);
         this.greyMat.setShininess(120);
@@ -200,6 +204,10 @@ class JaleoScene extends CGFscene{
         var dt = tNow - this.lastUpdate;
         this.graph.update(dt);                
         this.time = tNow;
+        if(this.board.count == true) {
+            this.board.counter = Math.round((this.time - this.board.start_time)/1000);
+            this.interface.update_panel_time(Math.round(this.board.counter));
+        }
         //this.camera.orbit("x",Math.PI/200);
     }
 
@@ -266,19 +274,23 @@ class JaleoScene extends CGFscene{
             this.scale(10,10,5);
             this.tv.display();
         this.popMatrix();
-
 	}
 
 	start_game() {
         this.fsm.init("SETUP");
-        this.camera = this.graph.views.get(this.viewIndexToNames[1]);
-        this.interface.setActiveCamera(this.camera);
+        // this.camera = this.graph.views.get(this.viewIndexToNames[1]);
+        // this.interface.setActiveCamera(this.camera);
 	}
 
 	how_to_play() {
 		document.getElementById("rules").style.display = "block";
 		document.getElementById("panel").style.display = "none";
-	}
+    }
+    
+    game_over() {
+		document.getElementById("game_over").style.display = "block";
+		document.getElementById("panel").style.display = "none";
+    }
 }
 
 
@@ -314,7 +326,7 @@ Funcionalidades genéricas do jogo (2.5 valores)
 Outras Funcionalidades (1.5 valores)
     Marcador                                                        todo
     Filme do jogo                                                   todo
-    Medição do tempo de jogo                                        todo
+    Medição do tempo de jogo                                        done
 Software (4 valores)
     Estrutura e parametrização                                      doing ok
     Interligação com Programação em Lógica                          complete

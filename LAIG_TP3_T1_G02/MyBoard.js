@@ -15,8 +15,12 @@ class MyBoard extends CGFobject {
         this.InnerRadius = this.OuterRadius * 0.866025404;
         this.sqrt3 = Math.sqrt(3);
         this.player = "";
+        this.firstTime = 0;
         this.saved_game_states = [];
         this.redo_stack = [];
+        this.start_time = 0;
+        this.count = false;
+        this.counter = 0;
 
         this.available_tiles = 24;
 
@@ -52,6 +56,18 @@ class MyBoard extends CGFobject {
 		this.blackMat.setShininess(120);
     }
 
+    // counter() {
+    //     let counterInit = false;
+    //     if(counterInit == false){
+    //         this.firstTime = this.scene.time;
+    //         counterInit = true;
+    //     }
+    //     while(this.scene.time > this.firstTime+500) {
+    //         return (this.scene.time/this.firstTime+500);
+    //     }
+    //     return "0K";
+    // }
+
     update_board(game_state) {
         this.game_state = game_state;
 
@@ -59,6 +75,15 @@ class MyBoard extends CGFobject {
         this.available_whites = 16 - this.game_state[9];
         this.available_tiles = 28 - (this.game_state[4].length + this.game_state[5].length + this.game_state[6].length);
         // this.print_board(game_state[0]);
+        this.scene.player = this.game_state[3]; 
+        if(this.scene.player == "black") {
+            this.scene.camera = this.scene.graph.views.get(this.scene.viewIndexToNames[1]);
+            this.scene.interface.setActiveCamera(this.scene.camera);
+        }
+        if(this.scene.player == "white") {
+            this.scene.camera = this.scene.graph.views.get(this.scene.viewIndexToNames[2]);
+            this.scene.interface.setActiveCamera(this.scene.camera);
+        }
     }
 
     update_adj(adj_tiles) {

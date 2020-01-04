@@ -145,6 +145,9 @@ class InputState extends AbstractState {
     }
 
     exit() {
+        this.stack_actions == null
+        this.stack_action = false;
+        this.matching_stack = null;
         super.exit();
         this.fsm.scene.interface.clean_folder();
     }

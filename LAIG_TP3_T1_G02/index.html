@@ -27,9 +27,9 @@
         #rules {
             position: absolute;
             display: none;
-            top: 25%;
+            top: 20%;
             left: 20%;
-            width: 60%;
+            width: 40%;
             height: 40%;
             min-height: 320px;
             padding: 1em 4em;
@@ -41,12 +41,11 @@
         #game_over {
             position: absolute;
             display: none;
-            top: 25%;
+            top: 20%;
             left: 20%;
-            width: 60%;
+            width: 40%;
             height: 40%;
             padding: 1em 4em;
-            margin: 1em;
             color: white;
             background-color: #bbbbbbdd;
             border-radius: 5px;
@@ -87,7 +86,7 @@
     <div id="game_over">
         <h1>GAME OVER</h1>
         <span id="game_over_message"><br>
-            Congratulations, player X you have won!
+        <button id="close_game_over"  onclick="close_game_over()">Close</button>
         </span>
         <br>
     </div>
@@ -99,4 +98,8 @@
         document.getElementById("rules").style.display = "none";
         document.getElementById("panel").style.display = "block";
     }
+    function close_game_over() {
+		document.getElementById("game_over").style.display = "none";
+		document.getElementById("panel").style.display = "block";
+	}
 </script>

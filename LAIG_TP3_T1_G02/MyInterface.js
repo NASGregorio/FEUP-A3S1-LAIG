@@ -116,6 +116,10 @@ class MyInterface extends CGFinterface {
         document.getElementById("information").innerText = info ? "\nInformation: " + info : "";
     }
 
+    update_panel_game_over(message) {
+        document.getElementById("game_over_message").innerText = message;
+    }
+
 
 
     addViews() {
