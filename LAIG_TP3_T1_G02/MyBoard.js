@@ -38,35 +38,36 @@ class MyBoard extends CGFobject {
 		this.appearance.setShininess(120);
 
         this.redMat = new CGFappearance(scene);
-		this.redMat.setAmbient(0.3, 0.3, 0.3, 1);
-		this.redMat.setDiffuse(0.7, 0.2, 0.2, 1);
+		this.redMat.setAmbient(0.0, 0.0, 0.0, 1);
+		this.redMat.setDiffuse(0.6, 0.2, 0.2, 1);
 		this.redMat.setSpecular(0.0, 0.0, 0.0, 1);
         this.redMat.setShininess(120);
         
         this.whiteMat = new CGFappearance(scene);
-		this.whiteMat.setAmbient(0.4, 0.4, 0.4, 1);
+		this.whiteMat.setAmbient(0.0, 0.0, 0.0, 1);
 		this.whiteMat.setDiffuse(0.6, 0.6, 0.6, 1);
 		this.whiteMat.setSpecular(0.0, 0.0, 0.0, 1);
         this.whiteMat.setShininess(120);
         
         this.blackMat = new CGFappearance(scene);
-		this.blackMat.setAmbient(0.05, 0.05, 0.05, 1);
+		this.blackMat.setAmbient(0.0, 0.0, 0.0, 1);
 		this.blackMat.setDiffuse(0.1, 0.1, 0.1, 1);
-		this.blackMat.setSpecular(0.0, 0.0, 0.0, 1);
+		this.blackMat.setSpecular(0.2, 0.2, 0.2, 1);
 		this.blackMat.setShininess(120);
     }
 
-    // counter() {
-    //     let counterInit = false;
-    //     if(counterInit == false){
-    //         this.firstTime = this.scene.time;
-    //         counterInit = true;
-    //     }
-    //     while(this.scene.time > this.firstTime+500) {
-    //         return (this.scene.time/this.firstTime+500);
-    //     }
-    //     return "0K";
-    // }
+    change_camera(player) {
+        if(player == "black") {
+            this.scene.camera = this.scene.graph.views.get(this.scene.viewIndexToNames[1]);
+            this.scene.interface.setActiveCamera(this.scene.camera);
+            this.scene.camera.orbit("x",Math.PI);
+        }
+        else if(player == "white") {
+            this.scene.camera = this.scene.graph.views.get(this.scene.viewIndexToNames[2]);
+            this.scene.interface.setActiveCamera(this.scene.camera);
+            this.scene.camera.orbit("x",Math.PI);
+        }
+    }
 
     update_board(game_state) {
         this.game_state = game_state;

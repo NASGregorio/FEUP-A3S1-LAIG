@@ -30,7 +30,6 @@ class JaleoScene extends CGFscene{
         this.setPickEnabled(true);
 
         this.slotMachine = new CGFOBJModel(this, 'models/slot_machine.obj');
-        this.tv = new CGFOBJModel(this, 'models/tv.obj');
 
         this.initMaterials();
 
