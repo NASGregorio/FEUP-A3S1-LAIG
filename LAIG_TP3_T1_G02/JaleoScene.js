@@ -9,50 +9,87 @@ class JaleoScene extends CGFscene{
 
 		this.interface = myinterface;
 
-		this.board = null;
-
-        this.info = "";
-
-        this.pickIDs = new Map();
-
+        this.xml_load_requests = 0;
+        this.graph = null;
+        this.graphs = new Map();
+        this.graphNames = [];
 	}
-
+    
 	init(application) {
-
-		super.init(application);
-
-		//this.initCameras();
-		//this.initLights();
-
-		this.gl.clearColor(0, 0, 0, 1.0);
-		this.gl.clearDepth(10000.0);
-		this.gl.enable(this.gl.DEPTH_TEST);
-		this.gl.enable(this.gl.CULL_FACE);
-		this.gl.depthFunc(this.gl.LEQUAL);
-
-
-		this.board = new MyBoard(this);
-
-		this.fsm = new StateMachine(this);
-
-        this.setPickEnabled(true);
         
-        this.timeFactor = 1;
+        super.init(application);
+        
+		this.board = new MyBoard(this);
+		this.fsm = new StateMachine(this);
+        
+        this.pickIDs = new Map();
+        this.setPickEnabled(true);
 
         this.slotMachine = new CGFOBJModel(this, 'models/slot_machine.obj');
         this.tv = new CGFOBJModel(this, 'models/tv.obj');
 
+        this.initMaterials();
+
+        this.parseXMLScenes();
+    }
+
+    parseXMLScenes() {
+
+        this.parseXML("demo.xml", "demo");
+        this.parseXML("alternative_scene.xml", "alt");
+
+        this.selectedScene = "demo";
+    }
+
+    parseXML(filename, sceneName) {
+        let scene = new MySceneGraph(filename, this);
+        this.xml_load_requests++;
+        this.graphs.set(sceneName, scene);
+        this.graphNames.push(sceneName);
+    }
+
+    onGraphLoaded() {
+        
+        this.xml_load_requests--;
+        
+        if(this.xml_load_requests != 0)
+            return;
+
+        this.onSceneChanged();
+        this.interface.addScenes();
+
+		this.enableTextures(true);
+		
+        this.gl.clearDepth(100.0);
+        this.gl.enable(this.gl.DEPTH_TEST);
+        this.gl.enable(this.gl.CULL_FACE);
+        this.gl.depthFunc(this.gl.LEQUAL);
+        this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
+        this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
+		
+        this.initCameras();
+        this.initLights();
+
+        this.setUpdatePeriod(1000/120);
+        this.lastUpdate = Date.now();
+		
+        this.axis = new CGFaxis(this, this.graph.referenceLength);
+		
+        this.sceneInited = true;
+        
+        // Start animations
+        this.graph.startAnimations();
+    
+    }
+    
+    initMaterials() {
         this.greyMat = new CGFappearance(this);
 		this.greyMat.setAmbient(0.2, 0.2, 0.2, 1);
 		this.greyMat.setDiffuse(0.2, 0.2, 0.2, 1);
 		this.greyMat.setSpecular(0.0, 0.0, 0.0, 1);
         this.greyMat.setShininess(120);
+    }
 
-	}
-
-    /**
-     * Initializes the scene lights with the values read from the XML file.
-     */
     initLights() {
 
         // Array for lights' UI
@@ -96,19 +133,6 @@ class JaleoScene extends CGFscene{
         });
     }
 
-    onLightSwitched(i) {
-        if(this.lightSwitches[i])
-            this.lights[i].enable();
-        else
-            this.lights[i].disable();
-        this.lights[i].update();
-    }
-
-    onViewChanged() {
-        this.camera = this.graph.views.get(this.viewIndexToNames[this.selectedView]);
-        this.interface.setActiveCamera(this.camera);
-    }
-
 	initCameras() {
         this.selectedView = 0;
         this.viewNamesToIndex = {};
@@ -129,6 +153,26 @@ class JaleoScene extends CGFscene{
         // Create camera UI
         this.interface.addViews();
     }
+
+
+    // Interface callbacks
+    onLightSwitched(i) {
+        if(this.lightSwitches[i])
+            this.lights[i].enable();
+        else
+            this.lights[i].disable();
+        this.lights[i].update();
+    }
+
+    onViewChanged() {
+        this.camera = this.graph.views.get(this.viewIndexToNames[this.selectedView]);
+        this.interface.setActiveCamera(this.camera);
+    }
+
+    onSceneChanged() {
+        this.graph = this.graphs.get(this.selectedScene);
+    }
+    //////////////////////
 
 
 	logPicking() {
@@ -152,39 +196,9 @@ class JaleoScene extends CGFscene{
         }
     }
 
-    onGraphLoaded() {
-		
-		this.enableTextures(true);
-		
-        this.gl.clearDepth(100.0);
-        this.gl.enable(this.gl.DEPTH_TEST);
-        this.gl.enable(this.gl.CULL_FACE);
-        this.gl.depthFunc(this.gl.LEQUAL);
-		
-        this.setUpdatePeriod(1000/120);
-		
-        this.lastUpdate = Date.now();
-		
-        this.axis = new CGFaxis(this, this.graph.referenceLength);
-		
-        this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
-		
-        this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
-		
-        this.sceneInited = true;
-        
-        this.initCameras();
-        this.initLights();
-
-        // Start animations
-        this.graph.startAnimations();
-        
-
-    }
-
     update(tNow) {
         var dt = tNow - this.lastUpdate;
-        this.graph.update(dt);
+        this.graph.update(dt);                
         this.time = tNow;
         //this.camera.orbit("x",Math.PI/200);
     }
@@ -275,6 +289,8 @@ class JaleoScene extends CGFscene{
 Ajustar camara de acordo com o tamanho e usar funçao orbit com toggle na interface (Afonso will do)
 
 Coisas do enunciado que ainda nao li (que podem ou nao existir)
+
+Usar exit da InputState ( e das outras)
 
 */
 

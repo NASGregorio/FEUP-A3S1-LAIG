@@ -44,6 +44,10 @@ class MyInterface extends CGFinterface {
         this.lights.add(lightSwitches, idx, lightSwitches[idx]).onChange(this.scene.onLightSwitched.bind(this.scene, idx)).name(id);          
     }
 
+    addScenes() {
+        this.gui.add(this.scene, 'selectedScene', this.scene.graphNames).onChange(this.scene.onSceneChanged.bind(this.scene)).name('Scenes');
+    }
+
     clean_folder() {
         if(this.curr_folder != null){
             this.gui.removeFolder(this.curr_folder);
