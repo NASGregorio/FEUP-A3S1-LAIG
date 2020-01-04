@@ -8,16 +8,16 @@ class MyBoard extends CGFobject {
 
         super(scene);
         
-        this.game_state = null;
-        this.last_move = [];
-
         this.OuterRadius = 0.5;
         this.InnerRadius = this.OuterRadius * 0.866025404;
         this.sqrt3 = Math.sqrt(3);
-        this.player = "";
-        this.firstTime = 0;
+        
+        this.game_state = null;
+        this.last_move = [];
+
         this.saved_game_states = [];
         this.redo_stack = [];
+
         this.start_time = 0;
         this.count = false;
         this.counter = 0;
@@ -25,9 +25,7 @@ class MyBoard extends CGFobject {
         this.available_tiles = 24;
 
         this.init_materials(scene);
-
-        this.hex = new CGFOBJModel(scene, 'models/RoundedHexagon.obj');
-        this.piece = new CGFOBJModel(scene, 'models/RoundedPiece.obj');
+        this.init_models(scene);
     };
 
     init_materials(scene) {
@@ -56,17 +54,9 @@ class MyBoard extends CGFobject {
 		this.blackMat.setShininess(120);
     }
 
-    change_camera(player) {
-        if(player == "black") {
-            this.scene.camera = this.scene.graph.views.get(this.scene.viewIndexToNames[1]);
-            this.scene.interface.setActiveCamera(this.scene.camera);
-            this.scene.camera.orbit("x",Math.PI);
-        }
-        else if(player == "white") {
-            this.scene.camera = this.scene.graph.views.get(this.scene.viewIndexToNames[2]);
-            this.scene.interface.setActiveCamera(this.scene.camera);
-            this.scene.camera.orbit("x",Math.PI);
-        }
+    init_models(scene) {
+        this.hex = new CGFOBJModel(scene, 'models/RoundedHexagon.obj');
+        this.piece = new CGFOBJModel(scene, 'models/RoundedPiece.obj');
     }
 
     update_board(game_state) {
@@ -76,15 +66,6 @@ class MyBoard extends CGFobject {
         this.available_whites = 16 - this.game_state[9];
         this.available_tiles = 28 - (this.game_state[4].length + this.game_state[5].length + this.game_state[6].length);
         // this.print_board(game_state[0]);
-        
-        if(this.game_state[3] == "black") {
-            this.scene.camera = this.scene.graph.views.get(this.scene.viewIndexToNames[1]);
-            this.scene.interface.setActiveCamera(this.scene.camera);
-        }
-        if(this.game_state[3] == "white") {
-            this.scene.camera = this.scene.graph.views.get(this.scene.viewIndexToNames[2]);
-            this.scene.interface.setActiveCamera(this.scene.camera);
-        }
     }
 
     update_adj(adj_tiles) {
@@ -93,15 +74,15 @@ class MyBoard extends CGFobject {
 
     update_last_move(last_move) {
         this.last_move = last_move;
-        let move = this.last_move[0];
-        let origin = this.last_move[1];
-        let destination = this.last_move[2];
-        if(move == "add")
-            this.add_animation(origin,destination);
-        else if(move == "move")
-            this.move_animation(origin,destination);
-        else
-            this.stack_animation(origin,destination);
+        // let move = this.last_move[0];
+        // let origin = this.last_move[1];
+        // let destination = this.last_move[2];
+        // if(move == "add")                                //TODO
+        //     this.add_animation(origin,destination);
+        // else if(move == "move")
+        //     this.move_animation(origin,destination);
+        // else
+        //     this.stack_animation(origin,destination);
     }
 
     save_state(data) {
@@ -239,16 +220,16 @@ class MyBoard extends CGFobject {
         }
     }
 
-    add_animation(origin,destination, t) {
+    // add_animation(origin,destination, t) {
 
-        console.log("Add animation: ",JSON.stringify(origin),", ",JSON.stringify(destination));
-    }
-    move_animation(origin,destination) {
-        console.log("Move animation: ",JSON.stringify(origin),", ",JSON.stringify(destination));
-    }
-    stack_animation(origin,destination) {
-        console.log("Stack animation: ",JSON.stringify(origin),", ",JSON.stringify(destination));
-    }
+    //     console.log("Add animation: ",JSON.stringify(origin),", ",JSON.stringify(destination));
+    // }
+    // move_animation(origin,destination) {
+    //     console.log("Move animation: ",JSON.stringify(origin),", ",JSON.stringify(destination));
+    // }
+    // stack_animation(origin,destination) {
+    //     console.log("Stack animation: ",JSON.stringify(origin),", ",JSON.stringify(destination));
+    // }
 
     display() {
 

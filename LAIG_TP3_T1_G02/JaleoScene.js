@@ -112,6 +112,27 @@ class JaleoScene extends CGFscene{
     //////////////////////
 
 
+    change_camera() {
+
+        let player = this.board.get_player();
+
+        if(player == "black") {
+            this.camera = this.graph.views.get(this.viewIndexToNames[1]);
+            this.interface.setActiveCamera(this.camera);
+            this.camera.orbit("x",Math.PI);
+        }
+        else if(player == "white") {
+            this.camera = this.graph.views.get(this.viewIndexToNames[2]);
+            this.interface.setActiveCamera(this.camera);
+            this.camera.orbit("x",Math.PI);
+        }
+    }
+
+    array_compare(arr1, arr2) {
+        return (arr1.x === arr2.x && arr1.y === arr2.y && arr1.z === arr2.z)
+    }
+
+
 	logPicking() {
 
 		if(this.fsm.curr_state_key != "INPUT")
@@ -134,14 +155,14 @@ class JaleoScene extends CGFscene{
     }
 
     update(tNow) {
+        this.time = tNow;
         var dt = tNow - this.lastUpdate;
         this.graph.update(dt);                
-        this.time = tNow;
+
         if(this.board.count == true) {
             this.board.counter = Math.round((this.time - this.board.start_time)/1000);
             this.interface.update_panel_time(Math.round(this.board.counter));
         }
-        //this.camera.orbit("x",Math.PI/200);
     }
 
 	display() {
@@ -196,8 +217,6 @@ class JaleoScene extends CGFscene{
 
 	start_game() {
         this.fsm.init("SETUP");
-        // this.camera = this.graph.views.get(this.viewIndexToNames[1]);
-        // this.interface.setActiveCamera(this.camera);
 	}
 
 	how_to_play() {
