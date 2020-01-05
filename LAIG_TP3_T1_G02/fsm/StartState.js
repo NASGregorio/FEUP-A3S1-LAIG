@@ -17,7 +17,7 @@ class StartState extends AbstractState {
     }
 
     start_game() {
-        this.fsm.init("SETUP");
+        this.fsm.switch_state("SETUP");
     }
 
 	how_to_play() {

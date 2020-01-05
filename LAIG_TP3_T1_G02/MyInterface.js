@@ -91,7 +91,6 @@ class MyInterface extends CGFinterface {
         group.add(ctx, "clear_turn").name("Clear Input");
         group.add(ctx, "undo_turn").name("Undo turn");
         group.add(ctx, "redo_turn").name("Redo turn");
-        group.add(ctx, "reset_game").name("Restart game");
         group.add(ctx, "go_to_start").name("To start menu");
         this.add_quit_button(group);
 
@@ -112,14 +111,13 @@ class MyInterface extends CGFinterface {
 
         this.clean_folder();
 
-        if(!this.go_to_start)
+        if(this.go_to_start != null)
             this.gui.remove(this.go_to_start);
 
         let group = this.gui.addFolder("Game Over!");
         group.open();
-      
-        group.add(ctx, "reset_game").name("New game?");
         group.add(ctx, "go_to_start").name("To start menu?");
+        group.add(ctx, "show_game_film").name("Replay game");
         this.add_quit_button(group);
 
         this.curr_folder = group;
@@ -147,7 +145,16 @@ class MyInterface extends CGFinterface {
         this.update_panel_time("");
         this.update_panel_info("");
         this.update_panel_game_over("");
+    }
 
+    hide_game_over() {
+		document.getElementById("game_over").style.display = "none";
+		document.getElementById("panel").style.display = "block";
+    }
+    
+    show_game_over() {
+		document.getElementById("game_over").style.display = "block";
+		document.getElementById("panel").style.display = "none";
     }
 
     update_panel_player(player) {

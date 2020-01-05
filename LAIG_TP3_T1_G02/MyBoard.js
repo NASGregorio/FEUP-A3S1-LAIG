@@ -15,11 +15,13 @@ class MyBoard extends CGFobject {
         this.board_origin_x = 0;
         this.board_origin_y = 0;
 
+        this.board_offset_x = 0;
+        this.board_offset_y = 0;
+
         this.game_state = null;
         this.last_move = [];
         
         this.saved_game_states = [];
-        this.film_game_states = [];
         this.redo_stack = [];
 
         this.start_time = 0;
@@ -69,7 +71,6 @@ class MyBoard extends CGFobject {
         this.available_blacks = 16 - this.game_state[8];
         this.available_whites = 16 - this.game_state[9];
         this.available_tiles = 28 - (this.game_state[4].length + this.game_state[5].length + this.game_state[6].length);
-        // this.print_board(game_state[0]);
     }
 
     update(tNow) {
@@ -85,30 +86,14 @@ class MyBoard extends CGFobject {
 
     update_last_move(last_move) {
         this.last_move = last_move;
-        // let move = this.last_move[0];
-        // let origin = this.last_move[1];
-        // let destination = this.last_move[2];
-        // if(move == "add")                                //TODO
-        //     this.add_animation(origin,destination);
-        // else if(move == "move")
-        //     this.move_animation(origin,destination);
-        // else
-        //     this.stack_animation(origin,destination);
     }
 
     save_state(data) {
         this.saved_game_states.push(data);
-        this.film_game_states.push(data);
-        //console.log("Film GameStates: ", this.film_game_states);
         this.redo_stack = [];
     }
 
-    invert_film_game() {
-        return this.film_game_states.reverse();
-    }
-
     replay(game_state) {
-        //this.animate_move(game_state);
         this.update_board(game_state);
     }
 
@@ -196,7 +181,7 @@ class MyBoard extends CGFobject {
     coords_to_world_space(coords) {
         var x = this.OuterRadius * Math.sqrt(3) * (coords[0] + 0.5 * ((coords[1])&1));
         var y = this.OuterRadius * 3/2 * coords[1];
-        return [x+this.board_origin_x, y+this.board_origin_y];
+        return [x+this.board_origin_x+this.board_offset_x, y+this.board_origin_y+this.board_offset_y];
     }
 
     set_origin(data) {
@@ -259,7 +244,7 @@ class MyBoard extends CGFobject {
             return;
 
         this.scene.pushMatrix();
-        this.scene.translate(this.board_origin_x, 0,this.board_origin_y);
+        this.scene.translate(this.board_origin_x+this.board_offset_x, 0,this.board_origin_y+this.board_offset_y);
 
         for (let i = 0; i < this.game_state[0].length; i++) {
             const row = this.game_state[0][i];

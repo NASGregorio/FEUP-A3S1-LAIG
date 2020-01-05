@@ -263,7 +263,9 @@ class JaleoScene extends CGFscene{
 
 (Não está por ordem de prioridade)
 
-TODO Afonso: Game Film - animation
+bot move logic
+
+verificar todos os menus
 
 */
 

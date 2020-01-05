@@ -246,11 +246,6 @@ class InputState extends AbstractState {
     }
 
     go_to_start() {
-        console.log("GO TO START");
         this.fsm.switch_state("START");
 	}
-
-    reset_game() {
-        this.fsm.init("SETUP");
-    }
 }
