@@ -12,21 +12,18 @@ class InputState extends AbstractState {
     };
 
     enter(stack_actions) {
-
-        this.scene.interface.show_panel();
-
         
         this.stack_actions = stack_actions;
 
         if(stack_actions != null && stack_actions.length > 0) {
-            this.fsm.scene.interface.update_panel_info("STACK situation detected | Pick piece to move.");
+            this.fsm.scene.interface.update_panel_info("Forced STACK\nPick piece to move.");
             this.fsm.scene.interface.update_panel_blacks(this.fsm.scene.board.available_blacks);
             this.fsm.scene.interface.update_panel_whites(this.fsm.scene.board.available_whites);
             this.fsm.scene.interface.update_panel_tiles(this.fsm.scene.board.available_tiles);
             this.stack_action = true;
         }
         else {
-            this.fsm.scene.interface.update_panel_info("ADD or MOVE available | Pick an hexagon or piece.");
+            this.fsm.scene.interface.update_panel_info("Pick an hexagon or piece.");
             this.fsm.scene.interface.update_panel_blacks(this.fsm.scene.board.available_blacks);
             this.fsm.scene.interface.update_panel_whites(this.fsm.scene.board.available_whites);
             this.fsm.scene.interface.update_panel_tiles(this.fsm.scene.board.available_tiles);
@@ -35,6 +32,7 @@ class InputState extends AbstractState {
         switch (this.fsm.scene.game_mode) {
             case "PvsP":
                 this.scene.interface.show_turn_information(this);
+                this.scene.interface.show_panel();
                 break;
             case "PvsB":
                 if(this.fsm.bot_turn) {
@@ -42,8 +40,9 @@ class InputState extends AbstractState {
                     this.sleep(1000).then(() => { this.bot_logic(); });
                 }
                 else {
-                    this.scene.interface.show_turn_information(this);
+                    this.scene.interface.show_turn_information(this); 
                 }
+                this.scene.interface.show_panel();
                 break;
             case "BvsB":
                     this.fsm.scene.setPickEnabled(false);
@@ -145,7 +144,7 @@ class InputState extends AbstractState {
 
         if(current_symbol != player_symbol) {
             this.matching_stack = null;
-            this.fsm.scene.interface.update_panel_info("STACK situation detected | Pick piece to move.");
+            this.fsm.scene.interface.update_panel_info("Forced STACK\nPick piece to move.");
             return;
         }
 
@@ -161,7 +160,7 @@ class InputState extends AbstractState {
                 let origin = JSON.stringify( action[0] );
                 if(coords_str == origin) {
                     this.matching_stack = action;
-                    this.fsm.scene.interface.update_panel_info("STACK action | Pick adjacent piece.");
+                    this.fsm.scene.interface.update_panel_info("Pick adjacent piece.");
                 }
             }
         }
@@ -171,12 +170,12 @@ class InputState extends AbstractState {
     detect_type_of_action(current_symbol, player_symbol) {
         if(current_symbol == "t") {
             this.add_action = true;
-            this.fsm.scene.interface.update_panel_info("ADD action | Pick white hexagon.");
+            this.fsm.scene.interface.update_panel_info("Pick white hexagon.");
         }
         else if(current_symbol != "0") {
             if(current_symbol == player_symbol) {
                 this.move_action = true;
-                this.fsm.scene.interface.update_panel_info("MOVE action | Pick single adjacent piece");
+                this.fsm.scene.interface.update_panel_info("Pick single adjacent piece");
             }
             else {
                 this.fsm.scene.interface.update_panel_info("Can't move opponent's piece.");
@@ -235,11 +234,11 @@ class InputState extends AbstractState {
         this.move_action = false;
 
         if(this.stack_actions != null && this.stack_actions.length > 0) {
-            this.fsm.scene.interface.update_panel_info("STACK situation detected | Pick piece to move.");
+            this.fsm.scene.interface.update_panel_info("Forced STACK\nPick piece to move.");
             this.stack_action = true;
         }
         else {
-            this.fsm.scene.interface.update_panel_info("ADD or MOVE available | Pick an hexagon or piece.");
+            this.fsm.scene.interface.update_panel_info("Pick an hexagon or piece.");
         }
     }
 

@@ -12,8 +12,8 @@ class MoveState extends AbstractState {
 
     enter(args) {
 
-        this.fsm.scene.interface.hide_panel();
-        this.fsm.scene.interface.update_panel_info("");
+        //this.fsm.scene.interface.hide_panel();
+        //this.fsm.scene.interface.update_panel_info("");
 
         this.fsm.scene.board.update_last_move(args);
 

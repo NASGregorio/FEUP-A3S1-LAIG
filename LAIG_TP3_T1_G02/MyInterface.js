@@ -189,7 +189,7 @@ class MyInterface extends CGFinterface {
     }
 
     update_panel_info(info) {
-        document.getElementById("information").innerText = info ? "\nInformation: " + info : "";
+        document.getElementById("information").innerText = info ? "\n" + info : "";
     }
 
     update_panel_game_over(message) {
