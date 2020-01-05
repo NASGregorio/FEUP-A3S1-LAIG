@@ -66,9 +66,9 @@ class MyInterface extends CGFinterface {
     // State UI Menus
     show_start_options(ctx) {
 
+        this.hide_go_to_start();
         this.clean_folder();
 
-        this.hide_go_to_start();
 
         let group = this.gui.addFolder("Start Menu");
         group.open();
@@ -103,16 +103,17 @@ class MyInterface extends CGFinterface {
     }
 
     hide_go_to_start() {
-        if(this.go_to_start != null)
+        if(this.go_to_start != null) {
             this.gui.remove(this.go_to_start);
+            this.go_to_start = null;
+        }
     }
 
     show_game_over_menu(ctx) {
 
         this.clean_folder();
 
-        if(this.go_to_start != null)
-            this.gui.remove(this.go_to_start);
+        this.hide_go_to_start();
 
         let group = this.gui.addFolder("Game Over!");
         group.open();
