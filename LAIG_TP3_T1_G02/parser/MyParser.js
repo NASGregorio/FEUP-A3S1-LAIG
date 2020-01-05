@@ -319,8 +319,8 @@ class MyParser {
                         return "no ID defined for fov";
                     if (fov < 0 || fov > 360)
                         return "Field of view (" + viewID + ") must be between 0 and 360 degrees";
-
-                    view = new CGFcamera(fov * DEGREE_TO_RAD, nearPlane, farPlane, vec3.clone(position), vec3.clone(target));
+                    
+                    view = new MyCameraData(fov * DEGREE_TO_RAD, nearPlane, farPlane, vec3.clone(position), vec3.clone(target));
                     break;
             
                 case "ortho":
@@ -351,7 +351,7 @@ class MyParser {
                     else
                         return "View " + viewID + " has an ivalid \"up\" tag";
 
-                    view = new CGFcameraOrtho(leftBound, rightBound, bottomBound, topBound,
+                    view = new MyCameraOrthoData(leftBound, rightBound, bottomBound, topBound,
                                 nearPlane, farPlane, vec3.clone(position), vec3.clone(target), vec3.clone(upVector));
                     break;
 

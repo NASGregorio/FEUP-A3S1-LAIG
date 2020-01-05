@@ -12,17 +12,15 @@ class JaleoScene extends CGFscene{
 
         this.rotate_camera = false;
         this.moving_camera = false;
-        this.camera_side1 = vec4.fromValues(-30, 15, 0, 0);
-        this.camera_side2 = vec4.fromValues(30, 15, 0, 0);
-        this.camera_target = this.camera_side1;
-        this.camera_rot_duration = 2;
-
         this.game_mode = "PvsP";
 	}
     
 	init(application) {
         
         super.init(application);
+
+        
+        this.camera = new CGFcamera(0.4, 10, 1000, vec3.fromValues(45, 45, 45), vec3.fromValues(0, 0, 0));
         
         this.pickIDs = new Map();
         this.setPickEnabled(true);
@@ -82,6 +80,8 @@ class JaleoScene extends CGFscene{
 
         this.setUpdatePeriod(1000/120);
         this.lastUpdate = Date.now();
+        console.log(this.camera);
+
 
         this.interface.addScenes();
         this.onSceneChanged();
@@ -105,7 +105,9 @@ class JaleoScene extends CGFscene{
     }
 
     onViewChanged() {
-        this.camera = this.graph.views.get(this.selectedView);
+        let cameraData = this.graph.views.get(this.selectedView);
+
+        this.loadValues(cameraData);
         this.interface.setActiveCamera(this.camera);
     }
 
@@ -120,6 +122,15 @@ class JaleoScene extends CGFscene{
     }
     //////////////////////
 
+    loadValues(cameraData) {
+        this.camera.fov = cameraData.fov;
+        this.camera.near = cameraData.nearPlane;
+        this.camera.far = cameraData.farPlane;
+        this.camera._up = vec3.fromValues(0, 1, 0);
+
+        this.camera.setPosition(cameraData.position);
+        this.camera.setTarget(cameraData.target);
+    }
 
     move_camera() {
 
@@ -128,15 +139,16 @@ class JaleoScene extends CGFscene{
 
         let player = this.board.get_player();
         this.camera_lerp_elapsed = 0;
+        this.camera_rot_duration = 2;
         
         if(player == "black") {
-            this.camera_target = this.camera_side2;
-            this.camera.setPosition(this.camera_side1);
+            this.camera_target = this.graph.views.get("Player2").position;
+            this.camera.setPosition(this.graph.views.get("Player1").position);
             this.moving_camera = true;
         }
         else if(player == "white") {
-            this.camera_target = this.camera_side1;
-            this.camera.setPosition(this.camera_side2);
+            this.camera_target = this.graph.views.get("Player1").position;
+            this.camera.setPosition(this.graph.views.get("Player2").position);
             this.moving_camera = true;
         }
         this.camera.setTarget(vec3.fromValues(0,0,0));
@@ -255,12 +267,6 @@ class JaleoScene extends CGFscene{
 
 (Não está por ordem de prioridade)
 
-Ajustar camara de acordo com o tamanho e usar funçao orbit com toggle na interface (Afonso will do)
-
-Coisas do enunciado que ainda nao li (que podem ou nao existir)
-
-Usar exit da InputState ( e das outras)
-
 TODO Afonso: Game Film - animation
 
 */
@@ -268,25 +274,25 @@ TODO Afonso: Game Film - animation
 
 /*
 Criação da cena de jogo (4.5 valores)
-    Tabuleiro                                                       wip
-    Aspeto geral                                                    wip
-    Jogabilidade, interação, criatividade                           wip
+    Tabuleiro                                                       complete
+    Aspeto geral                                                    complete
+    Jogabilidade, interação, criatividade                           complete
 Peças (4.5 valores)
     Modelação                                                       complete
-    Movimento e animação por imagens chave.                         todo
+    Movimento e animação por imagens chave.                         wip
 Visualização (3 valores)
-    Iluminação                                                      wip
-    Ambientes de jogo                                               wip
+    Iluminação                                                      complete
+    Ambientes de jogo                                               complete
 Funcionalidades genéricas do jogo (2.5 valores)
-    Nível de dificuldade                                            problem?
-    Tipo de jogo                                                    problem?
+    Nível de dificuldade                                            complete
+    Tipo de jogo                                                    complete
     Undo                                                            complete
-    Rotação da câmara entre pontos de vista pré-definidos           todo
+    Rotação da câmara entre pontos de vista pré-definidos           complete
 Outras Funcionalidades (1.5 valores)
-    Marcador                                                        todo
+    Marcador                                                        N/A
     Filme do jogo                                                   todo
-    Medição do tempo de jogo                                        done
+    Medição do tempo de jogo                                        complete
 Software (4 valores)
-    Estrutura e parametrização                                      doing ok
+    Estrutura e parametrização                                      complete
     Interligação com Programação em Lógica                          complete
 */
