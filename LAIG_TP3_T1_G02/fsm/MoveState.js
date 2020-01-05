@@ -66,6 +66,12 @@ class MoveState extends AbstractState {
     action_success(data) {
 
         if(data !== 'Bad Request') {
+
+            if(this.fsm.scene.game_mode != "PvsP") {
+                this.fsm.scene.setPickEnabled(this.fsm.bot_turn);
+                this.fsm.bot_turn = !this.fsm.bot_turn;
+            }
+
             this.data = data;
             this.animate_piece_placement();
         }

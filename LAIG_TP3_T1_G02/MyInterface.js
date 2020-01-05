@@ -69,6 +69,7 @@ class MyInterface extends CGFinterface {
         group.open();
       
         group.add(ctx, "start_game").name("Start Game!");
+        group.add(ctx.fsm.scene, 'game_mode', [ 'PvsP', 'PvsB', 'BvsB' ]).name("Game Mode");
         group.add(ctx, "how_to_play").name("How to play?");
         this.add_quit_button(group);
 

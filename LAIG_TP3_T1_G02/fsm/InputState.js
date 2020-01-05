@@ -14,9 +14,10 @@ class InputState extends AbstractState {
     enter(stack_actions) {
         super.enter();
 
-        this.scene.interface.show_turn_information(this);
-
         this.stack_actions = stack_actions;
+
+        console.log(this.fsm.scene.board.game_state[4]);
+        console.log(this.fsm.scene.board.adj_tiles);
 
         if(stack_actions != null && stack_actions.length > 0) {
             this.fsm.scene.interface.update_panel_info("STACK situation detected | Pick piece to move.");
@@ -25,12 +26,69 @@ class InputState extends AbstractState {
         else {
             this.fsm.scene.interface.update_panel_info("ADD or MOVE available | Pick an hexagon or piece.");
         }
+
+        console.log(this.fsm.scene.game_mode);
+
+        switch (this.fsm.scene.game_mode) {
+            case "PvsP":
+                this.scene.interface.show_turn_information(this);
+                break;
+            case "PvsB":
+                if(this.fsm.bot_turn) {
+                    this.fsm.scene.setPickEnabled(false);
+                    this.sleep(2000).then(() => { this.bot_logic(); });
+                }
+                else {
+                    this.scene.interface.show_turn_information(this);
+                }
+                break;
+            case "BvsB":
+                    this.fsm.scene.setPickEnabled(false);
+                    this.sleep(1000).then(() => { this.bot_logic(); });
+                break;
+            default:
+                break;
+        }
     }
 
     exit() {
         super.exit();
         this.clear_parameters();
         this.fsm.scene.interface.clean_folder();
+    }
+
+    sleep (time) {
+        return new Promise((resolve) => setTimeout(resolve, time));
+    }
+
+    bot_logic() {
+        if(this.stack_action) {
+            let idx = this.randomIntFromInterval(0, this.stack_actions.length-1);
+            this.fsm.switch_state("MOVE", ['stack', this.stack_actions[idx]]);
+        }
+        else {
+            let chance = this.randomIntFromInterval(0, 100);
+            if(chance >= 0) {
+                // ADD
+                let tiles = this.fsm.scene.board.game_state[4];
+                let tile_id = this.randomIntFromInterval(0, tiles.length-1);
+
+                let adj_tiles = this.fsm.scene.board.adj_tiles;
+                let adj_id = this.randomIntFromInterval(0, adj_tiles.length-1);
+
+                console.log(tiles[tile_id]);
+                console.log(adj_tiles[adj_id]);
+
+                this.fsm.switch_state("MOVE", ['add', tiles[tile_id].reverse(), adj_tiles[adj_id].reverse()]);  
+            }
+            else {
+                // MOVE
+            }
+        }
+    }
+
+    randomIntFromInterval(min, max) { // min and max included 
+        return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
     update_coord_selection(coords) {
@@ -178,12 +236,17 @@ class InputState extends AbstractState {
         if(this.fsm.scene.board.saved_game_states.length < 2) {
             return;
         }
+
+        if(!this.fsm.bot_turn)
+            this.fsm.scene.board.undo();
         let board = this.fsm.scene.board.undo();
         this.fsm.switch_state("UPDATE", board);
     }
 
     redo_turn() {
         if(this.fsm.scene.board.redo_stack.length > 0) {
+            if(!this.fsm.bot_turn)
+                this.fsm.scene.board.redo();
             let board = this.fsm.scene.board.redo();
             this.fsm.switch_state("UPDATE", board);
         }

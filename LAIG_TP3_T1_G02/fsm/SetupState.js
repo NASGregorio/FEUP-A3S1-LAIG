@@ -8,6 +8,7 @@ class SetupState extends AbstractState {
         super.enter();
         PrologInterpreter.send_setup_pvp(this.setup_success.bind(this));
 
+        this.fsm.bot_turn = false;
     }
 
     exit() {

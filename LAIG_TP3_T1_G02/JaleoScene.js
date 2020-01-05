@@ -13,6 +13,8 @@ class JaleoScene extends CGFscene{
         this.cam_rotation_step = Math.PI/100;
         this.cam_rotation_target = 0;
         this.cam_rotation_current = 0;
+
+        this.game_mode = "PvsP";
 	}
     
 	init(application) {
@@ -185,7 +187,6 @@ class JaleoScene extends CGFscene{
         // if(this.moving_camera) {
         //     this.lerp_camera();
         // }
-
     }
 
 	display() {
@@ -257,6 +258,7 @@ Coisas do enunciado que ainda nao li (que podem ou nao existir)
 Usar exit da InputState ( e das outras)
 
 TODO Afonso: Game Film - animation
+
 */
 
 
