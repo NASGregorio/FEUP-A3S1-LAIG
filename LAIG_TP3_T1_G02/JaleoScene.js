@@ -45,8 +45,9 @@ class JaleoScene extends CGFscene{
         this.graphs = new Map();
         this.graphNames = [];
 
-        this.initScene("demo.xml", "demo");
-        this.initScene("alternative_scene.xml", "casino");
+        this.initScene("casino_main.xml", "casino");
+        this.initScene("casino_night.xml", "casino_night");
+        this.initScene("game_table.xml", "game_table");
 
         this.selectedScene = "casino";
     }

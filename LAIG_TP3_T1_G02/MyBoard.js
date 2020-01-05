@@ -245,11 +245,7 @@ class MyBoard extends CGFobject {
 
         this.scene.pushMatrix();
         
-        if(this.scene.selectedScene == "casino")
-            this.scene.translate(this.board_origin_x+this.board_offset_x, -0.2,this.board_origin_y+this.board_offset_y);
-
-        else
-            this.scene.translate(this.board_origin_x+this.board_offset_x, 0,this.board_origin_y+this.board_offset_y);
+        this.scene.translate(this.board_origin_x+this.board_offset_x, 0,this.board_origin_y+this.board_offset_y);
 
         for (let i = 0; i < this.game_state[0].length; i++) {
             const row = this.game_state[0][i];

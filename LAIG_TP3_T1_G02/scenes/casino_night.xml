@@ -1,20 +1,20 @@
 <lxs>
     <scene root="demoRoot" axis_length="5"/>
 
-       <views default="defaultCamera">
+    <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
             <from x="0" y="15" z="50" />
             <to x="0" y="0" z="0" />
         </perspective>
 
         <perspective id="Player1" near="0.1" far="500" angle="45">
-            <from x="-30" y="20" z="0" />
-            <to x="0" y="0" z="0" />
+            <from x="-30" y="15" z="0" />
+            <to x="0" y="2" z="0" />
         </perspective>
 
         <perspective id="Player2" near="0.1" far="500" angle="45">
-            <from x="30" y="20" z="0" />
-            <to x="0" y="0" z="0" />
+            <from x="30" y="15" z="0" />
+            <to x="0" y="2" z="0" />
         </perspective>
 
         <perspective id="TopCamera" near="0.1" far="500" angle="45">
@@ -35,39 +35,41 @@
 
     <lights>
         <omni id="boardLight" enabled="1">
-            <location x="0" y="20" z="0" w="1.0" />
+            <location x="0" y="25" z="0" w="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.75" g="0.75" b="0.75" a="1.0" />
-            <specular r="0.75" g="0.75" b="0.75" a="1.0" />
+            <diffuse r="0.8" g="0.8" b="0.8" a="1.0" />
+            <specular r="0.7" g="0.7" b="0.7" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />  
         </omni>
         <omni id="backLight" enabled="1">
             <location x="0" y="20" z="30" w="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
-            <specular r="0.4" g="0.4" b="0.4" a="1.0" />
+            <diffuse r="0.05" g="0.05" b="0.05" a="1.0" />
+            <specular r="0.05" g="0.05" b="0.05" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />  
         </omni>
         <omni id="Player1Light" enabled="1">
             <location x="-20" y="20" z="0" w="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.4" g="0.3" b="0.3" a="1.0" />
-            <specular r="0.4" g="0.3" b="0.3" a="1.0" />
+            <diffuse r="0.05" g="0.05" b="0.05" a="1.0" />
+            <specular r="0.05" g="0.05" b="0.05" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />  
         </omni>
         <omni id="Player2Light" enabled="1">
             <location x="20" y="20" z="0" w="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.4" g="0.3" b="0.3" a="1.0" />
-            <specular r="0.4" g="0.3" b="0.3" a="1.0" />
+            <diffuse r="0.05" g="0.05" b="0.05" a="1.0" />
+            <specular r="0.05" g="0.05" b="0.05" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />  
         </omni>
     </lights>
 
     <textures>
         <texture id="woodTexture" file="scenes/images/wood.jpg" />
-        <texture id="wallTexture" file="scenes/images/alternative_wall_wood.jpg" />
-        <texture id="feltTexture" file="scenes/images/felt.jpg" />
+        <texture id="wallTexture" file="scenes/images/wall_wood.jpg" />
+        <texture id="feltTexture" file="scenes/images/felt2.jpg" />
+        <texture id="floorTexture" file="scenes/images/floor.jpg" />
+        <texture id="televisionTexture" file="scenes/images/casino.jpg" />
     </textures>
 
     <materials>
@@ -85,32 +87,25 @@
             <specular r="0.3" g="0.3" b="0.3" a="1.0" />
         </material>
 
-        <material id="tableMaterial" shininess="10">
-            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.6" g="0.6" b="0.6" a="1.0" />
-            <specular r="0.4" g="0.4" b="0.4" a="1.0" />
-        </material>
-
-        <material id="feltMaterial" shininess="10">
-            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
-            <specular r="0.1" g="0.1" b="0.1" a="1.0" />
-        </material>
-
-         <material id="televisionMaterial" shininess="10">
+        <material id="televisionMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
             <diffuse r="0.1" g="0.1" b="0.1" a="1.0" />
             <specular r="0.1" g="0.1" b="0.1" a="1.0" />
         </material>
 
-        <material id="floorMaterial" shininess="10">
+        <material id="feltMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.6" g="0.3" b="0.3" a="1.0" />
-            <specular r="0.4" g="0.4" b="0.4" a="1.0" />
+            <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
+            <specular r="0.05" g="0.05" b="0.05" a="1.0" />
+        </material>
+
+        <material id="floorMaterial" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.15" b="0.2" a="1.0" />
+            <diffuse r="0.0" g="0.15" b="0.2" a="1.0" />
+            <specular r="0.15" g="0.3" b="0.2" a="1.0" />
         </material>
     </materials>
 
@@ -188,47 +183,14 @@
             <rectangle x1="-40" y1="-40" x2="40" y2="40" />
         </primitive>
 
-        <primitive id="television">
+         <primitive id="television">
             <rectangle x1="-12" y1="-6" x2="12" y2="6" />
         </primitive>
 
         <primitive id="demoTorus">
             <torus inner="0.2" outer="2" slices="64" loops="64" />
         </primitive>
-        
-        <primitive id="sack">
-            <patch npointsU="5" npointsV="5" npartsU="40" npartsV="40" >
-                <controlpoint xx="0.4" yy="0" zz="0.5" />
-                <controlpoint xx="0.4*0.7" yy="0.4*0.7" zz="0.5" />
-                <controlpoint xx="0" yy="0.4*1" zz="0.5" />
-                <controlpoint xx="-0.4*0.7" yy="0.4*0.7" zz="0.5" />
-                <controlpoint xx="-0.4" yy="0" zz="0.5" />
 
-                <controlpoint xx="0.5" yy="0" zz="0" />
-                <controlpoint xx="0.5*0.7" yy="0.5*0.7" zz="0" />
-                <controlpoint xx="0" yy="0.5*1" zz="0" />
-                <controlpoint xx="-0.5*0.7" yy="0.5*0.7" zz="0" />
-                <controlpoint xx="-0.5" yy="0" zz="0" />
-
-                <controlpoint xx="1" yy="0" zz="-0.5" />
-                <controlpoint xx="0.7" yy="0.7" zz="-0.5" />
-                <controlpoint xx="0" yy="1" zz="-0.5" />
-                <controlpoint xx="-0.7" yy="0.7" zz="-0.5" />
-                <controlpoint xx="-1" yy="0" zz="-0.5" />
-
-                <controlpoint xx="1" yy="0" zz="-1.499" />
-                <controlpoint xx="0.7" yy="0.7" zz="-1.499" />
-                <controlpoint xx="0" yy="1" zz="-1.499" />
-                <controlpoint xx="-0.7" yy="0.7" zz="-1.499" />
-                <controlpoint xx="-1" yy="0" zz="-1.499" />
-
-                <controlpoint xx="0" yy="0" zz="-1.5" />
-                <controlpoint xx="0" yy="0" zz="-1.5" />
-                <controlpoint xx="0" yy="0" zz="-1.5" />
-                <controlpoint xx="0" yy="0" zz="-1.5" />
-                <controlpoint xx="0" yy="0" zz="-1.5" />
-            </patch>
-        </primitive>
     </primitives>
 
     <components>
@@ -240,7 +202,7 @@
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="table" />
+                <componentref id="alternative_table" />
                 <componentref id="house_interior" />
                 <componentref id="televisions" />
             </children>
@@ -252,7 +214,7 @@
             <materials>
                 <material id="televisionMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="televisionTexture" length_s="1" length_t="1"/>
             <children>
                 <componentref id="television_right" />
                 <componentref id="television_left" />
@@ -299,7 +261,6 @@
                 <componentref id="house_wall" />
                 <componentref id="house_lw" />
                 <componentref id="house_rw" />
-                <!-- <componentref id="sky_box_fw" /> -->
             </children>
         </component>
 
@@ -313,7 +274,7 @@
             <materials>
                 <material id="floorMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="floorTexture" length_s="20" length_t="20"/>
             <children>
                 <primitiveref id="demoRectangle" />
             </children>
@@ -328,7 +289,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="wallTexture" length_s="25" length_t="100"/>
+            <texture id="wallTexture" length_s="10" length_t="80"/>
             <children>
                 <primitiveref id="demoRectangle" />
             </children>
@@ -344,7 +305,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="wallTexture" length_s="50" length_t="100"/>
+            <texture id="wallTexture" length_s="10" length_t="80"/>
             <children>
                 <primitiveref id="demoRectangle" />
             </children>
@@ -360,201 +321,115 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="wallTexture" length_s="50" length_t="100"/>
+            <texture id="wallTexture" length_s="10" length_t="80"/>
             <children>
                 <primitiveref id="demoRectangle" />
             </children>
         </component>
 
-        <component id="table">
+        <component id="alternative_table">
             <transformation>
                 <scale x="2" y="2" z="2"/>
-                <translate x="0" y="2" z="0"/>
+                <translate x="0" y="2.1" z="0"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="table_top" />
-                <componentref id="table_top_bottom" />
-                <componentref id="table_legs" />
-                <componentref id="pieces_sack" />
+                <componentref id="alternative_table_top" />
+                <componentref id="alternative_table_top_bottom" />
+                <componentref id="alternative_table_legs" />
             </children>
         </component>
 
-        <component id="pieces_sack">
+        <component id="alternative_table_top">
             <transformation>
-                <translate x="0" y="0.9" z="-8.7"/>
-                <scale x="1" y="1" z="1"/>
-                <rotate axis="x" angle="-90" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <componentref id="pieces_sack_n" />
-                <componentref id="pieces_sack_i" />
-            </children>
-        </component>
-
-         <component id="pieces_sack_n">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <componentref id="half_sack" />
-                <componentref id="other_half_sack" />
-            </children>
-        </component>
-
-         <component id="pieces_sack_i">
-            <transformation>
-                <scale x="-1" y="1" z="1" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <componentref id="half_sack" />
-                <componentref id="other_half_sack" />
-            </children>
-        </component>
-        
-         <component id="half_sack">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="sack" />
-            </children>
-        </component>
-
-        <component id="other_half_sack">
-            <transformation>
-                <rotate axis="z" angle="180" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="sack" />
-            </children>
-        </component>
-
-        <component id="table_top">
-            <transformation>
-                <translate x="0" y="-0.001" z="0" />
-                <scale x="8" y="0.1" z="8"/>
+                <translate x="0" y="0.201" z="0" />
+                <scale x="4" y="0.1" z="4"/>
                 <rotate angle="90" axis="x"/>
-            </transformation>
-            <materials>
-                <material id="tableMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="table_tops" />
-                <primitiveref id="demoCylinder" />
-            </children>
-        </component>
-        
-        <component id="table_top_bottom">
-            <transformation>
-                <translate x="0" y="-0.601" z="0" />
-                <scale x="9" y="0.1" z="9"/>
-                <rotate angle="90" axis="x"/>
-            </transformation>
-            <materials>
-                <material id="tableMaterial" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="table_tops_bottom" />
-                <primitiveref id="demoCylinder" />
-            </children>
-        </component>
-
-        <component id="table_tops">
-            <transformation>
-                <rotate angle="-90" axis="x"/>
-                <scale x="1" y="0.001" z="1"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="table_tops_t" />
-                <componentref id="table_tops_b" />
-            </children>
-        </component>
-
-         <component id="table_tops_bottom">
-            <transformation>
-                <rotate angle="-90" axis="x"/>
-                <scale x="1" y="0.001" z="1"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="table_tops_t_bottom" />
-                <componentref id="table_tops_b" />
-            </children>
-        </component>
-
-        <component id="table_tops_t">
-            <transformation>
-                <translate x="0" y="0.101" z="0"/>
-            </transformation>
-            <materials>
-                <material id="feltMaterial" />
-            </materials>
-            <texture id="feltTexture" length_s="1" length_t="1"/>
-            <children>
-                <primitiveref id="demoSphere" />
-            </children>
-        </component>
-
-        <component id="table_tops_t_bottom">
-            <transformation>
-                <translate x="0" y="0.101" z="0"/>
             </transformation>
             <materials>
                 <material id="demoMaterial2" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
-                <primitiveref id="demoSphere" />
+                <componentref id="alternative_table_laterals" />
+                <componentref id="alternative_table_top_underside" />
+                <primitiveref id="demoTorus" />
             </children>
         </component>
 
-        <component id="table_tops_b">
+        <component id="alternative_table_top_underside">
             <transformation>
-                <translate x="0" y="-3000.1" z="0"/>
+                <translate x="0" y="0" z="6" />
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="demoMaterial2" />
             </materials>
             <texture id="inherit"/>
             <children>
+                <primitiveref id="demoTorus" />
+            </children>
+        </component>
+
+        <component id="alternative_table_laterals">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="demoMaterial2" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="alternative_table_lateral_outside" />
+                <componentref id="alternative_table_lateral_inside" />
+            </children>
+        </component>
+
+        <component id="alternative_table_lateral_outside">
+            <transformation>
+                <scale x="2.2" y="2.2" z="2"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial2" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+        <component id="alternative_table_lateral_inside">
+            <transformation>
+                <scale x="-1.8" y="1.8" z="2"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial2" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+        <component id="alternative_table_top_bottom">
+            <transformation>
+                <translate x="0" y="-0.201" z="0" />
+                <scale x="8" y="0.1" z="8"/>
+                <rotate angle="90" axis="x"/>
+            </transformation>
+            <materials>
+                <material id="feltMaterial" />
+            </materials>
+            <texture id="feltTexture" length_s="2" length_t="2"/>
+            <children>
                 <primitiveref id="demoSphere" />
             </children>
         </component>
 
-        <component id="table_legs">
+        <component id="alternative_table_legs">
             <transformation>
-                <translate x="0" y="-0.1" z="0" />
+                <translate x="0" y="-0.2" z="0" />
                 <scale x="0.75" y="1.2" z="0.75" />
                 <rotate angle="90" axis="x" />
             </transformation>
@@ -563,16 +438,16 @@
             </materials>
             <texture id="woodTexture" length_s="1" length_t="1"/>
             <children>
-                <componentref id="table_leg_lb" />
-                <componentref id="table_leg_rb" />
-                <componentref id="table_leg_lf" />
-                <componentref id="table_leg_rf" />
+                <componentref id="alternative_table_leg_lb" />
+                <componentref id="alternative_table_leg_rb" />
+                <componentref id="alternative_table_leg_lf" />
+                <componentref id="alternative_table_leg_rf" />
             </children>
         </component>
 
-        <component id="table_leg_lb">
+        <component id="alternative_table_leg_lb">
             <transformation>
-                <translate x="-4" y="-4" z="0" />
+                <translate x="-4.5" y="-4.5" z="0" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -583,9 +458,9 @@
             </children>
         </component>
 
-        <component id="table_leg_rb">
+        <component id="alternative_table_leg_rb">
             <transformation>
-                <translate x="4" y="-4" z="0" />
+                <translate x="4.5" y="-4.5" z="0" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -596,9 +471,9 @@
             </children>
         </component>
 
-         <component id="table_leg_lf">
+         <component id="alternative_table_leg_lf">
             <transformation>
-                <translate x="-4" y="4" z="0" />
+                <translate x="-4.5" y="4.5" z="0" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -609,9 +484,9 @@
             </children>
         </component>
 
-         <component id="table_leg_rf">
+         <component id="alternative_table_leg_rf">
             <transformation>
-                <translate x="4" y="4" z="0" />
+                <translate x="4.5" y="4.5" z="0" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -621,5 +496,6 @@
                 <primitiveref id="demoCylinder" />
             </children>
         </component>
+       
     </components>
 </lxs>
