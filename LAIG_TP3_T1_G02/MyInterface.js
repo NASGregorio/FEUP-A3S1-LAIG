@@ -29,6 +29,7 @@ class MyInterface extends CGFinterface {
 
         this.go_to_start = null;
 
+        this.gui.add(this.scene, 'rotate_camera').name('Enable rotation');
         
         this.curr_folder = null;
         

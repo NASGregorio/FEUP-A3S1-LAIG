@@ -9,6 +9,8 @@ class JaleoScene extends CGFscene{
 
         this.interface = myinterface;
 
+
+        this.rotate_camera = false;
         this.moving_camera = false;
         this.camera_side1 = vec4.fromValues(-30, 15, 0, 0);
         this.camera_side2 = vec4.fromValues(30, 15, 0, 0);
@@ -121,6 +123,9 @@ class JaleoScene extends CGFscene{
 
     move_camera() {
 
+        if(!this.rotate_camera)
+            return;
+
         let player = this.board.get_player();
         this.camera_lerp_elapsed = 0;
         
@@ -143,7 +148,10 @@ class JaleoScene extends CGFscene{
         this.camera._up = vec3.fromValues(0, 1, 0);
         this.camera.orbit("x", Math.PI / 100);
 
-        if(vec3.distance(this.camera.position, target) < 0.1 || t >= 1) {
+        let a = vec2.fromValues(this.camera.position[0], this.camera.position[2]);
+        let b = vec2.fromValues(target[0], target[2]);
+
+        if(vec2.distance(a, b) < 0.1 || t >= 1) {
             this.moving_camera = false;
             this.camera.setPosition(target);
             this.camera.setTarget(vec3.fromValues(0,0,0));
