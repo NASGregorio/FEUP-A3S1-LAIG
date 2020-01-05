@@ -188,6 +188,7 @@
         <primitive id="demoTorus">
             <torus inner="0.2" outer="2" slices="64" loops="64" />
         </primitive>
+
     </primitives>
 
     <components>
