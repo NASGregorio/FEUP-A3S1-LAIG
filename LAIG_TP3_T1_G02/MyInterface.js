@@ -116,8 +116,8 @@ class MyInterface extends CGFinterface {
 
         let group = this.gui.addFolder("Game Over!");
         group.open();
-        group.add(ctx, "go_to_start").name("To start menu?");
-        group.add(ctx, "show_game_film").name("Replay game");
+        group.add(ctx, "go_to_start").name("To start menu");
+        group.add(ctx, "show_game_film").name("Play game film");
         this.add_quit_button(group);
 
         this.curr_folder = group;
@@ -143,6 +143,9 @@ class MyInterface extends CGFinterface {
     clean_panel() {
         this.update_panel_player("");
         this.update_panel_time("");
+        this.update_panel_blacks("");
+        this.update_panel_whites("");
+        this.update_panel_tiles("");
         this.update_panel_info("");
         this.update_panel_game_over("");
     }

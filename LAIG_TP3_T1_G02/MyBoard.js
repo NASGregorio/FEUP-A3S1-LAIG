@@ -67,7 +67,6 @@ class MyBoard extends CGFobject {
 
     update_board(game_state) {
         this.game_state = game_state;
-        console.log("GAMESTATE: ",this.game_state);
 
         this.available_blacks = 16 - this.game_state[8];
         this.available_whites = 16 - this.game_state[9];
@@ -245,7 +244,12 @@ class MyBoard extends CGFobject {
             return;
 
         this.scene.pushMatrix();
-        this.scene.translate(this.board_origin_x+this.board_offset_x, 0,this.board_origin_y+this.board_offset_y);
+        
+        if(this.scene.selectedScene == "casino")
+            this.scene.translate(this.board_origin_x+this.board_offset_x, -0.2,this.board_origin_y+this.board_offset_y);
+
+        else
+            this.scene.translate(this.board_origin_x+this.board_offset_x, 0,this.board_origin_y+this.board_offset_y);
 
         for (let i = 0; i < this.game_state[0].length; i++) {
             const row = this.game_state[0][i];

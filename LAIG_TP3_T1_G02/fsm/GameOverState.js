@@ -36,7 +36,6 @@ class GameOverState extends AbstractState {
 
         (async function loop(board) {
         for (let i = 0; i < board.saved_game_states.length; i++) {
-            console.log("I AM IRON MAN!");
             await new Promise(resolve => setTimeout(resolve, 1000));
             board.game_state = board.saved_game_states[i];
         }

@@ -264,6 +264,7 @@ class JaleoScene extends CGFscene{
 (Não está por ordem de prioridade)
 
 BIG TODO : bot move logic
+Small bug on game over to start menu
 
 
 */

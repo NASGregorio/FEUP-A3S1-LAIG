@@ -89,7 +89,6 @@ class KeyframeAnimation extends Animation
         if(this.currKeyframe == this.keyframeCount-1) {
             this.finished = true;
             
-            console.log("B");
             if(this.onFinish)
                 this.onFinish();
             return;

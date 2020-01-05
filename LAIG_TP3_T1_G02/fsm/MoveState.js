@@ -133,8 +133,17 @@ class MoveState extends AbstractState {
         let key_origin_start = new Keyframe(0, [origin[0], 4+0.1, origin[1]], [0,0,0], [0,0,0]);
         let key_origin_end = new Keyframe(animation_time, [origin[0], 4+0.1, origin[1]], [0,0,0], [1,1,1]);
 
-        let key_destination_start = new Keyframe(0, [destination[0], 4, destination[1]], [0,0,0], [0,0,0]);
-        let key_destination_end = new Keyframe(animation_time, [destination[0], 4, destination[1]], [0,0,0], [1.5,1.5,1.5]);
+        let key_destination_start = new Keyframe(0, [0, 0, 0], [0,0,0], [0,0,0]);
+        let key_destination_end = new Keyframe(0, [0, 0, 0], [0,0,0], [0,0,0]);
+
+        if(this.fsm.scene.board.available_tiles > 0) {
+            key_destination_start = new Keyframe(0, [destination[0], 4, destination[1]], [0,0,0], [0,0,0]);
+            key_destination_end = new Keyframe(animation_time, [destination[0], 4, destination[1]], [0,0,0], [1.5,1.5,1.5]);
+        }
+        else {
+            key_destination_start = new Keyframe(0, [destination[0], 4, destination[1]], [0,0,0], [0,0,0]);
+            key_destination_end = new Keyframe(animation_time, [destination[0], 4, destination[1]], [0,0,0], [0,0,0]);
+        }
 
         this.animation1.anim.addKeyframe(key_origin_start);
         this.animation1.anim.addKeyframe(key_origin_end);
@@ -206,10 +215,6 @@ class MoveState extends AbstractState {
 
         this.animation1.material = (player == "white") ? this.fsm.scene.board.whiteMat : this.fsm.scene.board.blackMat;
         this.animation1.obj = this.fsm.scene.board.piece;
-
-        
-        console.log(this.animation1);
-        console.log(this.animation2);
 
         this.animation1.anim.setOnFinishCB(this.onAnimationFinish.bind(this));
         this.animation1.anim.resetAnimation();
