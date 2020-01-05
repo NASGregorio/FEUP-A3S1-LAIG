@@ -165,7 +165,7 @@ class MyInterface extends CGFinterface {
     
     show_game_over() {
 		document.getElementById("game_over").style.display = "block";
-		document.getElementById("panel").style.display = "none";
+		//document.getElementById("panel").style.display = "none";
     }
 
     update_panel_player(player) {
