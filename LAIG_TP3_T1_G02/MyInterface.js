@@ -147,6 +147,13 @@ class MyInterface extends CGFinterface {
         this.update_panel_game_over("");
     }
 
+    hide_panel() {
+		document.getElementById("panel").style.display = "none";
+    }
+    show_panel() {
+		document.getElementById("panel").style.display = "block";
+    }
+
     hide_game_over() {
 		document.getElementById("game_over").style.display = "none";
 		document.getElementById("panel").style.display = "block";
@@ -159,6 +166,18 @@ class MyInterface extends CGFinterface {
 
     update_panel_player(player) {
         document.getElementById("player").innerText = player ? "Player: " + player : "";
+    }
+
+    update_panel_blacks(blacks) {
+        document.getElementById("blacks").innerText = blacks ? "Available blacks: " + blacks : "";
+    }
+
+    update_panel_whites(whites) {
+        document.getElementById("whites").innerText = whites ? "Available whites: " + whites : "";
+    }
+
+    update_panel_tiles(tiles) {
+        document.getElementById("tiles").innerText = tiles ? "Available tiles: " + tiles : "";
     }
 
     update_panel_time(time) {

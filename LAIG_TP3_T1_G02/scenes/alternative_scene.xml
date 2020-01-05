@@ -52,14 +52,14 @@
             <location x="-20" y="20" z="0" w="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
             <diffuse r="0.35" g="0.3" b="0.3" a="1.0" />
-            <specular r="0.2" g="0.2" b="0.2" a="1.0" />
+            <specular r="0.1" g="0.1" b="0.1" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />  
         </omni>
         <omni id="Player2Light" enabled="1">
             <location x="20" y="20" z="0" w="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
             <diffuse r="0.35" g="0.3" b="0.3" a="1.0" />
-            <specular r="0.2" g="0.2" b="0.2" a="1.0" />
+            <specular r="0.1" g="0.1" b="0.1" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />  
         </omni>
     </lights>

@@ -263,9 +263,8 @@ class JaleoScene extends CGFscene{
 
 (Não está por ordem de prioridade)
 
-bot move logic
+BIG TODO : bot move logic
 
-verificar todos os menus
 
 */
 
@@ -277,7 +276,7 @@ Criação da cena de jogo (4.5 valores)
     Jogabilidade, interação, criatividade                           complete
 Peças (4.5 valores)
     Modelação                                                       complete
-    Movimento e animação por imagens chave.                         wip
+    Movimento e animação por imagens chave.                         complete
 Visualização (3 valores)
     Iluminação                                                      complete
     Ambientes de jogo                                               complete
@@ -287,8 +286,8 @@ Funcionalidades genéricas do jogo (2.5 valores)
     Undo                                                            complete
     Rotação da câmara entre pontos de vista pré-definidos           complete
 Outras Funcionalidades (1.5 valores)
-    Marcador                                                        N/A
-    Filme do jogo                                                   todo
+    Marcador                                                        complete
+    Filme do jogo                                                   complete
     Medição do tempo de jogo                                        complete
 Software (4 valores)
     Estrutura e parametrização                                      complete

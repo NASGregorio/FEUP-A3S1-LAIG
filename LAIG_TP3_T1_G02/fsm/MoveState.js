@@ -8,13 +8,11 @@ class MoveState extends AbstractState {
 
         this.animation1 = { "anim": new KeyframeAnimation(this.fsm.scene), "material":null, "obj":null };
         this.animation2 = { "anim": new KeyframeAnimation(this.fsm.scene), "material":null, "obj":null };
-        // let key_start = new Keyframe(0, [0,15,0], [0,0,0], [0,0,0]);
-        // this.animation1.addKeyframe(key_start);
-        // this.animation2.addKeyframe(key_start);
     };
 
     enter(args) {
 
+        this.fsm.scene.interface.hide_panel();
         this.fsm.scene.interface.update_panel_info("");
 
         this.fsm.scene.board.update_last_move(args);
@@ -99,17 +97,19 @@ class MoveState extends AbstractState {
         let origin = this.fsm.scene.board.coords_to_world_space([col, row]);
         let destination = this.fsm.scene.board.coords_to_world_space([last_move[1][1][1], last_move[1][1][0]]);  
 
-        // Move to animation method + "beautify" TODO
-        let key_origin_start = new Keyframe(0, [origin[0], 4+0.1, origin[1]], [0,0,0], [1,1,1]);
+        // Move to stack method
+        let key_origin_start = new Keyframe(0, [origin[0], 4+0.1, origin[1]], [0,0,0], [0,0,0]);
         let key_origin_end = new Keyframe(animation_time, [origin[0], 4+0.1, origin[1]], [0,0,0], [0,0,0]);
 
-        let key_destination_start = new Keyframe(0, [destination[0], 4+0.1+0.2, destination[1]], [0,0,0], [0,0,0]);
+        let key_destination_start = new Keyframe(0, [origin[0], 4+0.1, origin[1]], [0,0,0], [1,1,1]);
+        let key_destination_mid = new Keyframe(animation_time/3, [origin[0], 4+0.1+0.2, origin[1]], [0,0,0], [1,1,1]);
         let key_destination_end = new Keyframe(animation_time, [destination[0], 4+0.1+0.2, destination[1]], [0,0,0], [1,1,1]);
 
         this.animation1.anim.addKeyframe(key_origin_start);
         this.animation1.anim.addKeyframe(key_origin_end);
         
         this.animation2.anim.addKeyframe(key_destination_start);
+        this.animation2.anim.addKeyframe(key_destination_mid);
         this.animation2.anim.addKeyframe(key_destination_end);
 
         this.animation2.material = (player == "white") ? this.fsm.scene.board.whiteMat : this.fsm.scene.board.blackMat;
@@ -134,7 +134,7 @@ class MoveState extends AbstractState {
         let key_origin_end = new Keyframe(animation_time, [origin[0], 4+0.1, origin[1]], [0,0,0], [1,1,1]);
 
         let key_destination_start = new Keyframe(0, [destination[0], 4, destination[1]], [0,0,0], [0,0,0]);
-        let key_destination_end = new Keyframe(animation_time, [destination[0], 4, destination[1]], [0,0,0], [2.2,2.2,2.2]);
+        let key_destination_end = new Keyframe(animation_time, [destination[0], 4, destination[1]], [0,0,0], [1.5,1.5,1.5]);
 
         this.animation1.anim.addKeyframe(key_origin_start);
         this.animation1.anim.addKeyframe(key_origin_end);
@@ -163,16 +163,18 @@ class MoveState extends AbstractState {
         let destination = this.fsm.scene.board.coords_to_world_space(last_move[2]);
 
         // Move to animation method + "beautify" TODO
-        let key_origin_start = new Keyframe(0, [origin[0], 4+0.1+height*0.2, origin[1]], [0,0,0], [1,1,1]);
+        let key_origin_start = new Keyframe(0, [origin[0], 4+0.1+height*0.2, origin[1]], [0,0,0], [0,0,0]);
         let key_origin_end = new Keyframe(animation_time, [origin[0], 4+0.1+height*0.2, origin[1]], [0,0,0], [0,0,0]);
 
-        let key_destination_start = new Keyframe(0, [destination[0], 4+0.1+0.2, destination[1]], [0,0,0], [0,0,0]);
+        let key_destination_start = new Keyframe(0, [origin[0], 4+0.1, origin[1]], [0,0,0], [1,1,1]);
+        let key_destination_mid = new Keyframe(animation_time/3, [origin[0], 4+0.1+0.2, origin[1]], [0,0,0], [1,1,1]);
         let key_destination_end = new Keyframe(animation_time, [destination[0], 4+0.1+0.2, destination[1]], [0,0,0], [1,1,1]);
 
         this.animation1.anim.addKeyframe(key_origin_start);
         this.animation1.anim.addKeyframe(key_origin_end);
         
         this.animation2.anim.addKeyframe(key_destination_start);
+        this.animation2.anim.addKeyframe(key_destination_mid);
         this.animation2.anim.addKeyframe(key_destination_end);
 
         this.animation2.material = (player == "white") ? this.fsm.scene.board.whiteMat : this.fsm.scene.board.blackMat;

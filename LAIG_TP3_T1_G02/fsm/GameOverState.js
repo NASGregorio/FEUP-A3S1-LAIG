@@ -27,8 +27,10 @@ class GameOverState extends AbstractState {
     }
     
     show_game_film() {
-        console.log(this.fsm.scene.board.available_blacks);
-        console.log(this.fsm.scene.board.available_whites);
+
+        this.fsm.scene.interface.update_panel_blacks("");
+        this.fsm.scene.interface.update_panel_whites("");
+        this.fsm.scene.interface.update_panel_tiles("");
 
         this.fsm.scene.board.adj_tiles = [];
 

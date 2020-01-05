@@ -18,11 +18,15 @@
 
         #panel {
             position: absolute;
-            padding: 1em 4em;
+            padding: 0.2em 1em;
+            min-width: 200px;
             margin: 1em;
             color: white;
             background-color: #bbbbbbdd;
             border-radius: 5px;
+        }
+        #panel h1 {
+            text-align: center;
         }
         #rules {
             position: absolute;
@@ -51,13 +55,19 @@
             border-radius: 5px;
             font-size: 2em;
         }
+        #information {
+            font-size: 1.15em;
+        }
 	</style>
 </head>
 <body>
     <script src="main.js"></script>
     <div id="panel">
         <h1>Jaleo</h1>
-        <span id="player"></span>
+        <span id="player"></span><br>
+        <span id="blacks"></span><br>
+        <span id="whites"></span><br>
+        <span id="tiles"></span>
         <span id="time"></span>
         <span id="information"></span>
         <span id="error"></span>

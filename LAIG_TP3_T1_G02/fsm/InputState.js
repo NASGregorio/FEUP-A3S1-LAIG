@@ -12,15 +12,24 @@ class InputState extends AbstractState {
     };
 
     enter(stack_actions) {
+
+        this.scene.interface.show_panel();
+
         
         this.stack_actions = stack_actions;
 
         if(stack_actions != null && stack_actions.length > 0) {
             this.fsm.scene.interface.update_panel_info("STACK situation detected | Pick piece to move.");
+            this.fsm.scene.interface.update_panel_blacks(this.fsm.scene.board.available_blacks);
+            this.fsm.scene.interface.update_panel_whites(this.fsm.scene.board.available_whites);
+            this.fsm.scene.interface.update_panel_tiles(this.fsm.scene.board.available_tiles);
             this.stack_action = true;
         }
         else {
             this.fsm.scene.interface.update_panel_info("ADD or MOVE available | Pick an hexagon or piece.");
+            this.fsm.scene.interface.update_panel_blacks(this.fsm.scene.board.available_blacks);
+            this.fsm.scene.interface.update_panel_whites(this.fsm.scene.board.available_whites);
+            this.fsm.scene.interface.update_panel_tiles(this.fsm.scene.board.available_tiles);
         }
 
         switch (this.fsm.scene.game_mode) {
@@ -63,8 +72,10 @@ class InputState extends AbstractState {
             this.fsm.switch_state("MOVE", ['stack', this.stack_actions[idx]]);
         }
         else {
+            let blacks = this.fsm.scene.board.game_state[5];
+            let whites = this.fsm.scene.board.game_state[6];
             let chance = this.randomIntFromInterval(0, 100);
-            if(chance >= 0) {
+            if(chance <= 49) {
                 // ADD
                 let tiles = this.fsm.scene.board.game_state[4];
                 let tile_id = this.randomIntFromInterval(0, tiles.length-1);
@@ -75,7 +86,14 @@ class InputState extends AbstractState {
                 this.fsm.switch_state("MOVE", ['add', tiles[tile_id].reverse(), adj_tiles[adj_id].reverse()]);  
             }
             else {
-                // MOVE
+                // TODO: MOVE
+                let tiles = this.fsm.scene.board.game_state[4];
+                let tile_id = this.randomIntFromInterval(0, tiles.length-1);
+
+                let adj_tiles = this.fsm.scene.board.adj_tiles;
+                let adj_id = this.randomIntFromInterval(0, adj_tiles.length-1);
+
+                this.fsm.switch_state("MOVE", ['add', tiles[tile_id].reverse(), adj_tiles[adj_id].reverse()]);  
             }
         }
     }
@@ -230,10 +248,10 @@ class InputState extends AbstractState {
             return;
         }
 
-        if(!this.fsm.bot_turn)
-            this.fsm.scene.board.undo();
-        let board = this.fsm.scene.board.undo();
-        this.fsm.switch_state("UPDATE", board);
+        if(!this.fsm.bot_turn) {
+            let board = this.fsm.scene.board.undo();
+            this.fsm.switch_state("UPDATE", board);
+        }
     }
 
     redo_turn() {

@@ -7,6 +7,9 @@ class StartState extends AbstractState {
     enter() {
         this.fsm.scene.interface.show_start_options(this);
         this.fsm.scene.interface.clean_panel();
+        this.fsm.scene.interface.update_panel_blacks("");
+        this.fsm.scene.interface.update_panel_whites("");
+        this.fsm.scene.interface.update_panel_tiles("");
         this.fsm.scene.board = new MyBoard(this.fsm.scene);
         this.fsm.scene.board.count = false;
         super.enter();

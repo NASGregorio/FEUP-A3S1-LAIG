@@ -67,6 +67,7 @@ class MyBoard extends CGFobject {
 
     update_board(game_state) {
         this.game_state = game_state;
+        console.log("GAMESTATE: ",this.game_state);
 
         this.available_blacks = 16 - this.game_state[8];
         this.available_whites = 16 - this.game_state[9];
