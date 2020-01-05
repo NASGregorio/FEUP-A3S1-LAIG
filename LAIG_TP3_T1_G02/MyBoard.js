@@ -99,7 +99,7 @@ class MyBoard extends CGFobject {
     save_state(data) {
         this.saved_game_states.push(data);
         this.film_game_states.push(data);
-        console.log("Film GameStates: ", this.film_game_states);
+        //console.log("Film GameStates: ", this.film_game_states);
         this.redo_stack = [];
     }
 
@@ -193,10 +193,9 @@ class MyBoard extends CGFobject {
         }
     }
 
-    oddr_offset_to_pixel(coords) {
-        //this.fsm.scene.board.board_origin_x, 0,this.fsm.scene.board.board_origin_y);
-        var x = this.OuterRadius * Math.sqrt(3) * (coords[0] + 0.5 * ((coords[1])&1))
-        var y = this.OuterRadius * 3/2 * coords[1]
+    coords_to_world_space(coords) {
+        var x = this.OuterRadius * Math.sqrt(3) * (coords[0] + 0.5 * ((coords[1])&1));
+        var y = this.OuterRadius * 3/2 * coords[1];
         return [x+this.board_origin_x, y+this.board_origin_y];
     }
 

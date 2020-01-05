@@ -72,9 +72,6 @@ class InputState extends AbstractState {
                 let adj_tiles = this.fsm.scene.board.adj_tiles;
                 let adj_id = this.randomIntFromInterval(0, adj_tiles.length-1);
 
-                console.log(tiles[tile_id]);
-                console.log(adj_tiles[adj_id]);
-
                 this.fsm.switch_state("MOVE", ['add', tiles[tile_id].reverse(), adj_tiles[adj_id].reverse()]);  
             }
             else {

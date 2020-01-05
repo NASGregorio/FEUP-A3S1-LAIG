@@ -80,79 +80,122 @@ class MoveState extends AbstractState {
     }
 
     onAnimationFinish() {
-        this.animation1.removeLastKeyframe();
-        this.animation2.removeLastKeyframe();
+        this.animation1.clearKeyframes();
+        this.animation2.clearKeyframes();
         this.fsm.scene.board.save_state(this.data);
         this.fsm.switch_state("UPDATE", this.data);
     }
 
+    set_stack_animation(last_move) {
+        // Clear old piece
+        let row = last_move[1][0][0];
+        let col = last_move[1][0][1];
+        board[row][col] = "t";
+
+        // Get world space coordinates
+        let origin = this.fsm.scene.board.coords_to_world_space([col, row]);
+        let destination = this.fsm.scene.board.coords_to_world_space([last_move[1][1][1], last_move[1][1][0]]);  
+
+        this.set_stack_animation(origin, destination);
+
+        // Move to animation method + "beautify" TODO
+        key_origin_start = new Keyframe(0, [origin[0], 4+0.1, origin[1]], [0,0,0], [1,1,1]);
+        key_origin_end = new Keyframe(animation_time, [origin[0], 4+0.1, origin[1]], [0,0,0], [0,0,0]);
+
+        key_destination_start = new Keyframe(0, [destination[0], 4+0.1+0.2, destination[1]], [0,0,0], [0,0,0]);
+        key_destination_end = new Keyframe(animation_time, [destination[0], 4+0.1+0.2, destination[1]], [0,0,0], [1,1,1]);
+    }
+
+    set_add_animation(last_move) {
+        
+    }
+
+    set_move_animation(last_move) {
+        
+    }
+
     animate_piece_placement() {
+
+        let board = this.fsm.scene.board.get_board();
         let last_move = this.fsm.scene.board.last_move;
 
         let animation_time = 0.5;
 
-        console.log(this.animation1.keyframes);
-
         let move = last_move[0];
-        let origin;
-        let destination;
+        console.log(move);
 
-        let key_origin_start;
-        let key_origin_end;
-        let key_destination_start;
-        let key_destination_end;
-
-        if(move == "stack") {
-
-            let board = this.fsm.scene.board.get_board();
-            let row = last_move[1][0][0];
-            let col = last_move[1][0][1];
-            board[row][col] = "t";
-
-            origin = this.fsm.scene.board.oddr_offset_to_pixel([last_move[1][0][1], last_move[1][0][0]]);
-            destination = this.fsm.scene.board.oddr_offset_to_pixel([last_move[1][1][1], last_move[1][1][0]]);  
+        // let key_origin_start;
+        // let key_origin_end;
+        // let key_destination_start;
+        // let key_destination_end;
 
 
-            key_origin_start = new Keyframe(0, [origin[0], 4+0.1, origin[1]], [0,0,0], [1,1,1]);
-
-            this.animation1.keyframes
-            key_origin_end = new Keyframe(animation_time, [origin[0], 4+0.1, origin[1]], [0,0,0], [0,0,0]);
-
-            key_destination_start = new Keyframe(0, [destination[0], 4+0.1+0.2, destination[1]], [0,0,0], [0,0,0]);
-            key_destination_end = new Keyframe(animation_time, [destination[0], 4+0.1+0.2, destination[1]], [0,0,0], [1,1,1]);
-
-
-        }
-        else {
-
-            origin = this.fsm.scene.board.oddr_offset_to_pixel(last_move[1]);
-            destination = this.fsm.scene.board.oddr_offset_to_pixel(last_move[2]);
-
-            key_origin_start = new Keyframe(0, [origin[0], 4+0.1, origin[1]], [0,0,0], [0,0,0]);
-            key_origin_end = new Keyframe(animation_time, [origin[0], 4+0.1, origin[1]], [0,0,0], [1,1,1]);
-
-            key_destination_start = new Keyframe(0, [destination[0], 4, destination[1]], [0,0,0], [0,0,0]);
-            key_destination_end = new Keyframe(animation_time, [destination[0], 4, destination[1]], [0,0,0], [1.2,1.2,1.2]);
-
+        switch (move) {
+            case "stack":
+                this.set_stack_animation(last_move);
+                break;
+            case "add":
+                this.set_add_animation(last_move);
+                break;
+            case "move":
+                this.set_move_animation(last_move);
+                break;
+            default:
+                this.fsm.scene.board.save_state(this.data);
+                this.fsm.switch_state("UPDATE", this.data);
+                break;
         }
 
+        // if(move == "stack") {
 
-        this.animation1.addKeyframe(key_origin_start);
-        this.animation1.addKeyframe(key_origin_end);
+        //     // Clear old piece
+        //     let row = last_move[1][0][0];
+        //     let col = last_move[1][0][1];
+        //     board[row][col] = "t";
+
+        //     // Get world space coordinates
+        //     let origin = this.fsm.scene.board.coords_to_world_space([col, row]);
+        //     let destination = this.fsm.scene.board.coords_to_world_space([last_move[1][1][1], last_move[1][1][0]]);  
+
+        //     this.set_stack_animation(origin, destination);
+
+        //     // Move to animation method + "beautify" TODO
+        //     key_origin_start = new Keyframe(0, [origin[0], 4+0.1, origin[1]], [0,0,0], [1,1,1]);
+        //     key_origin_end = new Keyframe(animation_time, [origin[0], 4+0.1, origin[1]], [0,0,0], [0,0,0]);
+
+        //     key_destination_start = new Keyframe(0, [destination[0], 4+0.1+0.2, destination[1]], [0,0,0], [0,0,0]);
+        //     key_destination_end = new Keyframe(animation_time, [destination[0], 4+0.1+0.2, destination[1]], [0,0,0], [1,1,1]);
+
+        // }
+        // else if(move == "add") {
+
+        //     origin = this.fsm.scene.board.coords_to_world_space(last_move[1]);
+        //     destination = this.fsm.scene.board.coords_to_world_space(last_move[2]);
+
+        //     key_origin_start = new Keyframe(0, [origin[0], 4+0.1, origin[1]], [0,0,0], [0,0,0]);
+        //     key_origin_end = new Keyframe(animation_time, [origin[0], 4+0.1, origin[1]], [0,0,0], [1,1,1]);
+
+        //     key_destination_start = new Keyframe(0, [destination[0], 4, destination[1]], [0,0,0], [0,0,0]);
+        //     key_destination_end = new Keyframe(animation_time, [destination[0], 4, destination[1]], [0,0,0], [1.2,1.2,1.2]);
+        // }
+
+
+        // this.animation1.addKeyframe(key_origin_start);
+        // this.animation1.addKeyframe(key_origin_end);
         
-        this.animation2.addKeyframe(key_destination_start);
-        this.animation2.addKeyframe(key_destination_end);
+        // this.animation2.addKeyframe(key_destination_start);
+        // this.animation2.addKeyframe(key_destination_end);
 
-        this.animation1.setOnFinishCB(this.onAnimationFinish.bind(this));
-        this.animation1.resetAnimation();
-        this.animation1.advanceKeyframe();
-        this.animation1.startAnimation();
+        // this.animation1.setOnFinishCB(this.onAnimationFinish.bind(this));
+        // this.animation1.resetAnimation();
+        // this.animation1.advanceKeyframe();
+        // this.animation1.startAnimation();
         
-        this.animation2.setOnFinishCB(null);
-        this.animation2.resetAnimation();
-        this.animation2.advanceKeyframe();
-        this.animation2.startAnimation();
+        // this.animation2.setOnFinishCB(null);
+        // this.animation2.resetAnimation();
+        // this.animation2.advanceKeyframe();
+        // this.animation2.startAnimation();
 
-        this.animation_running = true;
+        //this.animation_running = true;
     }
 }

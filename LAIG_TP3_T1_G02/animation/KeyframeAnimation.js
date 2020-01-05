@@ -51,9 +51,21 @@ class KeyframeAnimation extends Animation
         }
     }
 
-    removeLastKeyframe() {
-        this.keyframes.pop();
-        this.keyframeCount--;
+    clearKeyframes() {
+        this.keyframes = [];
+        this.keyframeCount = 0;
+        this.currKeyframe = 0;
+
+        var zeroKey = new Keyframe(0, [0,0,0], [0,0,0], [1,1,1]);
+        this.addKeyframe(zeroKey);
+
+        this.timeInterval = 0;
+        this.totalTimeElapsed = 0;
+        this.keyframeTimeElapsed = 0;
+
+        this.finished = false;
+
+        this.onFinish = null;
     }
 
     updateKeyframe(dt) {

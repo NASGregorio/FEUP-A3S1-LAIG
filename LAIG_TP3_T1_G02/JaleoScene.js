@@ -80,7 +80,6 @@ class JaleoScene extends CGFscene{
 
         this.setUpdatePeriod(1000/120);
         this.lastUpdate = Date.now();
-        console.log(this.camera);
 
 
         this.interface.addScenes();
@@ -88,9 +87,6 @@ class JaleoScene extends CGFscene{
 
         this.fsm = new StateMachine(this);
         this.fsm.init("START");
-
-        // Start animations
-        //this.graph.startAnimations();
     }
 
 
