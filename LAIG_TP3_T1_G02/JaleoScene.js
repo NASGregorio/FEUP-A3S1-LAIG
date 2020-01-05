@@ -10,9 +10,10 @@ class JaleoScene extends CGFscene{
         this.interface = myinterface;
 
         this.moving_camera = false;
-        this.cam_rotation_step = Math.PI/100;
-        this.cam_rotation_target = 0;
-        this.cam_rotation_current = 0;
+        this.camera_side1 = vec4.fromValues(-30, 15, 0, 0);
+        this.camera_side2 = vec4.fromValues(30, 15, 0, 0);
+        this.camera_target = this.camera_side1;
+        this.camera_rot_duration = 2;
 
         this.game_mode = "PvsP";
 	}
@@ -102,7 +103,7 @@ class JaleoScene extends CGFscene{
     }
 
     onViewChanged() {
-        this.camera = this.graph.views.get(this.viewIndexToNames[this.selectedView]);
+        this.camera = this.graph.views.get(this.selectedView);
         this.interface.setActiveCamera(this.camera);
     }
 
@@ -121,39 +122,31 @@ class JaleoScene extends CGFscene{
     move_camera() {
 
         let player = this.board.get_player();
-
+        this.camera_lerp_elapsed = 0;
+        
         if(player == "black") {
-
-            this.cam_rotation_target = Math.PI;
+            this.camera_target = this.camera_side2;
+            this.camera.setPosition(this.camera_side1);
             this.moving_camera = true;
         }
         else if(player == "white") {
-
-            this.cam_rotation_target = Math.PI;
+            this.camera_target = this.camera_side1;
+            this.camera.setPosition(this.camera_side2);
             this.moving_camera = true;
         }
+        this.camera.setTarget(vec3.fromValues(0,0,0));
+
     }
 
-    array_compare(arr1, arr2) {
-        return (arr1.x === arr2.x && arr1.y === arr2.y && arr1.z === arr2.z)
-    }
+    lerp_camera(target, t) {
 
-    lerp_camera() {
+        this.camera._up = vec3.fromValues(0, 1, 0);
+        this.camera.orbit("x", Math.PI / 100);
 
-        this.cam_rotation_current += this.cam_rotation_step;
-
-        let pos = vec3.fromValues(30 * Math.cos(this.cam_rotation_current), 15, 30 * Math.sin(this.cam_rotation_current));
-        let tar = vec3.fromValues(0,0,0);
-
-        this.camera.setPosition(pos);
-        this.camera.setTarget(tar);
-
-        if(Math.abs(this.cam_rotation_current - this.cam_rotation_target) < 0.001) {
+        if(vec3.distance(this.camera.position, target) < 0.1 || t >= 1) {
             this.moving_camera = false;
-            console.log("END");
-
-            this.cam_rotation_current = 0;
-            this.cam_rotation_target = 0;
+            this.camera.setPosition(target);
+            this.camera.setTarget(vec3.fromValues(0,0,0));
         }
     }
 
@@ -181,12 +174,15 @@ class JaleoScene extends CGFscene{
     update(tNow) {
         this.time = tNow;
         var dt = tNow - this.lastUpdate;
+        this.camera_lerp_elapsed += (dt/1000)
+        
+        if(this.moving_camera) {
+            this.lerp_camera(this.camera_target, (this.camera_lerp_elapsed / this.camera_rot_duration) );
+        }
+
         this.graph.update(dt);    
         this.fsm.update(dt);
         this.board.update(this.time);
-        // if(this.moving_camera) {
-        //     this.lerp_camera();
-        // }
     }
 
 	display() {

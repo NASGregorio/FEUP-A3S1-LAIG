@@ -54,7 +54,7 @@ class MyInterface extends CGFinterface {
     addViews() {
         if(this.views != null)
             this.gui.remove(this.views);
-        this.views = this.gui.add(this.scene, 'selectedView', this.scene.viewNamesToIndex).onChange(this.scene.onViewChanged.bind(this.scene)).name('Views');
+        this.views = this.gui.add(this.scene, 'selectedView', this.scene.viewNames).onChange(this.scene.onViewChanged.bind(this.scene)).name('Views');
     }
 
     addScenes() {

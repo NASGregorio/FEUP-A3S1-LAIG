@@ -77,18 +77,17 @@ class MySceneGraph {
     initCameras() {
         
         this.scene.selectedView = 0;
-        this.scene.viewNamesToIndex = {};
-        this.scene.viewIndexToNames = {};
+        this.scene.views = new Map();
+        this.scene.viewNames = [];
 
         var i = 0;
         this.views.forEach((value, key) => {
-            this.scene.viewNamesToIndex[key] = i;
-            this.scene.viewIndexToNames[i] = key;
-            i++;
+            this.scene.views.set(key, value);
+            this.scene.viewNames.push(key);
         });
         
         // Set camera to XML's default
-        this.scene.selectedView = this.scene.viewNamesToIndex[this.defaultView];
+        this.scene.selectedView = this.defaultView;
         this.scene.onViewChanged();
 
 
@@ -105,10 +104,6 @@ class MySceneGraph {
             animation.startAnimation();
             
         });
-
-        // for (var k = 0; k < this.animationsInUse.size; k++) {
-
-        // }
     }
 
     update(dt) {
@@ -116,10 +111,6 @@ class MySceneGraph {
         this.animationsInUse.forEach(animationID => {
             this.animations.get(animationID).updateKeyframe(dt*this.scene.timeFactor);
         });
-
-
-        // for (var k = 0; k < this.animationsInUse.size; k++) {
-        // }
     }
 
     /**
