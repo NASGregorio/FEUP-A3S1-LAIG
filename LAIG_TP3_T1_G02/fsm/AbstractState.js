@@ -13,9 +13,12 @@ class AbstractState {
 
     enter() {
         console.log("Entering ", this.name);
-    }
 
+        this.fsm.switching_states = false;
+    }
+    
     exit() {
         console.log("Exiting ", this.name);
+        this.fsm.switching_states = true;
     }
 }

@@ -27,6 +27,8 @@ class MyInterface extends CGFinterface {
 
         this.views = null;
 
+        this.go_to_start = null;
+
         
         this.curr_folder = null;
         
@@ -65,6 +67,8 @@ class MyInterface extends CGFinterface {
 
         this.clean_folder();
 
+        this.hide_go_to_start();
+
         let group = this.gui.addFolder("Start Menu");
         group.open();
       
@@ -93,9 +97,22 @@ class MyInterface extends CGFinterface {
         this.curr_folder = group;
     }
 
+    show_go_to_start(ctx) {
+        this.hide_go_to_start();
+        this.go_to_start = this.gui.add(ctx, "go_to_start").name("To start menu");
+    }
+
+    hide_go_to_start() {
+        if(this.go_to_start != null)
+            this.gui.remove(this.go_to_start);
+    }
+
     show_game_over_menu(ctx) {
 
         this.clean_folder();
+
+        if(!this.go_to_start)
+            this.gui.remove(this.go_to_start);
 
         let group = this.gui.addFolder("Game Over!");
         group.open();

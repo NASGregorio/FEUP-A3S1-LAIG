@@ -12,12 +12,8 @@ class InputState extends AbstractState {
     };
 
     enter(stack_actions) {
-        super.enter();
-
+        
         this.stack_actions = stack_actions;
-
-        console.log(this.fsm.scene.board.game_state[4]);
-        console.log(this.fsm.scene.board.adj_tiles);
 
         if(stack_actions != null && stack_actions.length > 0) {
             this.fsm.scene.interface.update_panel_info("STACK situation detected | Pick piece to move.");
@@ -27,8 +23,6 @@ class InputState extends AbstractState {
             this.fsm.scene.interface.update_panel_info("ADD or MOVE available | Pick an hexagon or piece.");
         }
 
-        console.log(this.fsm.scene.game_mode);
-
         switch (this.fsm.scene.game_mode) {
             case "PvsP":
                 this.scene.interface.show_turn_information(this);
@@ -36,7 +30,7 @@ class InputState extends AbstractState {
             case "PvsB":
                 if(this.fsm.bot_turn) {
                     this.fsm.scene.setPickEnabled(false);
-                    this.sleep(2000).then(() => { this.bot_logic(); });
+                    this.sleep(1000).then(() => { this.bot_logic(); });
                 }
                 else {
                     this.scene.interface.show_turn_information(this);
@@ -44,11 +38,13 @@ class InputState extends AbstractState {
                 break;
             case "BvsB":
                     this.fsm.scene.setPickEnabled(false);
-                    this.sleep(1000).then(() => { this.bot_logic(); });
+                    this.sleep(0).then(() => { this.bot_logic(); });
                 break;
             default:
                 break;
         }
+
+        super.enter();
     }
 
     exit() {

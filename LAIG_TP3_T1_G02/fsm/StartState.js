@@ -5,11 +5,11 @@ class StartState extends AbstractState {
     };
 
     enter() {
-        super.enter();
         this.fsm.scene.interface.show_start_options(this);
         this.fsm.scene.interface.clean_panel();
         this.fsm.scene.board = new MyBoard(this.fsm.scene);
         this.fsm.scene.board.count = false;
+        super.enter();
     }
 
     exit() {

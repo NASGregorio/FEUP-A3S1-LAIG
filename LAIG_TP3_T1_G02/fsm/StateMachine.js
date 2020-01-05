@@ -7,6 +7,8 @@ class StateMachine {
         this.curr_state = null;
         this.curr_state_key = null;
 
+        this.switching_states = false;
+
         this.states = {
 			"START": new StartState(this, "Start"),
 			"SETUP": new SetupState(this, "Setup"),
@@ -25,10 +27,16 @@ class StateMachine {
     }
 
     switch_state(new_state, Args) {
+
+        if(this.switching_states)
+            return;
+
         this.curr_state_key = new_state;
         this.curr_state.exit();
         this.curr_state = this.states[new_state];
         this.curr_state.enter(Args);
+
+        //this.switching_states = false;
     }
 
     update(dt) {

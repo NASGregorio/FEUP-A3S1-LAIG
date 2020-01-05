@@ -5,10 +5,9 @@ class UpdateBoardState extends AbstractState {
     };
 
     enter(data) {
-        super.enter();
-
+        
         this.update_board(data);
-
+        super.enter();
     }
 
     exit() {

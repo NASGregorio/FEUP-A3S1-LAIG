@@ -5,10 +5,14 @@ class SetupState extends AbstractState {
     };
 
     enter() {
-        super.enter();
         PrologInterpreter.send_setup_pvp(this.setup_success.bind(this));
-
+        
         this.fsm.bot_turn = false;
+        
+        if(this.fsm.scene.game_mode == "BvsB") {
+            this.fsm.scene.interface.show_go_to_start(this);
+        }
+        super.enter();
     }
 
     exit() {
@@ -24,5 +28,9 @@ class SetupState extends AbstractState {
         this.fsm.scene.board.set_origin(data);
 
         this.fsm.switch_state("UPDATE", data);
+    }
+
+    go_to_start() {
+        this.fsm.switch_state("START");
     }
 }

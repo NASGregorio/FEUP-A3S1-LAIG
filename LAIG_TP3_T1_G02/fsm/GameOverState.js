@@ -5,7 +5,6 @@ class GameOverState extends AbstractState {
     };
 
     enter(winner) {
-        super.enter();
         console.log(winner);
         this.game_over();
 
@@ -19,6 +18,8 @@ class GameOverState extends AbstractState {
 
 
         this.fsm.scene.interface.show_game_over_menu();
+
+        super.enter();
     }
 
     exit() {
