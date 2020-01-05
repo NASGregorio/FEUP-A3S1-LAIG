@@ -19,9 +19,6 @@ class JaleoScene extends CGFscene{
         
         super.init(application);
         
-		
-		this.fsm = new StateMachine(this);
-        
         this.pickIDs = new Map();
         this.setPickEnabled(true);
 
@@ -78,17 +75,17 @@ class JaleoScene extends CGFscene{
         if(this.xml_load_requests != 0)
             return;
 
-        this.interface.addScenes();
-        
         this.setUpdatePeriod(1000/120);
         this.lastUpdate = Date.now();
-            
+
+        this.interface.addScenes();
         this.onSceneChanged();
 
+        this.fsm = new StateMachine(this);
         this.fsm.init("START");
 
         // Start animations
-        this.graph.startAnimations();
+        //this.graph.startAnimations();
     }
 
 
@@ -158,7 +155,6 @@ class JaleoScene extends CGFscene{
         }
     }
 
-
 	logPicking() {
 
 		if(this.fsm.curr_state_key != "INPUT")
@@ -184,14 +180,13 @@ class JaleoScene extends CGFscene{
         this.time = tNow;
         var dt = tNow - this.lastUpdate;
         this.graph.update(dt);    
+        this.fsm.update(dt);
         this.board.update(this.time);
-        
         // if(this.moving_camera) {
         //     this.lerp_camera();
         // }
 
     }
-
 
 	display() {
         if (!this.sceneInited)
@@ -216,7 +211,7 @@ class JaleoScene extends CGFscene{
 		this.lights[0].update();
 
 		// Draw axis
-		// this.axis.display();
+		//this.axis.display();
 
         this.pushMatrix();
         this.graph.displayScene();
@@ -226,6 +221,12 @@ class JaleoScene extends CGFscene{
             this.pushMatrix();
             this.translate(0,4,0);
 			this.board.display();
+			this.popMatrix();
+        }
+
+        if(this.fsm != null) {
+            this.pushMatrix();
+            this.fsm.display();
 			this.popMatrix();
         }
         
@@ -242,11 +243,6 @@ class JaleoScene extends CGFscene{
             this.slotMachine.display();
         this.popMatrix();
 	}
-    
-    game_over() {
-		document.getElementById("game_over").style.display = "block";
-		document.getElementById("panel").style.display = "none";
-    }
 }
 
 

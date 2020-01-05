@@ -30,4 +30,14 @@ class StateMachine {
         this.curr_state = this.states[new_state];
         this.curr_state.enter(Args);
     }
+
+    update(dt) {
+        if(this.curr_state.update)
+            this.curr_state.update(dt);
+    }
+
+    display() {
+        if(this.curr_state.update)
+            this.curr_state.display();
+    }
 }

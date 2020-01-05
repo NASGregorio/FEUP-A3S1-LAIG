@@ -83,7 +83,7 @@ class InputState extends AbstractState {
         if(this.matching_stack != null) {
             let destination = JSON.stringify( this.matching_stack[1] );
             if(coords_str == destination) {
-                this.fsm.switch_state("MOVE", ['stack', this.matching_stack[2]]);
+                this.fsm.switch_state("MOVE", ['stack', this.matching_stack]);
             }
         }
         else {

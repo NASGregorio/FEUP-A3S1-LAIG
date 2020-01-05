@@ -21,7 +21,7 @@ class KeyframeAnimation extends Animation
 
         this.finished = false;
 
-        this.repeatN = 1000;
+        this.onFinish = null;
     }
 
     resetAnimation() {
@@ -31,6 +31,10 @@ class KeyframeAnimation extends Animation
         this.timeInterval = 0;
         this.totalTimeElapsed = 0;
         this.keyframeTimeElapsed = 0;
+    }
+
+    setOnFinishCB(onFinish) {
+        this.onFinish = onFinish;
     }
     
     addKeyframe(keyframe) {
@@ -45,6 +49,11 @@ class KeyframeAnimation extends Animation
             this.keyframes.push(keyframe);
             this.keyframeCount++;
         }
+    }
+
+    removeLastKeyframe() {
+        this.keyframes.pop();
+        this.keyframeCount--;
     }
 
     updateKeyframe(dt) {
@@ -67,14 +76,12 @@ class KeyframeAnimation extends Animation
 
         if(this.currKeyframe == this.keyframeCount-1) {
             this.finished = true;
-            this.repeatN--;
-            if(this.repeatN > 0) {
-                this.resetAnimation();
-                this.advanceKeyframe();
-                this.startAnimation();
-            }
+            if(this.onFinish)
+                this.onFinish();
             return;
         }
+
+        console.log("B");
         
         var curr = this.keyframes[this.currKeyframe];
         var next = this.keyframes[++this.currKeyframe];

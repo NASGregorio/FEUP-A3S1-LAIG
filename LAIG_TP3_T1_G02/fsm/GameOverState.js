@@ -7,7 +7,7 @@ class GameOverState extends AbstractState {
     enter(winner) {
         super.enter();
         console.log(winner);
-        this.fsm.scene.game_over();
+        this.game_over();
 
         this.game_film = this.fsm.scene.board.invert_film_game();
         for (let i = 0; i < this.game_film.length; i++) {
@@ -27,5 +27,10 @@ class GameOverState extends AbstractState {
 
     reset_game() {
         this.fsm.init("SETUP");
+    }
+
+    game_over() {
+		document.getElementById("game_over").style.display = "block";
+		document.getElementById("panel").style.display = "none";
     }
 }

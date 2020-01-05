@@ -12,6 +12,9 @@ class MyBoard extends CGFobject {
         this.InnerRadius = this.OuterRadius * 0.866025404;
         this.sqrt3 = Math.sqrt(3);
 
+        this.board_origin_x = 0;
+        this.board_origin_y = 0;
+
         this.game_state = null;
         this.last_move = [];
         
@@ -190,6 +193,18 @@ class MyBoard extends CGFobject {
         }
     }
 
+    oddr_offset_to_pixel(coords) {
+        //this.fsm.scene.board.board_origin_x, 0,this.fsm.scene.board.board_origin_y);
+        var x = this.OuterRadius * Math.sqrt(3) * (coords[0] + 0.5 * ((coords[1])&1))
+        var y = this.OuterRadius * 3/2 * coords[1]
+        return [x+this.board_origin_x, y+this.board_origin_y];
+    }
+
+    set_origin(data) {
+        this.board_origin_x = - (data[1]-1) * this.InnerRadius;
+        this.board_origin_y = - (data[2]/2*this.InnerRadius*this.sqrt3);
+    }
+
 
     find_in_list(list, cell) {
         for (let i = 0; i < list.length; i++)
@@ -239,27 +254,13 @@ class MyBoard extends CGFobject {
         }
     }
 
-    // add_animation(origin,destination, t) {
-
-    //     console.log("Add animation: ",JSON.stringify(origin),", ",JSON.stringify(destination));
-    // }
-    // move_animation(origin,destination) {
-    //     console.log("Move animation: ",JSON.stringify(origin),", ",JSON.stringify(destination));
-    // }
-    // stack_animation(origin,destination) {
-    //     console.log("Stack animation: ",JSON.stringify(origin),", ",JSON.stringify(destination));
-    // }
-
     display() {
 
         if(this.game_state == null)
             return;
 
-        this.display_extra_tiles();
-        this.display_extra_pieces();
-
         this.scene.pushMatrix();
-        this.scene.translate(- (this.game_state[1]-1) * this.InnerRadius, 0, -(this.game_state[2]/2*this.InnerRadius*this.sqrt3));
+        this.scene.translate(this.board_origin_x, 0,this.board_origin_y);
 
         for (let i = 0; i < this.game_state[0].length; i++) {
             const row = this.game_state[0][i];

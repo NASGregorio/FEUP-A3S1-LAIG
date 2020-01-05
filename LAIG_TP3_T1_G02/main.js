@@ -13,7 +13,7 @@ function getUrlVars() {
 serialInclude([ '../lib/CGF.js', 'MyInterface.js', 'JaleoScene.js',
                 'models/CGFResourceReader.js', 'models/CGFOBJModel.js',
                 'prolog/PrologInterpreter.js',
-                'game/MyBoard.js', 'game/MyBoardDisplay.js', 'game/MyBoardPiece.js', 'game/MyBoardTile.js',
+                'MyBoard.js',
                 'fsm/StateMachine.js', 'fsm/AbstractState.js',
                 'fsm/StartState.js', 'fsm/SetupState.js', 'fsm/UpdateBoardState.js',
                 'fsm/InputState.js', 'fsm/MoveState.js', 'fsm/GameOverState.js',

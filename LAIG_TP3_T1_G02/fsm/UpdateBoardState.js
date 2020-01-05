@@ -8,6 +8,7 @@ class UpdateBoardState extends AbstractState {
         super.enter();
 
         this.update_board(data);
+
     }
 
     exit() {

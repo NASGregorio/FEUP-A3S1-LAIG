@@ -19,6 +19,9 @@ class SetupState extends AbstractState {
         this.fsm.scene.board.count = true;
         this.fsm.scene.interface.update_panel_time(this.fsm.scene.board.start_time);
         this.fsm.scene.board.save_state(data);
+
+        this.fsm.scene.board.set_origin(data);
+
         this.fsm.switch_state("UPDATE", data);
     }
 }
