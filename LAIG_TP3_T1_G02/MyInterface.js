@@ -76,7 +76,7 @@ class MyInterface extends CGFinterface {
         group.add(ctx, "start_game").name("Start Game!");
         group.add(ctx.fsm.scene, 'game_mode', [ 'PvsP', 'PvsB', 'BvsB' ]).name("Game Mode");
         group.add(ctx, "how_to_play").name("How to play?");
-        this.add_quit_button(group);
+        //this.add_quit_button(group);
 
         this.curr_folder = group;
     }
@@ -92,7 +92,7 @@ class MyInterface extends CGFinterface {
         group.add(ctx, "undo_turn").name("Undo turn");
         group.add(ctx, "redo_turn").name("Redo turn");
         group.add(ctx, "go_to_start").name("To start menu");
-        this.add_quit_button(group);
+        //this.add_quit_button(group);
 
         this.curr_folder = group;
     }
@@ -119,7 +119,7 @@ class MyInterface extends CGFinterface {
         group.open();
         group.add(ctx, "go_to_start").name("To start menu");
         group.add(ctx, "show_game_film").name("Play game film");
-        this.add_quit_button(group);
+        //this.add_quit_button(group);
 
         this.curr_folder = group;
     }
